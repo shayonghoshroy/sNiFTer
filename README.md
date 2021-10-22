@@ -67,4 +67,4 @@ Explain how to run the automated tests.
 
 Your names and emails:
 
-Shayon Ghoshroy
+Shayon Ghoshroy | shayong@email.sc.edu
