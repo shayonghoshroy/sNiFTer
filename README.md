@@ -12,18 +12,25 @@ following your instructions.
 
 ## External Requirements
 
-List all the stuff the reader will need to install in order to get you app to 
-run in their laptop. For example:
-
 In order to build this project you first have to install:
 
 * [Node.js](https://nodejs.org/en/)
-* [MongoDB](https://www.mongodb.com/)
+* [Vue.js](https://vuejs.org)
 
-If possible, list the actual commands you used to install these, so the reader
-can just cut-n-paste the commands and get everything setup.
+macOS:
+Ensure that you have Brew installed by running the following terminal command:
+```
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
 
-You only need to add instructions for the OS you are using.
+Once Brew is installed, run the following command for Node.js and NPM package manager:
+```
+brew install node
+```
+With NPM installed, run the following command for Vue.js:
+```
+npm install vue
+```
 
 ## Setup
 
