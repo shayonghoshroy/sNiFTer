@@ -17,18 +17,25 @@ following your instructions.
 
 ## External Requirements
 
-List all the stuff the reader will need to install in order to get you app to 
-run in their laptop. For example:
-
 In order to build this project you first have to install:
 
 * [Node.js](https://nodejs.org/en/)
-* [MongoDB](https://www.mongodb.com/)
+* [Vue.js](https://vuejs.org)
 
-If possible, list the actual commands you used to install these, so the reader
-can just cut-n-paste the commands and get everything setup.
+macOS:
+Ensure that you have Brew installed by running the following terminal command:
+```
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
 
-You only need to add instructions for the OS you are using.
+Once Brew is installed, run the following command for Node.js and NPM package manager:
+```
+brew install node
+```
+With NPM installed, run the following command for Vue.js:
+```
+npm install vue
+```
 
 ## Setup
 
@@ -42,14 +49,19 @@ database for running your webapp locally.
 Specify the commands for a developer to run the app from the cloned repo.
 
 # Deployment
-
-Webapps need a deployment section that explains how to get it deployed on the 
-Internet. These should be detailed enough so anyone can re-deploy if needed
-. Note that you **do not put passwords in git**. 
-
-Mobile apps will also sometimes need some instructions on how to build a
-"release" version, maybe how to sign it, and how to run that binary in an
-emulator or in a physical phone.
+Deploy and host a static web app through the Amplify CLI.
+```
+amplify add hosting
+```
+Choose the manual deployment option.
+```
+? Select the plugin module to execute: # Hosting with Amplify Console (Managed hosting with custom domains, Continuous deployment)
+? Choose a type: # Manual Deployment
+```
+Run the following command to publish the app.
+```
+amplify publush
+```
 
 # Testing
 
@@ -72,6 +84,4 @@ Explain how to run the automated tests.
 
 Your names and emails:
 
-Stephen Baione - sbaione@email.sc.edu
-
-shayon ghoshroy
+Shayon Ghoshroy | shayong@email.sc.edu
