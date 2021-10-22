@@ -67,4 +67,4 @@ Explain how to run the automated tests.
 
 Your names and emails:
 
-Evan Owre - eowre@eamil.sc.edu
+Evan Owre - eowre@email.sc.edu
