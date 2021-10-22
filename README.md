@@ -1,7 +1,12 @@
 # sNiFTer
 
-This first paragraph should be a short description of the app. You can add links
-to your wiki pages that have more detailed descriptions.
+sNiFTer is an information platform, with the goal to decrease the learning curve, increase engagement, and provide realiable, actionable information for the NFT space. sNiFTer aims to tackle this challenge on 3 fronts; insights and tracking into the performance of and engagement with an NFT entity, interactive educational resources on NFT and BlockChain technology, and interaction between users in a social manner for community engagement. By NFT entity, we are referring to an individual token, an NFT collection, or an NFT creator.
+
+Insights and tracking into the performance of and engagement with an NFT entity are provided through features that allow users to view the historical and current sales performance and transaction events associated with an NFT entity, along with community engagement on social sites. This is achieved through NFT entity search, NFT entity current and historical sales performance, transaction history, and beautiful art work that drives the marketplace. Finally, users can track the events associated with an NFT entity through watch lists that provide current sales information and notify of transactions or upcoming air drops.
+
+Interactive educational resources, presented in a __story__ like style, with quizzes after short videos, allow users to learn relevant technical information in bite sized pieces.
+
+Social interaction between members will be achieved through posts detailing NFT events, such as a transaction on an NFT, an NFT collection, or even NFT artwork that one finds interesting.
 
 Your audience for the Readme.md are other developers who are joining your team.
 Specifically, the file should contain detailed instructions that any developer
