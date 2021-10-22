@@ -44,14 +44,20 @@ database for running your webapp locally.
 Specify the commands for a developer to run the app from the cloned repo.
 
 # Deployment
+### Manually deploy and host a static web app through the Amplify CLI:
+```
+amplify add hosting
+```
+```
+? Select the plugin module to execute: # Hosting with Amplify Console (Managed hosting with custom domains, Continuous deployment)
+? Choose a type: # Manual Deployment
+```
+Run the following command to publish the app.
+```
+amplify publush
+```
+App will be online.
 
-Webapps need a deployment section that explains how to get it deployed on the 
-Internet. These should be detailed enough so anyone can re-deploy if needed
-. Note that you **do not put passwords in git**. 
-
-Mobile apps will also sometimes need some instructions on how to build a
-"release" version, maybe how to sign it, and how to run that binary in an
-emulator or in a physical phone.
 
 # Testing
 
