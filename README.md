@@ -44,10 +44,11 @@ database for running your webapp locally.
 Specify the commands for a developer to run the app from the cloned repo.
 
 # Deployment
-### Manually deploy and host a static web app through the Amplify CLI:
+Deploy and host a static web app through the Amplify CLI.
 ```
 amplify add hosting
 ```
+Choose the manual deployment option.
 ```
 ? Select the plugin module to execute: # Hosting with Amplify Console (Managed hosting with custom domains, Continuous deployment)
 ? Choose a type: # Manual Deployment
