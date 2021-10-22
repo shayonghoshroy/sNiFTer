@@ -57,8 +57,6 @@ Run the following command to publish the app.
 ```
 amplify publush
 ```
-App will be online.
-
 
 # Testing
 
