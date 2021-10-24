@@ -39,14 +39,25 @@ npm install vue
 
 ## Setup
 
-Here you list all the one-time things the developer needs to do after cloning
-your repo. Sometimes there is no need for this section, but some apps require
-some first-time configuration from the developer, for example: setting up a
-database for running your webapp locally.
+Install AWS Amplify CLI globally.
+```
+npm install -g @aws-amplify/cli
+```
+Setup the Amplify CLI.
+```
+amplify configure
+```
+Install Amplify libraries.
+```
+npm install aws-amplify @aws-amplify/ui-components
+```
 
 ## Running
 
-Specify the commands for a developer to run the app from the cloned repo.
+Run the Vue app.
+```
+npm run serve --open
+```
 
 # Deployment
 Deploy and host a static web app through the Amplify CLI.
