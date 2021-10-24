@@ -59,7 +59,7 @@ Run the Vue app.
 npm run serve --open
 ```
 
-# Deployment
+## Deployment
 Deploy and host a static web app through the Amplify CLI.
 ```
 amplify add hosting
