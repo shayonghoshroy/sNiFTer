@@ -60,7 +60,7 @@ Choose the manual deployment option.
 ```
 Run the following command to publish the app.
 ```
-amplify publush
+amplify publish
 ```
 
 # Testing
