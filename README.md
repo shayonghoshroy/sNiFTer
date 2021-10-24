@@ -87,3 +87,5 @@ Your names and emails:
 Shayon Ghoshroy | shayong@email.sc.edu
 
 Stephen Baione | sbaione@email.sc.edu
+
+Matthew Graham | grahammc@email.sc.edu
