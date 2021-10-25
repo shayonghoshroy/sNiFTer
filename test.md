@@ -1,2 +1,2 @@
 testing a merge conflict
-testing
+tested
