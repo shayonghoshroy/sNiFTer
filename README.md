@@ -82,4 +82,4 @@ Matthew Graham | grahammc@email.sc.edu
 
 Charlie Coffin | cdcoffin@email.sc.edu
 
-Evan | eowre@email.sc.edu
+| eowre@email.sc.edu
