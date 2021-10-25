@@ -63,20 +63,12 @@ amplify publish
 
 # Testing
 
-In 492 you will write automated tests. When you do you will need to add a 
-section that explains how to run them.
+Our project uses the Jest testing framework.
 
-The unit tests are in `/test/unit`.
-
-The behavioral tests are in `/test/casper/`.
-
-## Testing Technology
-
-In some cases you need to install test runners, etc. Explain how.
-
-## Running Tests
-
-Explain how to run the automated tests.
+To test the Vue app, use the command:
+```
+npm test [jest options]
+```
 
 # Authors
 
@@ -88,5 +80,6 @@ Stephen Baione | sbaione@email.sc.edu
 
 Matthew Graham | grahammc@email.sc.edu
 
-Evan Owre | eowre@email.sc.edu
+Charlie Coffin | cdcoffin@email.sc.edu
 
+Evan Owre | eowre@email.sc.edu
