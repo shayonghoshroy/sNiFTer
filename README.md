@@ -87,3 +87,6 @@ Shayon Ghoshroy | shayong@email.sc.edu
 Stephen Baione | sbaione@email.sc.edu
 
 Matthew Graham | grahammc@email.sc.edu
+
+Evan Owre | eowre@email.sc.edu
+
