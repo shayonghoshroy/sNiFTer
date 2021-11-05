@@ -72,8 +72,6 @@ npm test [jest options]
 
 # Authors
 
-Our names and emails:
-
 Shayon Ghoshroy | shayong@email.sc.edu
 
 Stephen Baione | sbaione@email.sc.edu
