@@ -72,7 +72,7 @@ npm test [jest options]
 
 # Authors
 
-Your names and emails:
+Our names and emails:
 
 Shayon Ghoshroy | shayong@email.sc.edu
 
