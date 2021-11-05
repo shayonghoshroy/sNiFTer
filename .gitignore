@@ -3,6 +3,8 @@
 node_modules
 /dist
 
+# AWS account information
+amplify/team-provider-info.json
 
 # local env files
 .env.local
