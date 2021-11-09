@@ -27,6 +27,7 @@ pnpm-debug.log*
 
 #amplify-do-not-edit-begin
 amplify/\#current-cloud-backend
+amplify/.config/local-aws-info.json
 amplify/.config/local-*
 amplify/logs
 amplify/mock-data
@@ -37,11 +38,13 @@ build/
 dist/
 node_modules/
 aws-exports.js
+aws-exports.ts
 awsconfiguration.json
 amplifyconfiguration.json
 amplifyconfiguration.dart
 amplify-build-config.json
 amplify-gradle-config.json
+amplifyxc.config
 amplifytools.xcconfig
 .secret-*
 **.sample
