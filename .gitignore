@@ -4,7 +4,7 @@ node_modules
 /dist
 
 # AWS account information
-snifter/amplify/team-provider-info.json
+#snifter/amplify/team-provider-info.json
 
 # local env files
 .env.local
