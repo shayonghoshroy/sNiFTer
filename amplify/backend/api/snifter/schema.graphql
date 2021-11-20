@@ -1,0 +1,11 @@
+type user @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  username: String!
+  password_hash: String!
+  email: String!
+  usertype: String!
+  favorites: [Int!]!
+  nftWatchlist: [Int!]!
+  walletWatchlist: [Int!]!
+}
+ 
