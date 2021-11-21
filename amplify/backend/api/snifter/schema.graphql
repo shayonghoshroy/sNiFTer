@@ -8,4 +8,14 @@ type user @model @auth(rules: [{allow: public}]) {
   nftWatchlist: [Int!]!
   walletWatchlist: [Int!]!
 }
+
+type tweet @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  text: String
+  username: String
+  reply_count: Int
+  retweet_count: Int
+  like_count: Int
+  interaction_count: Int
+}
  

@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "auth": {
+      "snifterab80c2c7": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    },
+    "api": {
+      "snifter": [
+        "Query",
+        "Mutation",
+        "Subscription"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}
