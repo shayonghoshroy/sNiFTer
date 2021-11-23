@@ -9,13 +9,17 @@
   },
   "dependencies": {
     "@aws-amplify/ui-components": "^1.9.2",
+    "@oruga-ui/oruga-next": "^0.4.8",
     "aws-amplify": "^4.3.4",
+    "bulma": "^0.9.3",
     "core-js": "^3.6.5",
-    "vue": "^3.0.0"
+    "vue": "^3.0.0",
+    "vue-router": "^4.0.0-0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-plugin-router": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
     "@vue/compiler-sfc": "^3.0.0",
     "@vue/eslint-config-prettier": "^6.0.0",
