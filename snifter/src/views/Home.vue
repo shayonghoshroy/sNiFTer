@@ -7,13 +7,12 @@
           <h2 class="subtitle">First rounds on us</h2>
           <div class="button-block">
             <button class="button is-xl is-pink">
-              Sign Up to Browse NFT's
+              <router-link to="/register">Sign Up to Browse NFT's</router-link>
             </button>
           </div>
         </div>
       </div>
     </section>
-    <HelloWorld />
   </div>
 </template>
 
