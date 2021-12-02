@@ -1,0 +1,15 @@
+{
+  "providers": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-snifter-dev-25817-authRole",
+      "UnauthRoleArn": "arn:aws:iam::722766780721:role/amplify-snifter-dev-25817-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::722766780721:role/amplify-snifter-dev-25817-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-snifter-dev-25817-deployment",
+      "UnauthRoleName": "amplify-snifter-dev-25817-unauthRole",
+      "StackName": "amplify-snifter-dev-25817",
+      "StackId": "arn:aws:cloudformation:us-east-2:722766780721:stack/amplify-snifter-dev-25817/9ee1cdd0-5345-11ec-8591-0669006b99b4",
+      "AmplifyAppId": "d360vg0ccti5zi"
+    }
+  }
+}

@@ -8,16 +8,16 @@
         </div>
       </div>
     </section>
-    <ListComponent />
+    <TweetComponent />
   </div>
 </template>
 
 <script>
-import ListComponent from "../components/ListComponent.vue";
+import TweetComponent from "../components/TweetComponent.vue";
 export default {
   name: "News",
   components: {
-    ListComponent,
+    TweetComponent,
   },
 };
 </script>

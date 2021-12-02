@@ -19,7 +19,16 @@ const getTweets = async () => {
     },
   });
 
-  return tweets.data.listTweets.items;
+  //for loop grabs the username and text from the tweets and puts them int array ret
+  let ret = [];
+  for (let i = 0; i < tweets.data.listTweets.items.length; i++) {
+    ret.push({
+      username: tweets.data.listTweets.items[i].username,
+      text: tweets.data.listTweets.items[i].text,
+    });
+  }
+
+  return ret;
 };
 
 export default getTweets();

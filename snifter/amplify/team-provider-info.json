@@ -1,15 +1,41 @@
 {
   "dev": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-snifter-dev-224946-authRole",
-      "UnauthRoleArn": "arn:aws:iam::722766780721:role/amplify-snifter-dev-224946-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::722766780721:role/amplify-snifter-dev-224946-authRole",
+      "AuthRoleName": "amplify-snifter-dev-25817-authRole",
+      "UnauthRoleArn": "arn:aws:iam::722766780721:role/amplify-snifter-dev-25817-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::722766780721:role/amplify-snifter-dev-25817-authRole",
       "Region": "us-east-2",
-      "DeploymentBucketName": "amplify-snifter-dev-224946-deployment",
-      "UnauthRoleName": "amplify-snifter-dev-224946-unauthRole",
-      "StackName": "amplify-snifter-dev-224946",
-      "StackId": "arn:aws:cloudformation:us-east-2:722766780721:stack/amplify-snifter-dev-224946/e786fe20-5322-11ec-9071-027516eb40e0",
+      "DeploymentBucketName": "amplify-snifter-dev-25817-deployment",
+      "UnauthRoleName": "amplify-snifter-dev-25817-unauthRole",
+      "StackName": "amplify-snifter-dev-25817",
+      "StackId": "arn:aws:cloudformation:us-east-2:722766780721:stack/amplify-snifter-dev-25817/e786fe20-5322-11ec-9071-027516eb40e0",
       "AmplifyAppId": "d360vg0ccti5zi"
+    },
+    "categories": {
+      "function": {
+        "scrapeTweets": {
+          "deploymentBucketName": "amplify-snifter-dev-25817-deployment",
+          "s3Key": "amplify-builds/scrapeTweets-594c36524e6b35544243-build.zip"
+        }
+      }
+    }
+  },
+  "test": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-snifter-test-25017-authRole",
+      "UnauthRoleArn": "arn:aws:iam::722766780721:role/amplify-snifter-test-25017-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::722766780721:role/amplify-snifter-test-25017-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-snifter-test-25017-deployment",
+      "UnauthRoleName": "amplify-snifter-test-25017-unauthRole",
+      "StackName": "amplify-snifter-test-25017",
+      "StackId": "arn:aws:cloudformation:us-east-2:722766780721:stack/amplify-snifter-test-25017/80588850-5344-11ec-8e67-023ebe32615c",
+      "AmplifyAppId": "d360vg0ccti5zi"
+    },
+    "categories": {
+      "function": {
+        "scrapeTweets": {}
+      }
     }
   }
 }

@@ -5,7 +5,7 @@ import "bulma/css/bulma.css";
 import Oruga from "@oruga-ui/oruga-next";
 import "@oruga-ui/oruga-next/dist/oruga.css";
 import Amplify from "aws-amplify";
-import aws_exports from "./aws-exports";
+import aws_exports from "./aws-exports.js";
 import {
   applyPolyfills,
   defineCustomElements,
