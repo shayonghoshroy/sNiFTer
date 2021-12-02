@@ -1,6 +1,6 @@
 <template>
   <div class="post">
-    <h2>{{ post.author }}</h2>
+    <h2>{{ post.username }}</h2>
     <p>{{ post.content }}</p>
   </div>
 </template>

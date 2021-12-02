@@ -1,25 +1,25 @@
-var names = [
-  "Matt Maribojoc",
-  "Lebron James",
-  "Bill Gates",
-  "Childish Gambino",
-]; // used to generate posts for this tutorial
+import { API } from "aws-amplify";
+import { listTweets } from "../graphql/queries.js";
 
-const getPosts = (number) => {
-  // generate a number of posts
-  // in a real setting, this would be a database call or algorithm
+// Uses the graphql query to get the tweets from the database
+const getTweets = async () => {
+  //tweets have the following structure:
+  // {
+  //   username: "",
+  //   text: "",
+  //   retweet_count: 0,
+  //   reply_count: 0,
+  //   like_count: 0,
+  //   interaction_count: 0,
+  const tweets = await API.graphql({
+    query: listTweets,
+    variables: {
+      limit: 10,
+      nextToken: null,
+    },
+  });
 
-  let ret = [];
-
-  for (var i = 0; i < number; i++) {
-    ret.push({
-      author: names[i % names.length],
-      content:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.",
-    });
-  }
-
-  return ret;
+  return tweets.data.listTweets.items;
 };
 
-export default getPosts;
+export default getTweets();

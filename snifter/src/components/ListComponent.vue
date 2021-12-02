@@ -37,17 +37,6 @@ export default {
       }
     };
 
-    onUnmounted(() => {
-      window.removeEventListener("scroll", () => {
-        if (
-          window.innerHeight + window.scrollY >=
-          document.body.offsetHeight - 500
-        ) {
-          loadMorePosts();
-        }
-      });
-    });
-
     return {
       posts,
       scrollComponent,
