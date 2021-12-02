@@ -1,6 +1,6 @@
 <template>
   <div id="tweetcomponent">
-    <div class="scrolling-component" ref="scrollComponent">
+    <div>
       <div class="post" v-for="item in tweets" :key="item.id">
         <h3>{{ item.username }}</h3>
         <p>{{ item.text }}</p>
@@ -9,31 +9,32 @@
   </div>
 </template>
 
-// <script>
-// //import { API } from "aws-amplify";
-// //import { listTweets } from "../graphql/queries";
-// export default {
-//   name: "TweetComponent",
-//   async created() {
-//     this.getTweets();
-//   },
-//   data() {
-//     return {
-//       username: "",
-//       text: "",
-//       tweets: [],
-//     };
-//   },
-//   methods: {
-//     async getTweets() {
-//       const tweets = await API.graphql({
-//         query: listTweets,
-//       });
-//       this.tweets = tweets.data.listTweets.items;
-//     },
-//   },
-// };
-// </script>
+<script>
+import { API } from "aws-amplify";
+import { listTweets } from "../graphql/queries";
+export default {
+  name: "TweetComponent",
+  async created() {
+    this.getTweets();
+  },
+  data() {
+    return {
+      username: "",
+      text: "",
+      tweets: [],
+    };
+  },
+  methods: {
+    async getTweets() {
+      const tweets = await API.graphql({
+        query: listTweets,
+      });
+      this.tweets = tweets.data.listTweets.items;
+      console.log(this.tweets);
+    },
+  },
+};
+</script>
 <style scoped>
 .post {
   background: #fff;

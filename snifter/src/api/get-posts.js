@@ -1,5 +1,5 @@
-// import { API } from "aws-amplify";
-// import { listTweets } from "../graphql/queries.js";
+import { API } from "aws-amplify";
+import { listTweets } from "../graphql/queries.js";
 
 // Uses the graphql query to get the tweets from the database
 const getTweets = async () => {

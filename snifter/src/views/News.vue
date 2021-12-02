@@ -4,7 +4,7 @@
       <div class="hero-body">
         <div class="container">
           <h1 class="title">sNiFTer News</h1>
-          <h2 class="subtitle">Figure out whats new in the world of NFT's</h2>
+          <h2 class="subtitle">Figure out what's new in the world of NFT's</h2>
         </div>
       </div>
     </section>

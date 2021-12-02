@@ -1,5 +1,38 @@
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
+  <div>
+    <Description class="description" />
   </div>
 </template>
+
+<script>
+import Description from "../components/Description";
+export default {
+  name: "About",
+  components: { Description },
+};
+</script>
+
+<style scoped>
+div {
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+}
+h1 {
+  margin-top: 1em;
+  text-align: center;
+}
+.description {
+  width: 60vw;
+}
+@media (max-width: 700px) {
+  div {
+    padding: 4em 0em;
+  }
+  .description {
+    text-align: justify;
+    width: 90vw;
+  }
+}
+</style>
