@@ -1,11 +1,8 @@
 <template>
-  <amplify-authenticator>
-    <div id="app">
-      <Nav />
-      <router-view />
-    </div>
-    <amplify-sign-out></amplify-sign-out>
-  </amplify-authenticator>
+  <div id="app">
+    <Nav />
+    <router-view />
+  </div>
 </template>
 
 <script>

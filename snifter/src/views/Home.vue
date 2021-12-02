@@ -7,18 +7,23 @@
           <h2 class="subtitle">First rounds on us</h2>
           <div class="button-block">
             <button class="button is-xl is-pink">
-              <router-link to="/register">Sign Up to Browse NFT's</router-link>
+              <router-link to="/register">Register Now</router-link>
             </button>
           </div>
         </div>
       </div>
     </section>
+    <ListComponent />
   </div>
 </template>
 
 <script>
+import ListComponent from "../components/ListComponent.vue";
 export default {
   name: "Home",
+  components: {
+    ListComponent,
+  },
 };
 </script>
 
@@ -57,7 +62,8 @@ export default {
   }
 }
 .is-xl {
-  font-size: 1.7rem;
+  font-size: 1.3rem;
+  height: 100%;
   color: #ffffff;
 }
 .is-pink {

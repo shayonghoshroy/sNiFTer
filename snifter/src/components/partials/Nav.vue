@@ -25,6 +25,13 @@
       <div class="navbar-end">
         <div class="navbar-item">
           <div class="buttons">
+            <router-link to="/register" class="button is-dark">
+              <strong>Register</strong>
+            </router-link>
+          </div>
+        </div>
+        <div class="navbar-item">
+          <div class="buttons">
             <router-link to="/signin" class="button is-dark">
               <strong>Sign In</strong>
             </router-link>

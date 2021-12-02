@@ -1,47 +1,63 @@
 <template>
   <div class="main" :style="main">
-    <h1 class="white">Welcome back!</h1>
-    <input
-      type="text"
-      name="username"
-      id="username"
-      placeholder="User Name"
-      :style="input"
-    />
-    <br />
-    <input
-      type="password"
-      name="password"
-      id="password"
-      placeholder="Password"
-      :style="input"
-    />
-    <br />
-    <input
-      type="button"
-      value="Done!"
-      class="button"
-      id="done"
-      :style="input"
-    />
-    <br />
-    <img src="../assets/google.svg" alt="Login using Google" />
-    <img src="../assets/facebook.svg" alt="Login using Facebook" />
+    <form @submit.prevent="signin">
+      <h1 class="white">Welcome back!</h1>
+      <input
+        type="text"
+        name="username"
+        id="username"
+        placeholder="User Name"
+        :style="input"
+      />
+      <br />
+      <input
+        type="password"
+        name="password"
+        id="password"
+        placeholder="Password"
+        :style="input"
+      />
+      <br />
+      <input
+        type="button"
+        value="Sign In"
+        class="button"
+        id="signin"
+        :style="input"
+      />
+      <br />
+      <img src="../assets/google.svg" alt="Login using Google" />
+      <img src="../assets/facebook.svg" alt="Login using Facebook" />
+    </form>
   </div>
 </template>
 
 <script>
+import { Auth } from "aws-amplify";
 export default {
   name: "SignIn",
   props: {
     main: String,
     input: String,
   },
+  data() {
+    return {
+      username: "",
+      password: "",
+    };
+  },
+  async signin() {
+    try {
+      await Auth.signIn(this.username, this.password);
+      alert("Successfully logged in");
+    } catch (error) {
+      alert(error.message);
+    }
+  },
 };
 </script>
 
 <style>
-@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
 .main {
   background: #6f36bc;
   position: absolute;
@@ -54,7 +70,6 @@ export default {
   box-shadow: 0px 0px 10px 0px;
   padding-top: 3%;
   padding-bottom: 5%;
-  font-family: "Poppins", sans-serif;
 }
 
 h1 {
@@ -71,7 +86,6 @@ input {
   margin: 10px;
   width: 30%;
   box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
   font-weight: 400;
 }
 
@@ -83,7 +97,7 @@ input:active {
   box-shadow: 0px 0px 5px 0px;
 }
 
-#done {
+#signin {
   background: #ff4778;
 }
 
