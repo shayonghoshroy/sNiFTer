@@ -8,6 +8,10 @@ type userMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 }
 
+type tweetMetaData = {
+  readOnlyFields: 'createdAt' | 'updatedAt';
+}
+
 export declare class user {
   readonly id: string;
   readonly username: string;
@@ -21,4 +25,18 @@ export declare class user {
   readonly updatedAt?: string;
   constructor(init: ModelInit<user, userMetaData>);
   static copyOf(source: user, mutator: (draft: MutableModel<user, userMetaData>) => MutableModel<user, userMetaData> | void): user;
+}
+
+export declare class tweet {
+  readonly id: string;
+  readonly text?: string;
+  readonly username?: string;
+  readonly reply_count?: number;
+  readonly retweet_count?: number;
+  readonly like_count?: number;
+  readonly interaction_count?: number;
+  readonly createdAt?: string;
+  readonly updatedAt?: string;
+  constructor(init: ModelInit<tweet, tweetMetaData>);
+  static copyOf(source: tweet, mutator: (draft: MutableModel<tweet, tweetMetaData>) => MutableModel<tweet, tweetMetaData> | void): tweet;
 }
