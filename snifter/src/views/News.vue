@@ -1,23 +1,40 @@
 <template>
-  <div class="home">
-    <section class="hero is-dark">
-      <div class="hero-body">
-        <div class="container">
-          <h1 class="title">sNiFTer News</h1>
-          <h2 class="subtitle">Figure out what's new in the world of NFT's</h2>
-        </div>
-      </div>
-    </section>
+  <div>
+    <NewsHeader class="description" />
     <TweetComponent />
   </div>
 </template>
 
 <script>
-import TweetComponent from "../components/TweetComponent.vue";
+import NewsHeader from "../components/NewsHeader";
+import TweetComponent from "../components/TweetComponent";
 export default {
   name: "News",
-  components: {
-    TweetComponent,
-  },
+  components: { NewsHeader, TweetComponent },
 };
 </script>
+
+<style scoped>
+div {
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+}
+h1 {
+  margin-top: 1em;
+  text-align: center;
+}
+.description {
+  width: 60vw;
+}
+@media (max-width: 700px) {
+  div {
+    padding: 4em 0em;
+  }
+  .description {
+    text-align: justify;
+    width: 90vw;
+  }
+}
+</style>

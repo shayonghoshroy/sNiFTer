@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { API } from "aws-amplify";
+import { API, graphqlOperation } from "aws-amplify";
 import { listTweets } from "../graphql/queries";
 export default {
   name: "TweetComponent",
@@ -19,18 +19,17 @@ export default {
   },
   data() {
     return {
-      username: "",
-      text: "",
       tweets: [],
     };
   },
   methods: {
     async getTweets() {
-      const tweets = await API.graphql({
-        query: listTweets,
-      });
-      this.tweets = tweets.data.listTweets.items;
-      console.log(this.tweets);
+      try {
+        const response = await API.graphql(graphqlOperation(listTweets));
+        this.tweets = response.data.listTweets.items;
+      } catch (error) {
+        console.log("Error loading tweets...", error);
+      }
     },
   },
 };

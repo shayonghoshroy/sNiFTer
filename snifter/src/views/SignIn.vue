@@ -1,125 +1,18 @@
 <template>
-  <div class="main" :style="main">
-    <form @submit.prevent="signin">
-      <h1 class="white">Welcome back!</h1>
-      <input
-        type="text"
-        name="username"
-        id="username"
-        placeholder="User Name"
-        :style="input"
-      />
-      <br />
-      <input
-        type="password"
-        name="password"
-        id="password"
-        placeholder="Password"
-        :style="input"
-      />
-      <br />
-      <input
-        type="button"
-        value="Sign In"
-        class="button"
-        id="signin"
-        :style="input"
-      />
-      <br />
-      <img src="../assets/google.svg" alt="Login using Google" />
-      <img src="../assets/facebook.svg" alt="Login using Facebook" />
-    </form>
-  </div>
+  <authenticator>
+    <template v-slot="{ user, signOut }">
+      <h1>Hello {{ user.username }}!</h1>
+      <button class="button is-dark" @click="signOut">Sign Out</button>
+    </template>
+  </authenticator>
 </template>
 
-<script>
-import { Auth } from "aws-amplify";
-export default {
-  name: "SignIn",
-  props: {
-    main: String,
-    input: String,
-  },
-  data() {
-    return {
-      username: "",
-      password: "",
-    };
-  },
-  async signin() {
-    try {
-      await Auth.signIn(this.username, this.password);
-      alert("Successfully logged in");
-    } catch (error) {
-      alert(error.message);
-    }
-  },
-};
+<script setup>
+import { Authenticator } from "@aws-amplify/ui-vue";
+import "@aws-amplify/ui-vue/styles.css";
+
+import Amplify from "aws-amplify";
+import awsconfig from "../aws-exports";
+
+Amplify.configure(awsconfig);
 </script>
-
-<style>
-.main {
-  background: #6f36bc;
-  position: absolute;
-  top: 20%;
-  left: 30%;
-  width: 40%;
-  text-align: center;
-  padding: 5px;
-  border-radius: 3rem;
-  box-shadow: 0px 0px 10px 0px;
-  padding-top: 3%;
-  padding-bottom: 5%;
-}
-
-h1 {
-  cursor: default;
-  user-select: none;
-}
-
-input {
-  border-radius: 3rem;
-  border: none;
-  padding: 10px;
-  text-align: center;
-  outline: none;
-  margin: 10px;
-  width: 30%;
-  box-sizing: border-box;
-  font-weight: 400;
-}
-
-input:hover {
-  box-shadow: 0px 0px 5px 0px;
-}
-
-input:active {
-  box-shadow: 0px 0px 5px 0px;
-}
-
-#signin {
-  background: #ff4778;
-}
-
-.button {
-  cursor: pointer;
-  user-select: none;
-  color: white;
-}
-
-.white {
-  color: white;
-}
-
-img {
-  height: 2.2rem;
-  margin: 10px;
-  user-select: none;
-}
-
-img:hover {
-  box-shadow: 0px 0px 5px 0px;
-  cursor: pointer;
-  border-radius: 200rem;
-}
-</style>
