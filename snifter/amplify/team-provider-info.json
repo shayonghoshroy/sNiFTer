@@ -10,11 +10,6 @@
       "StackName": "amplify-snifter-dev-180720",
       "StackId": "arn:aws:cloudformation:us-east-2:722766780721:stack/amplify-snifter-dev-180720/98cb1ef0-3dbb-11ec-803a-06fb52a2cb9e",
       "AmplifyAppId": "d3f4zcko6tfjc2"
-    },
-    "categories": {
-      "auth": {
-        "snifterab80c2c7": {}
-      }
     }
   }
 }
