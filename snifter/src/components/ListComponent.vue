@@ -32,7 +32,7 @@ export default {
 
     const handleScroll = () => {
       let element = scrollComponent.value;
-      if (element.getBoundingClientRect().bottom <= window.innerHeight) {
+      if (element.getBoundingClientRect().bottom < window.innerHeight) {
         loadMorePosts();
       }
     };
