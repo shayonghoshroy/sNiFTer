@@ -2,8 +2,14 @@
   <div id="tweetcomponent">
     <div>
       <div class="post" v-for="tweet in tweets" :key="tweet.id">
-        <h3>{{ tweet.username }}</h3>
-        <p>{{ tweet.text }}</p>
+        <div class="row center">
+          <div class="flex md6 lg4">
+            <va-card tag="b">
+              <va-card-title>{{ tweet.username }}</va-card-title>
+              <va-card-content>{{ tweet.text }}</va-card-content>
+            </va-card>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -47,10 +53,6 @@ export default {
   padding: 1.5em;
 }
 
-.post:not(:last-child) {
-  border-bottom: 1px solid #ddd;
-}
-
 .post h2 {
   font-size: 1.3em;
   padding-bottom: 0.25rem;
@@ -58,5 +60,10 @@ export default {
 
 .post p {
   color: #888;
+}
+.center {
+  margin-left: auto;
+  width: 60%;
+  padding: 10px;
 }
 </style>

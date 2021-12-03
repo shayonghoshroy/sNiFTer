@@ -6,31 +6,45 @@
           <h1 class="title">Welcome to sNiFTer</h1>
           <h2 class="subtitle">First rounds on us</h2>
           <div class="button-block">
-            <button class="button is-xl is-pink">
+            <button class="button is-xl is-purple">
               <router-link to="/register">Register Now</router-link>
             </button>
           </div>
         </div>
       </div>
     </section>
-    <div class="row div">
-      <div class="flex md6 lg4">
-        <va-card color="#4b4b4a" gradient>
-          <va-card-title class="is-white">Title</va-card-title>
-          <va-card-content class="is-white"
-            >Lorem ipsum dolor sit amet, consectetur adipiscing
-            elit.</va-card-content
-          >
-        </va-card>
-      </div>
+    <div>
+      <Popup>
+        <div class="row div">
+          <div class="flex md6 lg4">
+            <va-card style="height: 450px; width: 250px">
+              <va-image
+                src="https://lh3.googleusercontent.com/mBR3nwH1YONmC-Y5YOaDwSYa9Uo6hNFfXlRTdxDmHJ9Z1eOTCmteSA-ifqsYLechzztVGD6nC0EEomxZJjhpYl0pmSQx_uOqME8n=w600"
+                style="height: 300px"
+              />
+              <va-card-title>Tenkara</va-card-title>
+              <va-card-content
+                >Created by VictorMosquera Deriving inspiration from Japanese
+                and South American traditional fishing practices.
+              </va-card-content>
+            </va-card>
+          </div>
+        </div>
+      </Popup>
     </div>
   </div>
 </template>
 
 <script>
+import Popup from "../components/Popup.vue";
+
 export default {
   name: "Home",
-  components: {},
+  setup() {
+    return {
+      Popup,
+    };
+  },
 };
 </script>
 
@@ -44,9 +58,10 @@ export default {
   height: 400px;
 }
 .hero-body .title {
-  text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.6);
+  text-shadow: 3px 3px 3px rgba(0, 0, 0, 0.6);
   padding: 40px 0 20px 0;
   font-size: 60px;
+  text-transform: none;
 }
 .subtitle {
   text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.7);
@@ -73,8 +88,8 @@ export default {
   height: 100%;
   color: #ffffff;
 }
-.is-pink {
-  background-color: #ff4778;
+.is-purple {
+  background-color: #6f36bc;
 }
 .is-white {
   color: #ffffff;

@@ -2,7 +2,11 @@
   <authenticator>
     <template v-slot="{ user, signOut }">
       <h1>Hello {{ user.username }}!</h1>
-      <button class="button is-dark" @click="signOut">Sign Out</button>
+      <div class="padding">
+        <button class="button is-purple" @click="signOut">
+          <div class="is-white">Sign Out</div>
+        </button>
+      </div>
     </template>
   </authenticator>
 </template>
@@ -16,3 +20,15 @@ import awsconfig from "../aws-exports";
 
 Amplify.configure(awsconfig);
 </script>
+
+<style lang="css" scoped>
+.is-purple {
+  background-color: #6f36bc;
+}
+.is-white {
+  color: #ffffff;
+}
+.padding {
+  padding-top: 1rem;
+}
+</style>
