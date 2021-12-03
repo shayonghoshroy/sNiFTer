@@ -27,14 +27,14 @@
       <div class="navbar-end">
         <div class="buttons">
           <router-link to="/register" class="button is-purple">
-            <div class="is-white">Register</div>
+            <div class="is-purple">Register</div>
           </router-link>
         </div>
       </div>
       <div class="navbar-item">
         <div class="buttons">
           <router-link to="/signin" class="button is-purple">
-            <div class="is-white">Sign In</div>
+            <div class="is-purple">Sign In</div>
           </router-link>
         </div>
       </div>
@@ -73,7 +73,7 @@ nav {
   margin-top: 24px;
 }
 .is-purple {
-  background-color: #6f36bc;
+  color: #6f36bc;
 }
 .is-white {
   color: #ffffff;

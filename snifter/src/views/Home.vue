@@ -13,7 +13,7 @@
         </div>
       </div>
     </section>
-    <div>
+    <div class="is-purple">
       <NFTComponent />
     </div>
   </div>
@@ -72,7 +72,7 @@ export default {
   color: #ffffff;
 }
 .is-purple {
-  background-color: #6f36bc;
+  color: #6f36bc;
 }
 .is-white {
   color: #ffffff;

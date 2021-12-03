@@ -24,6 +24,12 @@
       },
       "auth": {
         "snifter40205934": {}
+      },
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d22d1odtojlp9e",
+          "type": "manual"
+        }
       }
     }
   }

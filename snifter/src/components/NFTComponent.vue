@@ -1,6 +1,6 @@
 <template>
   <div id="nftcomponent">
-    <div class="center">
+    <simple-grid-container class="container" columnWidth="300px">
       <div class="post" v-for="nft in nfts" :key="nft.id">
         <div class="row div">
           <div class="flex md6 lg4">
@@ -14,7 +14,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </simple-grid-container>
   </div>
 </template>
 
@@ -43,7 +43,7 @@ export default {
         const nfts = await API.graphql({
           query: listNfts,
           variables: {
-            limit: 50,
+            limit: 300,
           },
         });
         this.nfts = nfts.data.listNfts.items;
@@ -68,9 +68,8 @@ export default {
 .post p {
   color: #888;
 }
-.center {
-  margin-left: auto;
-  width: 60%;
-  padding: 10px;
+.container {
+  justify-items: stretch;
+  width: 83.5%;
 }
 </style>

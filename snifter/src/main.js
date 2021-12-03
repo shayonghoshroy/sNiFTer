@@ -10,10 +10,11 @@ import {
   applyPolyfills,
   defineCustomElements,
 } from "@aws-amplify/ui-components/loader";
+import SimpleVueGrid from "simple-vue-grid";
 
 applyPolyfills().then(() => {
   defineCustomElements(window);
 });
 Amplify.configure(awsconfig);
 
-createApp(App).use(router).use(VuesticPlugin).mount("#app");
+createApp(App).use(router).use(VuesticPlugin).use(SimpleVueGrid).mount("#app");
