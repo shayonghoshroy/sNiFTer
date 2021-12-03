@@ -16,6 +16,7 @@ export const createTweet = /* GraphQL */ `
       interaction_count
       createdAt
       updatedAt
+      date
     }
   }
 `;
@@ -34,6 +35,7 @@ export const updateTweet = /* GraphQL */ `
       interaction_count
       createdAt
       updatedAt
+      date
     }
   }
 `;
@@ -52,6 +54,7 @@ export const deleteTweet = /* GraphQL */ `
       interaction_count
       createdAt
       updatedAt
+      date
     }
   }
 `;
@@ -136,13 +139,13 @@ export const createNftTraits = /* GraphQL */ `
     $condition: ModelNftTraitsConditionInput
   ) {
     createNftTraits(input: $input, condition: $condition) {
+      id
       trait_type
       value
       display_type
       max_value
       trait_count
       order
-      id
       createdAt
       updatedAt
     }
@@ -154,13 +157,13 @@ export const updateNftTraits = /* GraphQL */ `
     $condition: ModelNftTraitsConditionInput
   ) {
     updateNftTraits(input: $input, condition: $condition) {
+      id
       trait_type
       value
       display_type
       max_value
       trait_count
       order
-      id
       createdAt
       updatedAt
     }
@@ -172,13 +175,13 @@ export const deleteNftTraits = /* GraphQL */ `
     $condition: ModelNftTraitsConditionInput
   ) {
     deleteNftTraits(input: $input, condition: $condition) {
+      id
       trait_type
       value
       display_type
       max_value
       trait_count
       order
-      id
       createdAt
       updatedAt
     }
@@ -193,6 +196,7 @@ export const createNft = /* GraphQL */ `
       id
       token_id
       num_sales
+      address
       background_color
       image_url
       image_preview_url
@@ -204,35 +208,6 @@ export const createNft = /* GraphQL */ `
       description
       external_link
       perma_link
-      asset_contract {
-        name
-        address
-        symbol
-        payout_address
-        asset_contract_type
-        created_date
-        description
-        image_url
-        total_supply
-        nft_version
-        opensea_version
-        schema_name
-        external_link
-        id
-        createdAt
-        updatedAt
-      }
-      traits {
-        trait_type
-        value
-        display_type
-        max_value
-        trait_count
-        order
-        id
-        createdAt
-        updatedAt
-      }
       createdAt
       updatedAt
     }
@@ -247,6 +222,7 @@ export const updateNft = /* GraphQL */ `
       id
       token_id
       num_sales
+      address
       background_color
       image_url
       image_preview_url
@@ -258,35 +234,6 @@ export const updateNft = /* GraphQL */ `
       description
       external_link
       perma_link
-      asset_contract {
-        name
-        address
-        symbol
-        payout_address
-        asset_contract_type
-        created_date
-        description
-        image_url
-        total_supply
-        nft_version
-        opensea_version
-        schema_name
-        external_link
-        id
-        createdAt
-        updatedAt
-      }
-      traits {
-        trait_type
-        value
-        display_type
-        max_value
-        trait_count
-        order
-        id
-        createdAt
-        updatedAt
-      }
       createdAt
       updatedAt
     }
@@ -301,6 +248,7 @@ export const deleteNft = /* GraphQL */ `
       id
       token_id
       num_sales
+      address
       background_color
       image_url
       image_preview_url
@@ -312,35 +260,6 @@ export const deleteNft = /* GraphQL */ `
       description
       external_link
       perma_link
-      asset_contract {
-        name
-        address
-        symbol
-        payout_address
-        asset_contract_type
-        created_date
-        description
-        image_url
-        total_supply
-        nft_version
-        opensea_version
-        schema_name
-        external_link
-        id
-        createdAt
-        updatedAt
-      }
-      traits {
-        trait_type
-        value
-        display_type
-        max_value
-        trait_count
-        order
-        id
-        createdAt
-        updatedAt
-      }
       createdAt
       updatedAt
     }

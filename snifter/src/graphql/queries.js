@@ -13,6 +13,7 @@ export const getTweet = /* GraphQL */ `
       interaction_count
       createdAt
       updatedAt
+      date
     }
   }
 `;
@@ -33,6 +34,7 @@ export const listTweets = /* GraphQL */ `
         interaction_count
         createdAt
         updatedAt
+        date
       }
       nextToken
     }
@@ -96,13 +98,13 @@ export const listNftAssetContracts = /* GraphQL */ `
 export const getNftTraits = /* GraphQL */ `
   query GetNftTraits($id: ID!) {
     getNftTraits(id: $id) {
+      id
       trait_type
       value
       display_type
       max_value
       trait_count
       order
-      id
       createdAt
       updatedAt
     }
@@ -116,13 +118,13 @@ export const listNftTraits = /* GraphQL */ `
   ) {
     listNftTraits(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
+        id
         trait_type
         value
         display_type
         max_value
         trait_count
         order
-        id
         createdAt
         updatedAt
       }
@@ -136,6 +138,7 @@ export const getNft = /* GraphQL */ `
       id
       token_id
       num_sales
+      address
       background_color
       image_url
       image_preview_url
@@ -147,35 +150,6 @@ export const getNft = /* GraphQL */ `
       description
       external_link
       perma_link
-      asset_contract {
-        name
-        address
-        symbol
-        payout_address
-        asset_contract_type
-        created_date
-        description
-        image_url
-        total_supply
-        nft_version
-        opensea_version
-        schema_name
-        external_link
-        id
-        createdAt
-        updatedAt
-      }
-      traits {
-        trait_type
-        value
-        display_type
-        max_value
-        trait_count
-        order
-        id
-        createdAt
-        updatedAt
-      }
       createdAt
       updatedAt
     }
@@ -192,6 +166,7 @@ export const listNfts = /* GraphQL */ `
         id
         token_id
         num_sales
+        address
         background_color
         image_url
         image_preview_url
@@ -203,35 +178,6 @@ export const listNfts = /* GraphQL */ `
         description
         external_link
         perma_link
-        asset_contract {
-          name
-          address
-          symbol
-          payout_address
-          asset_contract_type
-          created_date
-          description
-          image_url
-          total_supply
-          nft_version
-          opensea_version
-          schema_name
-          external_link
-          id
-          createdAt
-          updatedAt
-        }
-        traits {
-          trait_type
-          value
-          display_type
-          max_value
-          trait_count
-          order
-          id
-          createdAt
-          updatedAt
-        }
         createdAt
         updatedAt
       }

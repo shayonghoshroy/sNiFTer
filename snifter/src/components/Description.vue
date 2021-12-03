@@ -4,7 +4,7 @@
     <div class="div">
       <p>
         sNiFTer is an information platform, with the goal to decrease the
-        learning curve, increase engagement, and provide realiable, actionable
+        learning curve, increase engagement, and provide reliable, actionable
         information for the NFT space. sNiFTer aims to tackle this challenge on
         3 fronts; insights and tracking into the performance of and engagement
         with an NFT entity, interactive educational resources on NFT and
@@ -18,15 +18,15 @@
         historical and current sales performance and transaction events
         associated with an NFT entity, along with community engagement on social
         sites. This is achieved through NFT entity search, NFT entity current
-        and historical sales performance, transaction history, and beautiful art
-        work that drives the marketplace. Finally, users can track the events
+        and historical sales performance, transaction history, and beautiful
+        artwork that drives the marketplace. Finally, users can track the events
         associated with an NFT entity through watch lists that provide current
-        sales information and notify of transactions or upcoming air drops.
+        sales information and notify of transactions or upcoming airdrops.
       </p>
       <p>
-        Interactive educational resources, presented in a story like style, with
+        Interactive educational resources, presented in a story-like style, with
         quizzes after short videos, allow users to learn relevant technical
-        information in bite sized pieces. Social interaction between members
+        information in bite-sized pieces. Social interaction between members
         will be achieved through posts detailing NFT events, such as a
         transaction on an NFT, an NFT collection, or even NFT artwork that one
         finds interesting.

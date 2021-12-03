@@ -12,6 +12,7 @@ type tweet @model {
  interaction_count: Int
  createdAt: AWSDateTime
  updatedAt:AWSDateTime
+ date: String
 }
  
 type nftAssetContract @model @auth(rules: [{allow: public}]){
@@ -31,6 +32,7 @@ type nftAssetContract @model @auth(rules: [{allow: public}]){
 }
  
 type nftTraits @model @auth(rules: [{allow: public}]){
+ id: ID!
  trait_type: String
  value: String
  display_type: String
@@ -39,10 +41,11 @@ type nftTraits @model @auth(rules: [{allow: public}]){
  order: String
 }
  
-type nft @model @auth(rules: [{allow: public}]) {
+type nft @model {
  id: ID!
  token_id: Int!
  num_sales: Int!
+ address: String
  background_color: String
  image_url: String
  image_preview_url: String
@@ -54,6 +57,6 @@ type nft @model @auth(rules: [{allow: public}]) {
  description: String
  external_link: String
  perma_link: String
- asset_contract: nftAssetContract
- traits: [nftTraits]
+ createdAt: AWSDateTime
+ updatedAt:AWSDateTime
 }

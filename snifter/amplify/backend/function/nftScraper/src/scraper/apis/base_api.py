@@ -38,7 +38,8 @@ class BaseAPI:
 
             request = client.build_request("get", endpoint)
             if headers is not None:
-                request.headers = headers
+                for key, val in headers.items():
+                    request.headers[key] = val
 
             # Handle response
             resp = await client.send(request)

@@ -4,7 +4,7 @@ import asyncio
 
 from .request_schemas import AssetsRequest, EventRequest
 
-from ..models.nft import NFT
+from ..models.nft import NFT, NFTAssetContract
 from ..models.collection import Collection
 
 from ..apis.exceptions import APIException
@@ -17,9 +17,6 @@ class NFTService():
         self.block_chair_api = BlockChairAPI()
 
     def function_switch(self, event_type: str, event: dict):
-        if event_type != "get_asset" or event_type != "get_assets":
-            return {}
-
         print(event_type)
         if event_type == "get_asset":
             contract_address = event.pop("contract_address")
@@ -62,8 +59,16 @@ class NFTService():
         result = await self.opensea_api.get_asset(contract_address, token_id)
         if isinstance(result, APIException):
             return result
+
+        result = dict(result)
+        asset_contract = result.get("asset_contract", None)
+        if asset_contract is not None:
+            result["address"] = asset_contract["address"]
     
-        return NFT(**result)
+        return {
+            "nft": NFT(**result),
+            "asset_contract": NFTAssetContract(**asset_contract)
+        }
 
     async def get_assets(self, contract_addresses: list, token_ids: list = None, **options):
         params = {key: val for key, val in options.items() if val is not None}

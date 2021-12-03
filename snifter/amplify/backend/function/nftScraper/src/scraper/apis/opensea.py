@@ -11,7 +11,7 @@ class OpenSeaAPI(BaseAPI):
 
         self.api_key = "121e8a8126664ef8ab27769de9fc6549"
 
-    async def make_get_request(self, endpoint: str, params: dict = ..., headers: dict = None):
+    async def make_get_request(self, endpoint: str, params: dict = {}, headers: dict = None):
         headers = {"X-API-KEY": self.api_key}
         return await super().make_get_request(endpoint, params=params, headers=headers)
 
@@ -28,7 +28,7 @@ class OpenSeaAPI(BaseAPI):
         endpoint = f"/assets"
 
         results = await self.make_get_request(endpoint, params)
-        if isinstance(results, Exception):
+        if isinstance(results, APIException):
             return results
         
         return results.json()

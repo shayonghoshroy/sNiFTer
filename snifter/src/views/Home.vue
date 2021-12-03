@@ -4,7 +4,7 @@
       <div class="hero-body">
         <div class="container">
           <h1 class="title">Welcome to sNiFTer</h1>
-          <h2 class="subtitle">First rounds on us</h2>
+          <h2 class="subtitle">First round's on us</h2>
           <div class="button-block">
             <button class="button is-xl is-purple">
               <router-link to="/register">Register Now</router-link>
@@ -14,36 +14,19 @@
       </div>
     </section>
     <div>
-      <Popup>
-        <div class="row div">
-          <div class="flex md6 lg4">
-            <va-card style="height: 450px; width: 250px">
-              <va-image
-                src="https://lh3.googleusercontent.com/mBR3nwH1YONmC-Y5YOaDwSYa9Uo6hNFfXlRTdxDmHJ9Z1eOTCmteSA-ifqsYLechzztVGD6nC0EEomxZJjhpYl0pmSQx_uOqME8n=w600"
-                style="height: 300px"
-              />
-              <va-card-title>Tenkara</va-card-title>
-              <va-card-content
-                >Created by VictorMosquera Deriving inspiration from Japanese
-                and South American traditional fishing practices.
-              </va-card-content>
-            </va-card>
-          </div>
-        </div>
-      </Popup>
+      <NFTComponent />
     </div>
   </div>
 </template>
 
 <script>
-import Popup from "../components/Popup.vue";
+import NFTComponent from "../components/NFTComponent";
 
 export default {
   name: "Home",
+  components: { NFTComponent },
   setup() {
-    return {
-      Popup,
-    };
+    return {};
   },
 };
 </script>
