@@ -5,7 +5,11 @@
         <div class="row div">
           <div class="flex md6 lg4">
             <va-card style="height: 300px; width: 250px">
-              <va-image :src="nft.image_url" style="height: 200px" />
+              <va-image
+                class="rounded-card"
+                :src="nft.image_url"
+                style="height: 200px"
+              />
               <va-card-title>{{ nft.name }}</va-card-title>
               <va-card-content
                 >{{ nft.name }} {{ nft.token_id }}
@@ -71,5 +75,8 @@ export default {
 .container {
   justify-items: stretch;
   width: 83.5%;
+}
+.rounded-card {
+  border-radius: 5px;
 }
 </style>
