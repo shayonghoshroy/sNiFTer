@@ -2,7 +2,8 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
 import "bulma/css/bulma.css";
-import Oruga from "@oruga-ui/oruga-next";
+import { VuesticPlugin } from "vuestic-ui";
+import "vuestic-ui/dist/vuestic-ui.css";
 import Amplify from "aws-amplify";
 import awsconfig from "./aws-exports";
 import {
@@ -15,4 +16,4 @@ applyPolyfills().then(() => {
 });
 Amplify.configure(awsconfig);
 
-createApp(App).use(router).use(Oruga).mount("#app");
+createApp(App).use(router).use(VuesticPlugin).mount("#app");

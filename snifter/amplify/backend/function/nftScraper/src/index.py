@@ -1,5 +1,7 @@
 import json
 
+import uuid
+
 import boto3
 
 from scraper.apis.exceptions import APIException
@@ -10,7 +12,7 @@ def handler(event, context):
     event_type = event.get("event_type", None)
 
     # Bad Request
-    if event_type is None:
+    if event_type is None or not event_type in ["get_asset", "get_assets"]:
         return {
             'statusCode': 400,
             'headers': {
@@ -23,6 +25,8 @@ def handler(event, context):
     # Perform event
     nft_service = NFTService()
     result = nft_service.function_switch(event_type, event)
+    nft = dict(result)
+    print(nft)
 
     # If error resulting from external API
     if isinstance(result, APIException):
@@ -49,9 +53,21 @@ def handler(event, context):
             )
     
     else:
+        table_item = {
+            'id': {
+                'S': uuid.uuid4()
+            },
+            'token_id': {
+                'N': str(nft["token_id"])
+            },
+            'num_sales': {
+                'N': str(nft["num_sales"])
+            }
+        }
+
         data = client.put_item(
             TableName=table_name,
-            Item=result
+            Item=table_item
         )
 
     return {
@@ -60,5 +76,6 @@ def handler(event, context):
             'Access-Control-Allow-Headers': '*',
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
-        }
+        },
+        
     }

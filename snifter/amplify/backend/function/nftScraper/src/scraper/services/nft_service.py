@@ -20,6 +20,7 @@ class NFTService():
         if event_type != "get_asset" or event_type != "get_assets":
             return {}
 
+        print(event_type)
         if event_type == "get_asset":
             contract_address = event.pop("contract_address")
             token_id = event.pop("token_id")

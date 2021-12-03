@@ -13,6 +13,17 @@
         </div>
       </div>
     </section>
+    <div class="row div">
+      <div class="flex md6 lg4">
+        <va-card color="#4b4b4a" gradient>
+          <va-card-title class="is-white">Title</va-card-title>
+          <va-card-content class="is-white"
+            >Lorem ipsum dolor sit amet, consectetur adipiscing
+            elit.</va-card-content
+          >
+        </va-card>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -64,5 +75,14 @@ export default {
 }
 .is-pink {
   background-color: #ff4778;
+}
+.is-white {
+  color: #ffffff;
+}
+.div {
+  padding-top: 50px;
+  padding-right: 50px;
+  padding-bottom: 50px;
+  padding-left: 50px;
 }
 </style>

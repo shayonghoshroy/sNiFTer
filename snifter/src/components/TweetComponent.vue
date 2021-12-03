@@ -30,7 +30,7 @@ export default {
         const tweets = await API.graphql({
           query: listTweets,
           variables: {
-            limit: 10,
+            limit: 50,
           },
         });
         this.tweets = tweets.data.listTweets.items;
