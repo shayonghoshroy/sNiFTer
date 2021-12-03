@@ -3,7 +3,6 @@ import App from "./App.vue";
 import router from "./router";
 import "bulma/css/bulma.css";
 import Oruga from "@oruga-ui/oruga-next";
-import "@oruga-ui/oruga-next/dist/oruga.css";
 import Amplify from "aws-amplify";
 import awsconfig from "./aws-exports";
 import {
