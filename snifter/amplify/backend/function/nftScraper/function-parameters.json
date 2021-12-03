@@ -1,0 +1,54 @@
+{
+  "permissions": {
+    "auth": {
+      "snifter40205934": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    },
+    "api": {
+      "myapi": [
+        "Query",
+        "Mutation",
+        "Subscription"
+      ]
+    },
+    "function": {
+      "scrapeTweets": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    },
+    "storage": {
+      "tweet:@model(appsync)": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "nftAssetContract:@model(appsync)": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "nftTraits:@model(appsync)": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "nft:@model(appsync)": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}

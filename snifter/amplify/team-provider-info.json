@@ -16,6 +16,10 @@
         "scrapeTweets": {
           "deploymentBucketName": "amplify-snifter-dev-34702-deployment",
           "s3Key": "amplify-builds/scrapeTweets-74745262397279457951-build.zip"
+        },
+        "nftScraper": {
+          "deploymentBucketName": "amplify-snifter-dev-34702-deployment",
+          "s3Key": "amplify-builds/nftScraper-78646a6a70493249624f-build.zip"
         }
       },
       "auth": {
