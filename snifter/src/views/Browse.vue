@@ -1,18 +1,18 @@
 <template>
   <div>
     <article>
-      <h2>sNiFTer News</h2>
-      <p>See what's hot in the world of NFT's</p>
+      <h2>Take a look</h2>
+      <p>You should definitely keep your eye on these</p>
     </article>
-    <TweetComponent />
+    <NFTComponent />
   </div>
 </template>
 
 <script>
-import TweetComponent from "../components/TweetComponent";
+import NFTComponent from "../components/NFTComponent";
 export default {
-  name: "News",
-  components: { TweetComponent },
+  name: "Browse",
+  components: { NFTComponent },
 };
 </script>
 
@@ -29,15 +29,6 @@ h1 {
 }
 .description {
   width: 60vw;
-}
-@media (max-width: 700px) {
-  div {
-    padding: 4em 0em;
-  }
-  .description {
-    text-align: justify;
-    width: 90vw;
-  }
 }
 p {
   font-size: clamp(16px, 1.2vw, 1.2vw);
