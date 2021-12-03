@@ -1,16 +1,16 @@
 <template>
   <div id="tweetcomponent">
     <div>
-      <div class="post" v-for="item in tweets" :key="item.id">
-        <h3>{{ item.username }}</h3>
-        <p>{{ item.text }}</p>
+      <div class="post" v-for="tweet in tweets" :key="tweet.id">
+        <h3>{{ tweet.username }}</h3>
+        <p>{{ tweet.text }}</p>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { API, graphqlOperation } from "aws-amplify";
+import { API } from "aws-amplify";
 import { listTweets } from "../graphql/queries";
 export default {
   name: "TweetComponent",
@@ -19,16 +19,23 @@ export default {
   },
   data() {
     return {
+      username: "",
+      text: "",
       tweets: [],
     };
   },
   methods: {
     async getTweets() {
       try {
-        const response = await API.graphql(graphqlOperation(listTweets));
-        this.tweets = response.data.listTweets.items;
-      } catch (error) {
-        console.log("Error loading tweets...", error);
+        const tweets = await API.graphql({
+          query: listTweets,
+          variables: {
+            limit: 10,
+          },
+        });
+        this.tweets = tweets.data.listTweets.items;
+      } catch (e) {
+        console.error(e);
       }
     },
   },

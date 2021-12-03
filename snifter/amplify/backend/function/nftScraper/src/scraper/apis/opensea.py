@@ -9,6 +9,12 @@ class OpenSeaAPI(BaseAPI):
 
         super().__init__("opensea", base_url)
 
+        self.api_key = "121e8a8126664ef8ab27769de9fc6549"
+
+    async def make_get_request(self, endpoint: str, params: dict = ..., headers: dict = None):
+        headers = {"X-API-KEY": self.api_key}
+        return await super().make_get_request(endpoint, params=params, headers=headers)
+
     async def get_asset(self, contract_address: str, token_id: int):
         endpoint = f"/asset/{contract_address}/{token_id}"
         

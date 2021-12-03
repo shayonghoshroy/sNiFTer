@@ -1,8 +1,8 @@
 # This "input" configures a global authorization rule to enable public access to
 # all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
-#input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONLY!
+input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONLY!
 
-type tweet @model @auth(rules: [{allow: private}]) {
+type tweet @model {
  id: ID!
  text: String
  username: String
@@ -10,6 +10,8 @@ type tweet @model @auth(rules: [{allow: private}]) {
  retweet_count: Int
  like_count: Int
  interaction_count: Int
+ createdAt: AWSDateTime
+ updatedAt:AWSDateTime
 }
  
 type nftAssetContract @model @auth(rules: [{allow: public}]){
@@ -21,7 +23,6 @@ type nftAssetContract @model @auth(rules: [{allow: public}]){
  created_date: String
  description: String
  image_url: String
- 
  total_supply: String
  nft_version: String
  opensea_version: String
@@ -32,7 +33,6 @@ type nftAssetContract @model @auth(rules: [{allow: public}]){
 type nftTraits @model @auth(rules: [{allow: public}]){
  trait_type: String
  value: String
- 
  display_type: String
  max_value: String
  trait_count: Int
@@ -43,7 +43,6 @@ type nft @model @auth(rules: [{allow: public}]) {
  id: ID!
  token_id: Int!
  num_sales: Int!
- 
  background_color: String
  image_url: String
  image_preview_url: String
@@ -55,7 +54,6 @@ type nft @model @auth(rules: [{allow: public}]) {
  description: String
  external_link: String
  perma_link: String
- 
  asset_contract: nftAssetContract
  traits: [nftTraits]
 }

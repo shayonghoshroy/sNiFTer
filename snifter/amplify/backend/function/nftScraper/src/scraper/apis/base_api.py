@@ -15,7 +15,7 @@ class BaseAPI:
         self.authentication_key = authentication_key
         self.service = service
 
-    async def make_get_request(self, endpoint: str, params: dict = {}):
+    async def make_get_request(self, endpoint: str, params: dict = {}, headers: dict = None):
         async with httpx.AsyncClient(base_url=self.base_url) as client:
             if self.authentication_key:
                 # TODO:// Don't hard code this specifically for block chair
@@ -36,8 +36,12 @@ class BaseAPI:
             # Append query params to endpoint
             endpoint += "?" + "&".join(formatted_params)
 
+            request = client.build_request("get", endpoint)
+            if headers is not None:
+                request.headers = headers
+
             # Handle response
-            resp = await client.get(endpoint)
+            resp = await client.send(request)
             if resp.status_code != 200:
                 return APIException(self.service, endpoint, resp.status_code, resp.reason_phrase)
             

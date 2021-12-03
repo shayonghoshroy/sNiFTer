@@ -2,8 +2,8 @@ import json
 
 import boto3
 
-from .scraper.apis.exceptions import APIException
-from .scraper.services.nft_service import NFTService
+from scraper.apis.exceptions import APIException
+from scraper.services.nft_service import NFTService
 
 def handler(event, context):
     # All events should contain event_type field for function switch

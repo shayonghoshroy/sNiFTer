@@ -65,21 +65,21 @@ class NFTService():
         return NFT(**result)
 
     async def get_assets(self, contract_addresses: list, token_ids: list = None, **options):
-            params = {key: val for key, val in options.items() if val is not None}
-            params["asset_contract_addresses"] = contract_addresses
-            if token_ids is not None:
-                params["token_ids"] = token_ids
+        params = {key: val for key, val in options.items() if val is not None}
+        params["asset_contract_addresses"] = contract_addresses
+        if token_ids is not None:
+            params["token_ids"] = token_ids
 
-            # Set query options
-            options.setdefault("offset", 0)
-            options.setdefault("limit", 50)
+        # Set query options
+        options.setdefault("offset", 0)
+        options.setdefault("limit", 50)
 
-            params.update(options)
+        params.update(options)
 
-            result = await self.opensea_api.get_assets(params)
-            if isinstance(result, Exception):
-                return result
-            return self.parse_asset_response(result['assets'])
+        result = await self.opensea_api.get_assets(params)
+        if isinstance(result, Exception):
+            return result
+        return self.parse_asset_response(result['assets'])
             
     
     def parse_asset_response(self, data, fields: list = None):
