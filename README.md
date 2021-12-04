@@ -45,6 +45,11 @@ Ensure that all dependencies are downloaded with the following command:
 npm install
 ```
 
+Get setup with our Amplify environment (requires adminstrator (Shayon) to first provide access through email)
+```
+amplify pull --appId d22d1odtojlp9e --envName dev
+```
+
 Run the Vue app.
 ```
 npm run serve --open
