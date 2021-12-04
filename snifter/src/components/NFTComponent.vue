@@ -4,17 +4,22 @@
       <div class="post" v-for="nft in nfts" :key="nft.id">
         <div class="row div">
           <div class="flex md6 lg4">
-            <va-card style="height: 300px; width: 250px">
-              <va-image
-                class="rounded-card"
-                :src="nft.image_url"
-                style="height: 200px"
-              />
-              <va-card-title>{{ nft.name }}</va-card-title>
-              <va-card-content
-                >{{ nft.name }} {{ nft.token_id }}
-              </va-card-content>
-            </va-card>
+            <router-link
+              :to="{ name: 'Nft', 
+                query: nft
+              }">
+              <va-card class="nft-card" style="height: 300px; width: 250px">
+                <va-image v-if="nft.image_url"
+                  class="rounded-card"
+                  :src="nft.image_url"
+                  style="height: 200px"
+                />
+                <va-card-title>{{ nft.name }}</va-card-title>
+                <va-card-content
+                  >{{ nft.name }} {{ nft.token_id }}
+                </va-card-content>
+              </va-card>
+            </router-link>
           </div>
         </div>
       </div>
@@ -54,7 +59,7 @@ export default {
       } catch (e) {
         console.error(e);
       }
-    },
+    }
   },
 };
 </script>
@@ -79,4 +84,10 @@ export default {
 .rounded-card {
   border-radius: 5px;
 }
+
+.nft-card:hover {
+  cursor: pointer;
+  box-shadow: 15px 5px 15px 5px grey;
+}
+
 </style>
