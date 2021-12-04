@@ -24,6 +24,7 @@
         <router-link to="/about" class="navbar-item">About</router-link>
         <router-link to="/news" class="navbar-item">News</router-link>
         <router-link to="/browse" class="navbar-item">Browse</router-link>
+        <router-link to="/search" class="navbar-item">Search</router-link>
       </div>
       <div class="navbar-end">
         <div class="buttons">

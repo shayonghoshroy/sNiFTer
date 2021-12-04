@@ -29,6 +29,8 @@ type nftAssetContract @model @auth(rules: [{allow: public}]){
  opensea_version: String
  schema_name: String
  external_link: String
+ createdAt: AWSDateTime
+ updatedAt: AWSDateTime
 }
  
 type nftTraits @model @auth(rules: [{allow: public}]){
