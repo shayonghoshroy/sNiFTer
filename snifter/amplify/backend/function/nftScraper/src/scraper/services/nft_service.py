@@ -25,6 +25,12 @@ class NFTService():
             loop = asyncio.get_event_loop()
             return loop.run_until_complete(self.get_asset(contract_address, token_id))
 
+        elif event_type == "collection":
+            collection_slug = event.pop("collection_slug")
+            
+            loop = asyncio.get_event_loop()
+            return loop.run_until_complete(self.get_asset(collection_slug))
+
         else:
             contract_addresses = event.get("contract_addresses", None)
             token_ids = event.get("token_ids", None)

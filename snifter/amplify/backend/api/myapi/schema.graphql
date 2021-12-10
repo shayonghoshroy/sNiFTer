@@ -14,6 +14,56 @@ type tweet @model {
  updatedAt:AWSDateTime
  date: String
 }
+
+type collectionStats @model @auth(rules: [{allow: public}]) {
+    one_day_volume: Float
+    one_day_change: Float
+    one_day_sales: Int
+    one_day_average_price: Float
+    seven_day_volume: Float
+    seven_day_change: Float
+    seven_day_sales: Int
+    seven_day_average_price: Float
+    thirty_day_volume: Float
+    thirty_day_change: Float
+    thirty_day_sales: Int
+    thirty_day_average_price: Float
+    total_volume: Float
+    total_sales: Int
+    total_supply: Int
+    count: Int
+    num_owners: Int
+    average_price: Float
+    num_reports: Int
+    market_cap: Float
+    floor_price: Int
+}
+
+# Collection related models
+type collection @model @auth(rules: [{allow: public}]){
+    slug: String!
+    name: String!
+    traits: [nftTraits]
+    stats: collectionStats
+    description: String
+    image_url: String
+    external_url: String
+    # payment_tokens: String
+    #primary_asset_contracts: [nftAssetContract]
+    banner_image_url: String
+    char_url: String
+    created_date: Int
+    discord_url: String
+    featured: Boolean
+    featured_image_url: String
+    payout_address: String
+    telegram_url: String
+    twitter_username: String
+    instagram_username: String
+    wiki_url: String
+    createdAt: AWSDateTime
+    updatedAt: AWSDateTime
+}
  
 type nftAssetContract @model @auth(rules: [{allow: public}]){
  name: String!

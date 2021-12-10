@@ -1,6 +1,6 @@
 <template>
   <div class="nft-container">
-    <va-card :src="nft" class="nft-card" style="height: 500px; width: 450px">
+    <va-card :src="nft" class="nft-card" style="height: 500px; width: 500px">
 
         <va-image
             class="rounded-card"
@@ -14,6 +14,14 @@
         <va-card-content>
             {{ nft.name }} {{ nft.token_id }}
         </va-card-content>
+
+        <va-collapse
+        v-model="showContract"
+        header="Contract Information">
+          <contract-stats
+          :contracts="nftContract">
+          </contract-stats>
+        </va-collapse>
     </va-card>
   </div>
 </template>
@@ -21,9 +29,13 @@
 <script>
 import { API } from "aws-amplify";
 import { listNftAssetContracts } from "../graphql/queries";
+import ContractStats from "../components/ContractInfo";
 
 export default {    
   name: "Nft",
+  components: {
+    ContractStats,
+  },
   async created(){
     console.log(this.$route.query);
     this.nftData = this.$route.query;
@@ -34,7 +46,7 @@ export default {
   data() {
     return {
         nftData: null,
-        value: [false, false, false],
+        showContract: false,
         collapses: [
         { title: 'Contract', content: 'first collapse content' },
         ],

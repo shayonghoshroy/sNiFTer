@@ -1,32 +1,42 @@
 import json
-
 import uuid
-
 import boto3
+
+from pydantic import BaseModel
 
 from scraper.apis.exceptions import APIException
 from scraper.services.nft_service import NFTService
 
-def put_item(data: dict, table_name):
-    # Otherwise, save nft model to dynamoDB
-    client = boto3.client('dynamodb')
-
+# We can run this asynchronously, because it doesn't matter the order that the data is inserted into the dictionary
+async def format_item(data: dict):
     item = {}
     for key, val in data.items():
+        # Don't insert null values
         if val is None:
             continue
 
         if isinstance(val, str):
             item[key] = {"S": val}
 
-        if isinstance(val, int):
+        if isinstance(val, int) or isinstance(val, float):
             item[key] = {"N": str(val)}
 
+        # If embedded model or dictionary
+        if isinstance(val, dict):
+            # Recursively insert fields into item
+            item[key] = {"M": format_item(dict(val))}
+        
+        return item
+
+def put_item(data: dict, table_name):
+    # Otherwise, save nft model to dynamoDB
+    client = boto3.client('dynamodb')
+    item = format_item(data)
+            
     data = client.put_item(
                 TableName=table_name,
                 Item=item
             )
-    
 
 def handler(event, context):
     # All events should contain event_type field for function switch
