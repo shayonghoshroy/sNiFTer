@@ -1,52 +1,60 @@
 <template>
     <div class="searchComponent">
-        <va-input
-            class="mb-4"
-            v-model="address"
-            label="Address"
-            placeholder="Required"
-        />
-        <va-input
-            class="mb-4"
-            v-model="tokenid"
-            label="Token ID"
-            placeholder="Optional"
-        />
-        <va-button @click="getNFTs(address,tokenid)">Search</va-button>
-    </div>
-    <div>
-        <simple-grid-container class="container" columnWidth="300px">
-            <div class="post" v-for="nft in nfts" :key="nft.id">
-                <div class="row div">
-                <div class="flex md6 lg4">
-                    <router-link
-                    :to="{ name: 'Nft', 
-                        query: nft
-                    }">
-                        <va-card style="height: 300px; width: 250px">
-                        <va-image
-                            class="rounded-card"
-                            :src="nft.image_url"
-                            style="height: 200px"
-                        />
-                        <va-card-title>{{ nft.name }}</va-card-title>
-                        <va-card-content
-                            >{{ nft.name }} {{ nft.token_id }}
-                        </va-card-content>
-                        </va-card>
-                    </router-link>
-                </div>
-                </div>
+        <div class="search-wrapper">
+            <va-button-dropdown
+            :icon="searchTypes.at(searchIndex)[1]"
+            :label="searchTypes.at(searchIndex)[0]">
+                <va-list class="search-item-list">
+                    <va-list-item class="search-item" v-for="(type, index) in searchTypes"
+                    :key="index"
+                    @click="searchIndex = index">
+                        <va-list-item-section avatar>
+                            <va-icon :name="type[1]"></va-icon>
+                        </va-list-item-section>
+                        <va-list-item-section>
+                            <va-list-item-label>{{ type[0] }}</va-list-item-label>
+                        </va-list-item-section>
+                    </va-list-item>
+                </va-list>
+            </va-button-dropdown>
+            <div>
+                <va-form class="search-input-form" v-if="searchIndex === 1">
+                    <va-input
+                        class="mb-4"
+                        v-model="address"
+                        label="Address"
+                        placeholder="Required"
+                    />
+                    <va-input
+                        class="mb-4"
+                        v-model="tokenid"
+                        label="Token ID"
+                        placeholder="Optional"
+                    />
+                </va-form>
+
+                <va-form class="search-input-form" v-else>
+                    <va-input
+                        class="mb-4"
+                        v-model="address"
+                        label="Address"
+                        placeholder="Required"
+                    />
+                </va-form>
             </div>
-        </simple-grid-container>
+
+            <va-button @click="getNFTs()">Search</va-button>
+        </div>
     </div>
 </template>
 
 <script>
 import { API } from "aws-amplify";
 import { listNfts } from "../graphql/queries";
+
 export default {
     name: "SearchComponent",
+    components: { },
     async created() {
         //this.getNFTs();
     },
@@ -55,33 +63,34 @@ export default {
             tokenid: "",
             address: "",
             nfts: [],
+            searchTypes: [["Collection", "collections"], ["Token", 'generating_tokens'], ["Owner", 'account_balance_wallet'], ["Creator", 'palette']],
+            searchIndex: 0
         };
     },
     methods: {
-        async getNFTs(address, tokenid) {
+        getNFTs: async function() {
             try {
-                console.log(tokenid);
-                if(tokenid=="") {
-                    console.log("no id")
+                if(this.tokenid=="") {
                     const nfts = await API.graphql({
                         query: listNfts,
                         variables: {
                         limit: 300,
-                        filter: {address: {eq: address}}
+                        filter: {address: {eq: this.address}}
                         },
                     });
                     this.nfts = nfts.data.listNfts.items;
+                    this.$emit('getNFTs', this.nfts)
                 }
                 else{
-                    console.log("yes ids");
                     const nfts = await API.graphql({
                         query: listNfts,
                         variables: {
                         limit: 300,
-                        filter: {token_id: {eq: tokenid}, address: {eq: address}}
+                        filter: {token_id: {eq: this.tokenid}, address: {eq: this.address}}
                         },
                     });
                     this.nfts = nfts.data.listNfts.items;
+                    this.$emit('getNFTs', this.nfts)
                 }
             } catch (e) {
             console.error(e);
@@ -92,15 +101,40 @@ export default {
 </script>
 
 <style scoped>
-    .searchComponent {
+    .search-wrapper {
         display: flex;
         justify-content: center;
         align-items: center;
-        margin-bottom: 1em;
-        padding: 5px;
+        padding: 1em;
     }
+
+    .search-item-list {
+        padding: 1em;
+    }
+
+    .search-item:hover {
+        cursor: pointer;
+        background-color: #6f36bc;
+        transition: ease-in 0.1s;
+    }
+
+    .search-input-form {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .search-alert {
+        color: white;
+    }
+
     .va-input-wrapper {
         margin-bottom: 0 !important;
+    }
+
+    .va-alert__content {
+        display: flex;
+        flex-direction: row;
     }
     
     .post {
