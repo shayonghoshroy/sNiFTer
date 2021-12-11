@@ -1,5 +1,7 @@
 import json
 import uuid
+import asyncio
+
 import boto3
 
 from pydantic import BaseModel
@@ -8,7 +10,7 @@ from scraper.apis.exceptions import APIException
 from scraper.services.nft_service import NFTService
 
 # We can run this asynchronously, because it doesn't matter the order that the data is inserted into the dictionary
-async def format_item(data: dict):
+def format_item(data: dict):
     item = {}
     for key, val in data.items():
         # Don't insert null values
@@ -21,16 +23,28 @@ async def format_item(data: dict):
         if isinstance(val, int) or isinstance(val, float):
             item[key] = {"N": str(val)}
 
+        elif isinstance(val, list):
+            if isinstance(val[0], str):
+                item[key] = {"SS": [string for string in val]}
+
+            elif isinstance(val[0], int) or isinstance(val[0], float):
+                item[key] = {"NS": [num for num in val]}
+            
+            # If dictionary or model, recursively add to list
+            else:
+                item[key] = {"L": format_item(obj) for obj in val}
+
         # If embedded model or dictionary
         if isinstance(val, dict):
             # Recursively insert fields into item
-            item[key] = {"M": format_item(dict(val))}
+            item[key] = {"M": format_item(val)}
         
         return item
 
 def put_item(data: dict, table_name):
     # Otherwise, save nft model to dynamoDB
     client = boto3.client('dynamodb')
+
     item = format_item(data)
             
     data = client.put_item(
