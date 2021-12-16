@@ -49,6 +49,282 @@ export const onDeleteTweet = /* GraphQL */ `
     }
   }
 `;
+export const onCreateCollectionStats = /* GraphQL */ `
+  subscription OnCreateCollectionStats {
+    onCreateCollectionStats {
+      one_day_volume
+      one_day_change
+      one_day_sales
+      one_day_average_price
+      seven_day_volume
+      seven_day_change
+      seven_day_sales
+      seven_day_average_price
+      thirty_day_volume
+      thirty_day_change
+      thirty_day_sales
+      thirty_day_average_price
+      total_volume
+      total_sales
+      total_supply
+      count
+      num_owners
+      average_price
+      num_reports
+      market_cap
+      floor_price
+      id
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateCollectionStats = /* GraphQL */ `
+  subscription OnUpdateCollectionStats {
+    onUpdateCollectionStats {
+      one_day_volume
+      one_day_change
+      one_day_sales
+      one_day_average_price
+      seven_day_volume
+      seven_day_change
+      seven_day_sales
+      seven_day_average_price
+      thirty_day_volume
+      thirty_day_change
+      thirty_day_sales
+      thirty_day_average_price
+      total_volume
+      total_sales
+      total_supply
+      count
+      num_owners
+      average_price
+      num_reports
+      market_cap
+      floor_price
+      id
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteCollectionStats = /* GraphQL */ `
+  subscription OnDeleteCollectionStats {
+    onDeleteCollectionStats {
+      one_day_volume
+      one_day_change
+      one_day_sales
+      one_day_average_price
+      seven_day_volume
+      seven_day_change
+      seven_day_sales
+      seven_day_average_price
+      thirty_day_volume
+      thirty_day_change
+      thirty_day_sales
+      thirty_day_average_price
+      total_volume
+      total_sales
+      total_supply
+      count
+      num_owners
+      average_price
+      num_reports
+      market_cap
+      floor_price
+      id
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onCreateCollection = /* GraphQL */ `
+  subscription OnCreateCollection {
+    onCreateCollection {
+      slug
+      name
+      traits {
+        id
+        trait_type
+        value
+        display_type
+        max_value
+        trait_count
+        order
+        createdAt
+        updatedAt
+      }
+      stats {
+        one_day_volume
+        one_day_change
+        one_day_sales
+        one_day_average_price
+        seven_day_volume
+        seven_day_change
+        seven_day_sales
+        seven_day_average_price
+        thirty_day_volume
+        thirty_day_change
+        thirty_day_sales
+        thirty_day_average_price
+        total_volume
+        total_sales
+        total_supply
+        count
+        num_owners
+        average_price
+        num_reports
+        market_cap
+        floor_price
+        id
+        createdAt
+        updatedAt
+      }
+      description
+      image_url
+      external_url
+      banner_image_url
+      char_url
+      created_date
+      discord_url
+      featured
+      featured_image_url
+      payout_address
+      telegram_url
+      twitter_username
+      instagram_username
+      wiki_url
+      createdAt
+      updatedAt
+      id
+    }
+  }
+`;
+export const onUpdateCollection = /* GraphQL */ `
+  subscription OnUpdateCollection {
+    onUpdateCollection {
+      slug
+      name
+      traits {
+        id
+        trait_type
+        value
+        display_type
+        max_value
+        trait_count
+        order
+        createdAt
+        updatedAt
+      }
+      stats {
+        one_day_volume
+        one_day_change
+        one_day_sales
+        one_day_average_price
+        seven_day_volume
+        seven_day_change
+        seven_day_sales
+        seven_day_average_price
+        thirty_day_volume
+        thirty_day_change
+        thirty_day_sales
+        thirty_day_average_price
+        total_volume
+        total_sales
+        total_supply
+        count
+        num_owners
+        average_price
+        num_reports
+        market_cap
+        floor_price
+        id
+        createdAt
+        updatedAt
+      }
+      description
+      image_url
+      external_url
+      banner_image_url
+      char_url
+      created_date
+      discord_url
+      featured
+      featured_image_url
+      payout_address
+      telegram_url
+      twitter_username
+      instagram_username
+      wiki_url
+      createdAt
+      updatedAt
+      id
+    }
+  }
+`;
+export const onDeleteCollection = /* GraphQL */ `
+  subscription OnDeleteCollection {
+    onDeleteCollection {
+      slug
+      name
+      traits {
+        id
+        trait_type
+        value
+        display_type
+        max_value
+        trait_count
+        order
+        createdAt
+        updatedAt
+      }
+      stats {
+        one_day_volume
+        one_day_change
+        one_day_sales
+        one_day_average_price
+        seven_day_volume
+        seven_day_change
+        seven_day_sales
+        seven_day_average_price
+        thirty_day_volume
+        thirty_day_change
+        thirty_day_sales
+        thirty_day_average_price
+        total_volume
+        total_sales
+        total_supply
+        count
+        num_owners
+        average_price
+        num_reports
+        market_cap
+        floor_price
+        id
+        createdAt
+        updatedAt
+      }
+      description
+      image_url
+      external_url
+      banner_image_url
+      char_url
+      created_date
+      discord_url
+      featured
+      featured_image_url
+      payout_address
+      telegram_url
+      twitter_username
+      instagram_username
+      wiki_url
+      createdAt
+      updatedAt
+      id
+    }
+  }
+`;
 export const onCreateNftAssetContract = /* GraphQL */ `
   subscription OnCreateNftAssetContract {
     onCreateNftAssetContract {
@@ -65,9 +341,9 @@ export const onCreateNftAssetContract = /* GraphQL */ `
       opensea_version
       schema_name
       external_link
-      id
       createdAt
       updatedAt
+      id
     }
   }
 `;
@@ -87,9 +363,9 @@ export const onUpdateNftAssetContract = /* GraphQL */ `
       opensea_version
       schema_name
       external_link
-      id
       createdAt
       updatedAt
+      id
     }
   }
 `;
@@ -109,9 +385,9 @@ export const onDeleteNftAssetContract = /* GraphQL */ `
       opensea_version
       schema_name
       external_link
-      id
       createdAt
       updatedAt
+      id
     }
   }
 `;

@@ -42,7 +42,6 @@
     },
     methods: {
       searchResult(nfts) {
-        console.log(nfts);
         this.nfts = nfts;
         this.searched = true;
       }

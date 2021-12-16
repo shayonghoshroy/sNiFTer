@@ -37,6 +37,8 @@ type collectionStats @model @auth(rules: [{allow: public}]) {
  num_reports: Int
  market_cap: Float
  floor_price: Int
+ createdAt: AWSDateTime
+ updatedAt:AWSDateTime
 }
 
 # Collection related models
@@ -91,6 +93,8 @@ type nftTraits @model @auth(rules: [{allow: public}]){
  max_value: String
  trait_count: Int
  order: String
+ createdAt: AWSDateTime
+ updatedAt:AWSDateTime
 }
  
 type nft @model {
