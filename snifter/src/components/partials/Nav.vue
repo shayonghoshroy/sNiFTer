@@ -15,7 +15,7 @@
       </va-navbar-item>
     </template>
     <template #center class="mb-2">
-      <div>
+      <div class="nav-center">
         <SearchComponent />
       </div>
     </template>
@@ -87,5 +87,11 @@ nav {
 
 .buttons {
   display: flex;
+}
+
+.nav-center {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 </style>
