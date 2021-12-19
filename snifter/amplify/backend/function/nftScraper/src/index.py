@@ -12,15 +12,20 @@ from scraper.services.nft_service import NFTService
 # We can run this asynchronously, because it doesn't matter the order that the data is inserted into the dictionary
 def format_item(data: dict):
     item = {}
+    
     for key, val in data.items():
+                
         # Don't insert null values
         if val is None:
             continue
 
         if isinstance(val, str):
             item[key] = {"S": val}
+            
+        elif isinstance(val, bool):
+            item[key] = {"BOOL": val}
 
-        if isinstance(val, int) or isinstance(val, float):
+        elif isinstance(val, int) or isinstance(val, float):
             item[key] = {"N": str(val)}
 
         elif isinstance(val, list):
@@ -32,21 +37,22 @@ def format_item(data: dict):
             
             # If dictionary or model, recursively add to list
             else:
-                item[key] = {"L": format_item(obj) for obj in val}
+                item[key] = {"L": [{"M": format_item(dict(obj)) for obj in val}]}
 
         # If embedded model or dictionary
-        if isinstance(val, dict):
+        elif isinstance(val, dict) or BaseModel in val.__class__.mro():
             # Recursively insert fields into item
-            item[key] = {"M": format_item(val)}
-        
-        return item
+            item[key] = {"M": format_item(dict(val))}
+            
+    return item
 
 def put_item(data: dict, table_name):
+    data = dict(data)    
     # Otherwise, save nft model to dynamoDB
     client = boto3.client('dynamodb')
 
     item = format_item(data)
-            
+    
     data = client.put_item(
                 TableName=table_name,
                 Item=item
@@ -57,7 +63,7 @@ def handler(event, context):
     event_type = event.get("event_type", None)
 
     # Bad Request
-    if event_type is None or not event_type in ["get_asset", "get_assets"]:
+    if event_type is None or not event_type in ["get_asset", "get_assets", "get_collection"]:
         return {
             'statusCode': 400,
             'headers': {
@@ -90,6 +96,9 @@ def handler(event, context):
 
             put_item(contract_address, "nftAssetContract-l6kkjo2j3jf55dllykn3b64e2u-dev")
             put_item(nft, "nft-l6kkjo2j3jf55dllykn3b64e2u-dev")
+            
+    elif event_type == "get_collection":
+        put_item(result, "collection-l6kkjo2j3jf55dllykn3b64e2u-dev")
     
     else:
         contract_address, nft = result["asset_contract"], result["nft"]

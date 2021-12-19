@@ -65,7 +65,6 @@ export default {
             const nfts = await API.graphql({
                 query: listNftAssetContracts,
                 variables: {
-                limit: 1,
                 filter: {address: {eq: address}}
                 },
             });

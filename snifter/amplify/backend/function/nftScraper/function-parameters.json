@@ -30,6 +30,18 @@
         "update",
         "delete"
       ],
+      "collectionStats:@model(appsync)": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "collection:@model(appsync)": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
       "nftAssetContract:@model(appsync)": [
         "create",
         "read",

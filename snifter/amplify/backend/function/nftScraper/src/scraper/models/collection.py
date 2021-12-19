@@ -1,3 +1,4 @@
+import uuid
 from pydantic import BaseModel
 from datetime import datetime
 
@@ -14,7 +15,14 @@ class PaymentToken(BaseModel):
     eth_price: float = None
     usd_price: float = None
 
+    def __init__(__pydantic_self__, **data) -> None:
+        data['id'] = f"{data['address']}-{data['symbol']}"
+
+        super().__init__(**data)
+
 class PrimaryAssetContracts(BaseModel):
+    id: str
+
     address: str
     asset_contract_type: str
     created_at: datetime = None
@@ -31,8 +39,14 @@ class PrimaryAssetContracts(BaseModel):
     default_to_fiat: bool
     payout_address: str
 
+    def __init__(self, **data) -> None:
+        data['id'] = f"{data['address']}-{data['name']}"
+
+        super().__init__(**data)
 
 class CollectionStats(BaseModel):
+    id: str = str(uuid.uuid4())
+
     one_day_volume: float = 0
     one_day_change: float = 0
     one_day_sales: int = 0
@@ -57,6 +71,8 @@ class CollectionStats(BaseModel):
 
 
 class Collection(BaseModel):
+    id: str
+
     editors: List[str] = []
     slug: str
     name: str
@@ -80,4 +96,9 @@ class Collection(BaseModel):
     twitter_username: str = None
     instagram_username: str = None
     wiki_url: str = None
-    
+
+    def __init__(self, **data) -> None:
+        data['id'] = f"{data['slug']}-{data['name']}"
+
+        super().__init__(**data)
+   

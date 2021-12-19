@@ -64,6 +64,7 @@ export const createCollectionStats = /* GraphQL */ `
     $condition: ModelCollectionStatsConditionInput
   ) {
     createCollectionStats(input: $input, condition: $condition) {
+      id
       one_day_volume
       one_day_change
       one_day_sales
@@ -85,7 +86,6 @@ export const createCollectionStats = /* GraphQL */ `
       num_reports
       market_cap
       floor_price
-      id
       createdAt
       updatedAt
     }
@@ -97,6 +97,7 @@ export const updateCollectionStats = /* GraphQL */ `
     $condition: ModelCollectionStatsConditionInput
   ) {
     updateCollectionStats(input: $input, condition: $condition) {
+      id
       one_day_volume
       one_day_change
       one_day_sales
@@ -118,7 +119,6 @@ export const updateCollectionStats = /* GraphQL */ `
       num_reports
       market_cap
       floor_price
-      id
       createdAt
       updatedAt
     }
@@ -130,6 +130,7 @@ export const deleteCollectionStats = /* GraphQL */ `
     $condition: ModelCollectionStatsConditionInput
   ) {
     deleteCollectionStats(input: $input, condition: $condition) {
+      id
       one_day_volume
       one_day_change
       one_day_sales
@@ -151,7 +152,6 @@ export const deleteCollectionStats = /* GraphQL */ `
       num_reports
       market_cap
       floor_price
-      id
       createdAt
       updatedAt
     }
@@ -163,6 +163,7 @@ export const createCollection = /* GraphQL */ `
     $condition: ModelCollectionConditionInput
   ) {
     createCollection(input: $input, condition: $condition) {
+      id
       slug
       name
       traits {
@@ -177,6 +178,7 @@ export const createCollection = /* GraphQL */ `
         updatedAt
       }
       stats {
+        id
         one_day_volume
         one_day_change
         one_day_sales
@@ -198,13 +200,30 @@ export const createCollection = /* GraphQL */ `
         num_reports
         market_cap
         floor_price
-        id
         createdAt
         updatedAt
       }
       description
       image_url
       external_url
+      primary_asset_contracts {
+        id
+        name
+        address
+        symbol
+        payout_address
+        asset_contract_type
+        created_date
+        description
+        image_url
+        total_supply
+        nft_version
+        opensea_version
+        schema_name
+        external_link
+        createdAt
+        updatedAt
+      }
       banner_image_url
       char_url
       created_date
@@ -218,7 +237,6 @@ export const createCollection = /* GraphQL */ `
       wiki_url
       createdAt
       updatedAt
-      id
     }
   }
 `;
@@ -228,6 +246,7 @@ export const updateCollection = /* GraphQL */ `
     $condition: ModelCollectionConditionInput
   ) {
     updateCollection(input: $input, condition: $condition) {
+      id
       slug
       name
       traits {
@@ -242,6 +261,7 @@ export const updateCollection = /* GraphQL */ `
         updatedAt
       }
       stats {
+        id
         one_day_volume
         one_day_change
         one_day_sales
@@ -263,13 +283,30 @@ export const updateCollection = /* GraphQL */ `
         num_reports
         market_cap
         floor_price
-        id
         createdAt
         updatedAt
       }
       description
       image_url
       external_url
+      primary_asset_contracts {
+        id
+        name
+        address
+        symbol
+        payout_address
+        asset_contract_type
+        created_date
+        description
+        image_url
+        total_supply
+        nft_version
+        opensea_version
+        schema_name
+        external_link
+        createdAt
+        updatedAt
+      }
       banner_image_url
       char_url
       created_date
@@ -283,7 +320,6 @@ export const updateCollection = /* GraphQL */ `
       wiki_url
       createdAt
       updatedAt
-      id
     }
   }
 `;
@@ -293,6 +329,7 @@ export const deleteCollection = /* GraphQL */ `
     $condition: ModelCollectionConditionInput
   ) {
     deleteCollection(input: $input, condition: $condition) {
+      id
       slug
       name
       traits {
@@ -307,6 +344,7 @@ export const deleteCollection = /* GraphQL */ `
         updatedAt
       }
       stats {
+        id
         one_day_volume
         one_day_change
         one_day_sales
@@ -328,13 +366,30 @@ export const deleteCollection = /* GraphQL */ `
         num_reports
         market_cap
         floor_price
-        id
         createdAt
         updatedAt
       }
       description
       image_url
       external_url
+      primary_asset_contracts {
+        id
+        name
+        address
+        symbol
+        payout_address
+        asset_contract_type
+        created_date
+        description
+        image_url
+        total_supply
+        nft_version
+        opensea_version
+        schema_name
+        external_link
+        createdAt
+        updatedAt
+      }
       banner_image_url
       char_url
       created_date
@@ -348,7 +403,6 @@ export const deleteCollection = /* GraphQL */ `
       wiki_url
       createdAt
       updatedAt
-      id
     }
   }
 `;
@@ -358,6 +412,7 @@ export const createNftAssetContract = /* GraphQL */ `
     $condition: ModelNftAssetContractConditionInput
   ) {
     createNftAssetContract(input: $input, condition: $condition) {
+      id
       name
       address
       symbol
@@ -373,7 +428,6 @@ export const createNftAssetContract = /* GraphQL */ `
       external_link
       createdAt
       updatedAt
-      id
     }
   }
 `;
@@ -383,6 +437,7 @@ export const updateNftAssetContract = /* GraphQL */ `
     $condition: ModelNftAssetContractConditionInput
   ) {
     updateNftAssetContract(input: $input, condition: $condition) {
+      id
       name
       address
       symbol
@@ -398,7 +453,6 @@ export const updateNftAssetContract = /* GraphQL */ `
       external_link
       createdAt
       updatedAt
-      id
     }
   }
 `;
@@ -408,6 +462,7 @@ export const deleteNftAssetContract = /* GraphQL */ `
     $condition: ModelNftAssetContractConditionInput
   ) {
     deleteNftAssetContract(input: $input, condition: $condition) {
+      id
       name
       address
       symbol
@@ -423,7 +478,6 @@ export const deleteNftAssetContract = /* GraphQL */ `
       external_link
       createdAt
       updatedAt
-      id
     }
   }
 `;

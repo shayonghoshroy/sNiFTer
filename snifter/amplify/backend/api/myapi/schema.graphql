@@ -16,6 +16,7 @@ type tweet @model {
 }
 
 type collectionStats @model @auth(rules: [{allow: public}]) {
+ id: ID!
  one_day_volume: Float
  one_day_change: Float
  one_day_sales: Int
@@ -43,6 +44,7 @@ type collectionStats @model @auth(rules: [{allow: public}]) {
 
 # Collection related models
 type collection @model @auth(rules: [{allow: public}]){
+ id: ID!
  slug: String!
  name: String!
  traits: [nftTraits]
@@ -51,7 +53,7 @@ type collection @model @auth(rules: [{allow: public}]){
  image_url: String
  external_url: String
  # payment_tokens: String
- #primary_asset_contracts: [nftAssetContract]
+ primary_asset_contracts: [nftAssetContract]
  banner_image_url: String
  char_url: String
  created_date: Int
@@ -68,6 +70,7 @@ type collection @model @auth(rules: [{allow: public}]){
 }
  
 type nftAssetContract @model @auth(rules: [{allow: public}]){
+ id: ID!
  name: String!
  address: String!
  symbol: String!

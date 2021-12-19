@@ -43,6 +43,7 @@ export const listTweets = /* GraphQL */ `
 export const getCollectionStats = /* GraphQL */ `
   query GetCollectionStats($id: ID!) {
     getCollectionStats(id: $id) {
+      id
       one_day_volume
       one_day_change
       one_day_sales
@@ -64,7 +65,6 @@ export const getCollectionStats = /* GraphQL */ `
       num_reports
       market_cap
       floor_price
-      id
       createdAt
       updatedAt
     }
@@ -78,6 +78,7 @@ export const listCollectionStats = /* GraphQL */ `
   ) {
     listCollectionStats(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
+        id
         one_day_volume
         one_day_change
         one_day_sales
@@ -99,7 +100,6 @@ export const listCollectionStats = /* GraphQL */ `
         num_reports
         market_cap
         floor_price
-        id
         createdAt
         updatedAt
       }
@@ -110,6 +110,7 @@ export const listCollectionStats = /* GraphQL */ `
 export const getCollection = /* GraphQL */ `
   query GetCollection($id: ID!) {
     getCollection(id: $id) {
+      id
       slug
       name
       traits {
@@ -124,6 +125,7 @@ export const getCollection = /* GraphQL */ `
         updatedAt
       }
       stats {
+        id
         one_day_volume
         one_day_change
         one_day_sales
@@ -145,13 +147,30 @@ export const getCollection = /* GraphQL */ `
         num_reports
         market_cap
         floor_price
-        id
         createdAt
         updatedAt
       }
       description
       image_url
       external_url
+      primary_asset_contracts {
+        id
+        name
+        address
+        symbol
+        payout_address
+        asset_contract_type
+        created_date
+        description
+        image_url
+        total_supply
+        nft_version
+        opensea_version
+        schema_name
+        external_link
+        createdAt
+        updatedAt
+      }
       banner_image_url
       char_url
       created_date
@@ -165,7 +184,6 @@ export const getCollection = /* GraphQL */ `
       wiki_url
       createdAt
       updatedAt
-      id
     }
   }
 `;
@@ -177,6 +195,7 @@ export const listCollections = /* GraphQL */ `
   ) {
     listCollections(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
+        id
         slug
         name
         description
@@ -195,7 +214,6 @@ export const listCollections = /* GraphQL */ `
         wiki_url
         createdAt
         updatedAt
-        id
       }
       nextToken
     }
@@ -204,6 +222,7 @@ export const listCollections = /* GraphQL */ `
 export const getNftAssetContract = /* GraphQL */ `
   query GetNftAssetContract($id: ID!) {
     getNftAssetContract(id: $id) {
+      id
       name
       address
       symbol
@@ -219,7 +238,6 @@ export const getNftAssetContract = /* GraphQL */ `
       external_link
       createdAt
       updatedAt
-      id
     }
   }
 `;
@@ -235,6 +253,7 @@ export const listNftAssetContracts = /* GraphQL */ `
       nextToken: $nextToken
     ) {
       items {
+        id
         name
         address
         symbol
@@ -250,7 +269,6 @@ export const listNftAssetContracts = /* GraphQL */ `
         external_link
         createdAt
         updatedAt
-        id
       }
       nextToken
     }

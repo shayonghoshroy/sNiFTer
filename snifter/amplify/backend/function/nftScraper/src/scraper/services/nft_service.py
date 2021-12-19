@@ -17,7 +17,6 @@ class NFTService():
         self.block_chair_api = BlockChairAPI()
 
     def function_switch(self, event_type: str, event: dict):
-        print(event_type)
         if event_type == "get_asset":
             contract_address = event.pop("contract_address")
             token_id = event.pop("token_id")
@@ -25,11 +24,11 @@ class NFTService():
             loop = asyncio.get_event_loop()
             return loop.run_until_complete(self.get_asset(contract_address, token_id))
 
-        elif event_type == "collection":
+        elif event_type == "get_collection":
             collection_slug = event.pop("collection_slug")
             
             loop = asyncio.get_event_loop()
-            return loop.run_until_complete(self.get_asset(collection_slug))
+            return loop.run_until_complete(self.get_nft_collection(collection_slug))
 
         else:
             contract_addresses = event.get("contract_addresses", None)
@@ -91,6 +90,7 @@ class NFTService():
         result = await self.opensea_api.get_assets(params)
         if isinstance(result, Exception):
             return result
+
         return self.parse_asset_response(result['assets'])
             
     
@@ -101,14 +101,18 @@ class NFTService():
         models = []
 
         # Parse each value if multiple passed in
-        if hasattr(data, "__iter__"):
-            for elt in data:
-                elt.pop("id")
-                nft_model = NFT(**elt)
-                models.append(nft_model)
-        else:
-            nft_model = NFT(**data)
-            models.append(nft_model)
+        if not isinstance(data, list):
+            data = [data]
+        
+        for elt in data:
+            elt.pop("id")
+            asset_contract = elt.get("asset_contract", None)
+            if asset_contract is not None:
+                elt["address"] = asset_contract["address"]
+            nft_model = NFT(**elt)
+            asset_contract = NFTAssetContract(**asset_contract)
+            models.append({"nft": nft_model, "asset_contract": asset_contract})
+            
         return models
 
     async def get_nft_collection(self, collection_slug: str):
@@ -118,6 +122,7 @@ class NFTService():
         return self.parse_nft_collection_response(result["collection"])
 
     def parse_nft_collection_response(self, data):
+
         return Collection(**data)
 
     async def get_nft_collections(self, asset_owner = None, offset = 0, limit = 50):
@@ -127,8 +132,13 @@ class NFTService():
         
         params["offset"] = offset
         params["limit"] = limit
+        
+        result = await self.opensea_api.get_collections(params)
 
-        return await self.opensea_api.get_collections(params)
+        if isinstance(result, APIException):
+            return result
+
+        return Collection(**result)
 
     async def get_nft_collection_stats(self, collection_slug: str):
         return await self.opensea_api.get_collection_stats(collection_slug)

@@ -52,6 +52,7 @@ export const onDeleteTweet = /* GraphQL */ `
 export const onCreateCollectionStats = /* GraphQL */ `
   subscription OnCreateCollectionStats {
     onCreateCollectionStats {
+      id
       one_day_volume
       one_day_change
       one_day_sales
@@ -73,7 +74,6 @@ export const onCreateCollectionStats = /* GraphQL */ `
       num_reports
       market_cap
       floor_price
-      id
       createdAt
       updatedAt
     }
@@ -82,6 +82,7 @@ export const onCreateCollectionStats = /* GraphQL */ `
 export const onUpdateCollectionStats = /* GraphQL */ `
   subscription OnUpdateCollectionStats {
     onUpdateCollectionStats {
+      id
       one_day_volume
       one_day_change
       one_day_sales
@@ -103,7 +104,6 @@ export const onUpdateCollectionStats = /* GraphQL */ `
       num_reports
       market_cap
       floor_price
-      id
       createdAt
       updatedAt
     }
@@ -112,6 +112,7 @@ export const onUpdateCollectionStats = /* GraphQL */ `
 export const onDeleteCollectionStats = /* GraphQL */ `
   subscription OnDeleteCollectionStats {
     onDeleteCollectionStats {
+      id
       one_day_volume
       one_day_change
       one_day_sales
@@ -133,7 +134,6 @@ export const onDeleteCollectionStats = /* GraphQL */ `
       num_reports
       market_cap
       floor_price
-      id
       createdAt
       updatedAt
     }
@@ -142,6 +142,7 @@ export const onDeleteCollectionStats = /* GraphQL */ `
 export const onCreateCollection = /* GraphQL */ `
   subscription OnCreateCollection {
     onCreateCollection {
+      id
       slug
       name
       traits {
@@ -156,6 +157,7 @@ export const onCreateCollection = /* GraphQL */ `
         updatedAt
       }
       stats {
+        id
         one_day_volume
         one_day_change
         one_day_sales
@@ -177,13 +179,30 @@ export const onCreateCollection = /* GraphQL */ `
         num_reports
         market_cap
         floor_price
-        id
         createdAt
         updatedAt
       }
       description
       image_url
       external_url
+      primary_asset_contracts {
+        id
+        name
+        address
+        symbol
+        payout_address
+        asset_contract_type
+        created_date
+        description
+        image_url
+        total_supply
+        nft_version
+        opensea_version
+        schema_name
+        external_link
+        createdAt
+        updatedAt
+      }
       banner_image_url
       char_url
       created_date
@@ -197,13 +216,13 @@ export const onCreateCollection = /* GraphQL */ `
       wiki_url
       createdAt
       updatedAt
-      id
     }
   }
 `;
 export const onUpdateCollection = /* GraphQL */ `
   subscription OnUpdateCollection {
     onUpdateCollection {
+      id
       slug
       name
       traits {
@@ -218,6 +237,7 @@ export const onUpdateCollection = /* GraphQL */ `
         updatedAt
       }
       stats {
+        id
         one_day_volume
         one_day_change
         one_day_sales
@@ -239,13 +259,30 @@ export const onUpdateCollection = /* GraphQL */ `
         num_reports
         market_cap
         floor_price
-        id
         createdAt
         updatedAt
       }
       description
       image_url
       external_url
+      primary_asset_contracts {
+        id
+        name
+        address
+        symbol
+        payout_address
+        asset_contract_type
+        created_date
+        description
+        image_url
+        total_supply
+        nft_version
+        opensea_version
+        schema_name
+        external_link
+        createdAt
+        updatedAt
+      }
       banner_image_url
       char_url
       created_date
@@ -259,13 +296,13 @@ export const onUpdateCollection = /* GraphQL */ `
       wiki_url
       createdAt
       updatedAt
-      id
     }
   }
 `;
 export const onDeleteCollection = /* GraphQL */ `
   subscription OnDeleteCollection {
     onDeleteCollection {
+      id
       slug
       name
       traits {
@@ -280,6 +317,7 @@ export const onDeleteCollection = /* GraphQL */ `
         updatedAt
       }
       stats {
+        id
         one_day_volume
         one_day_change
         one_day_sales
@@ -301,13 +339,30 @@ export const onDeleteCollection = /* GraphQL */ `
         num_reports
         market_cap
         floor_price
-        id
         createdAt
         updatedAt
       }
       description
       image_url
       external_url
+      primary_asset_contracts {
+        id
+        name
+        address
+        symbol
+        payout_address
+        asset_contract_type
+        created_date
+        description
+        image_url
+        total_supply
+        nft_version
+        opensea_version
+        schema_name
+        external_link
+        createdAt
+        updatedAt
+      }
       banner_image_url
       char_url
       created_date
@@ -321,13 +376,13 @@ export const onDeleteCollection = /* GraphQL */ `
       wiki_url
       createdAt
       updatedAt
-      id
     }
   }
 `;
 export const onCreateNftAssetContract = /* GraphQL */ `
   subscription OnCreateNftAssetContract {
     onCreateNftAssetContract {
+      id
       name
       address
       symbol
@@ -343,13 +398,13 @@ export const onCreateNftAssetContract = /* GraphQL */ `
       external_link
       createdAt
       updatedAt
-      id
     }
   }
 `;
 export const onUpdateNftAssetContract = /* GraphQL */ `
   subscription OnUpdateNftAssetContract {
     onUpdateNftAssetContract {
+      id
       name
       address
       symbol
@@ -365,13 +420,13 @@ export const onUpdateNftAssetContract = /* GraphQL */ `
       external_link
       createdAt
       updatedAt
-      id
     }
   }
 `;
 export const onDeleteNftAssetContract = /* GraphQL */ `
   subscription OnDeleteNftAssetContract {
     onDeleteNftAssetContract {
+      id
       name
       address
       symbol
@@ -387,7 +442,6 @@ export const onDeleteNftAssetContract = /* GraphQL */ `
       external_link
       createdAt
       updatedAt
-      id
     }
   }
 `;
