@@ -67,6 +67,10 @@ export default {
 .post {
   background: #fff;
   padding: 1.5em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .post h2 {
