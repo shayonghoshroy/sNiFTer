@@ -2,6 +2,8 @@ import json
 import uuid
 import asyncio
 
+from scraper.models.collection import Collection
+
 import boto3
 
 from pydantic import BaseModel
@@ -9,7 +11,12 @@ from pydantic import BaseModel
 from scraper.apis.exceptions import APIException
 from scraper.services.nft_service import NFTService
 
-# We can run this asynchronously, because it doesn't matter the order that the data is inserted into the dictionary
+TABLE_MAP = {
+    "collection": "collection-l6kkjo2j3jf55dllykn3b64e2u-dev",
+    "nft_asset_contract": "nftAssetContract-l6kkjo2j3jf55dllykn3b64e2u-dev",
+    "nft": "nft-l6kkjo2j3jf55dllykn3b64e2u-dev"
+}
+
 def format_item(data: dict):
     item = {}
     
@@ -58,6 +65,28 @@ def put_item(data: dict, table_name):
                 Item=item
             )
 
+def put_collection(collection: Collection):
+    collection = dict(collection)
+
+    # Remove asset contract from collection
+    collection.setdefault('primary_asset_contracts', None)
+    primary_asset_contracts = collection.pop('primary_asset_contracts')
+
+    # Create collection object
+    collection = dict(collection)
+    dynamodb = boto3.resource('dynamodb')
+    table = dynamodb.Table('Collection')
+    put_item(collection, TABLE_MAP["collection"])
+
+    # Create Asset Contracts
+    if primary_asset_contracts is not None:
+        for contract in primary_asset_contracts:
+            contract = dict(contract)
+            contract['collection'] = collection
+            # Ensure that the contract slug is set
+            contract.setdefault('slug', collection['slug'])
+            put_item(contract, TABLE_MAP['nft_asset_contract'])
+
 def handler(event, context):
     # All events should contain event_type field for function switch
     event_type = event.get("event_type", None)
@@ -98,7 +127,7 @@ def handler(event, context):
             put_item(nft, "nft-l6kkjo2j3jf55dllykn3b64e2u-dev")
             
     elif event_type == "get_collection":
-        put_item(result, "collection-l6kkjo2j3jf55dllykn3b64e2u-dev")
+        put_collection(result)
     
     else:
         contract_address, nft = result["asset_contract"], result["nft"]

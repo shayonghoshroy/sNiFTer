@@ -207,22 +207,7 @@ export const createCollection = /* GraphQL */ `
       image_url
       external_url
       primary_asset_contracts {
-        id
-        name
-        address
-        symbol
-        payout_address
-        asset_contract_type
-        created_date
-        description
-        image_url
-        total_supply
-        nft_version
-        opensea_version
-        schema_name
-        external_link
-        createdAt
-        updatedAt
+        nextToken
       }
       banner_image_url
       char_url
@@ -290,22 +275,7 @@ export const updateCollection = /* GraphQL */ `
       image_url
       external_url
       primary_asset_contracts {
-        id
-        name
-        address
-        symbol
-        payout_address
-        asset_contract_type
-        created_date
-        description
-        image_url
-        total_supply
-        nft_version
-        opensea_version
-        schema_name
-        external_link
-        createdAt
-        updatedAt
+        nextToken
       }
       banner_image_url
       char_url
@@ -373,22 +343,7 @@ export const deleteCollection = /* GraphQL */ `
       image_url
       external_url
       primary_asset_contracts {
-        id
-        name
-        address
-        symbol
-        payout_address
-        asset_contract_type
-        created_date
-        description
-        image_url
-        total_supply
-        nft_version
-        opensea_version
-        schema_name
-        external_link
-        createdAt
-        updatedAt
+        nextToken
       }
       banner_image_url
       char_url
@@ -413,8 +368,12 @@ export const createNftAssetContract = /* GraphQL */ `
   ) {
     createNftAssetContract(input: $input, condition: $condition) {
       id
-      name
+      slug
       address
+      nfts {
+        nextToken
+      }
+      name
       symbol
       payout_address
       asset_contract_type
@@ -426,6 +385,27 @@ export const createNftAssetContract = /* GraphQL */ `
       opensea_version
       schema_name
       external_link
+      collection {
+        id
+        slug
+        name
+        description
+        image_url
+        external_url
+        banner_image_url
+        char_url
+        created_date
+        discord_url
+        featured
+        featured_image_url
+        payout_address
+        telegram_url
+        twitter_username
+        instagram_username
+        wiki_url
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }
@@ -438,8 +418,12 @@ export const updateNftAssetContract = /* GraphQL */ `
   ) {
     updateNftAssetContract(input: $input, condition: $condition) {
       id
-      name
+      slug
       address
+      nfts {
+        nextToken
+      }
+      name
       symbol
       payout_address
       asset_contract_type
@@ -451,6 +435,27 @@ export const updateNftAssetContract = /* GraphQL */ `
       opensea_version
       schema_name
       external_link
+      collection {
+        id
+        slug
+        name
+        description
+        image_url
+        external_url
+        banner_image_url
+        char_url
+        created_date
+        discord_url
+        featured
+        featured_image_url
+        payout_address
+        telegram_url
+        twitter_username
+        instagram_username
+        wiki_url
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }
@@ -463,8 +468,12 @@ export const deleteNftAssetContract = /* GraphQL */ `
   ) {
     deleteNftAssetContract(input: $input, condition: $condition) {
       id
-      name
+      slug
       address
+      nfts {
+        nextToken
+      }
+      name
       symbol
       payout_address
       asset_contract_type
@@ -476,6 +485,27 @@ export const deleteNftAssetContract = /* GraphQL */ `
       opensea_version
       schema_name
       external_link
+      collection {
+        id
+        slug
+        name
+        description
+        image_url
+        external_url
+        banner_image_url
+        char_url
+        created_date
+        discord_url
+        featured
+        featured_image_url
+        payout_address
+        telegram_url
+        twitter_username
+        instagram_username
+        wiki_url
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }
@@ -542,9 +572,9 @@ export const createNft = /* GraphQL */ `
   ) {
     createNft(input: $input, condition: $condition) {
       id
+      address
       token_id
       num_sales
-      address
       background_color
       image_url
       image_preview_url
@@ -556,6 +586,25 @@ export const createNft = /* GraphQL */ `
       description
       external_link
       perma_link
+      primary_asset_contract {
+        id
+        slug
+        address
+        name
+        symbol
+        payout_address
+        asset_contract_type
+        created_date
+        description
+        image_url
+        total_supply
+        nft_version
+        opensea_version
+        schema_name
+        external_link
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }
@@ -568,9 +617,9 @@ export const updateNft = /* GraphQL */ `
   ) {
     updateNft(input: $input, condition: $condition) {
       id
+      address
       token_id
       num_sales
-      address
       background_color
       image_url
       image_preview_url
@@ -582,6 +631,25 @@ export const updateNft = /* GraphQL */ `
       description
       external_link
       perma_link
+      primary_asset_contract {
+        id
+        slug
+        address
+        name
+        symbol
+        payout_address
+        asset_contract_type
+        created_date
+        description
+        image_url
+        total_supply
+        nft_version
+        opensea_version
+        schema_name
+        external_link
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }
@@ -594,9 +662,9 @@ export const deleteNft = /* GraphQL */ `
   ) {
     deleteNft(input: $input, condition: $condition) {
       id
+      address
       token_id
       num_sales
-      address
       background_color
       image_url
       image_preview_url
@@ -608,6 +676,25 @@ export const deleteNft = /* GraphQL */ `
       description
       external_link
       perma_link
+      primary_asset_contract {
+        id
+        slug
+        address
+        name
+        symbol
+        payout_address
+        asset_contract_type
+        created_date
+        description
+        image_url
+        total_supply
+        nft_version
+        opensea_version
+        schema_name
+        external_link
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }

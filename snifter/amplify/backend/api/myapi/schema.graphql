@@ -45,7 +45,7 @@ type collectionStats @model @auth(rules: [{allow: public}]) {
 # Collection related models
 type collection @model @auth(rules: [{allow: public}]){
  id: ID!
- slug: String!
+ slug: ID!
  name: String!
  traits: [nftTraits]
  stats: collectionStats
@@ -53,7 +53,7 @@ type collection @model @auth(rules: [{allow: public}]){
  image_url: String
  external_url: String
  # payment_tokens: String
- primary_asset_contracts: [nftAssetContract]
+ primary_asset_contracts: [nftAssetContract] @hasMany(indexName: "contractsByCollection", fields: ["slug"])
  banner_image_url: String
  char_url: String
  created_date: Int
@@ -71,8 +71,10 @@ type collection @model @auth(rules: [{allow: public}]){
  
 type nftAssetContract @model @auth(rules: [{allow: public}]){
  id: ID!
+ slug: ID! @index(name: "contractsByCollection", sortKeyFields: ["address"])
+ address: ID!
+ nfts: [nft] @hasMany(indexName: "nftsByContract", fields: ["address"])
  name: String!
- address: String!
  symbol: String!
  payout_address: String
  asset_contract_type: String
@@ -84,6 +86,7 @@ type nftAssetContract @model @auth(rules: [{allow: public}]){
  opensea_version: String
  schema_name: String
  external_link: String
+ collection: collection @belongsTo(fields: ["slug"])
  createdAt: AWSDateTime
  updatedAt: AWSDateTime
 }
@@ -102,9 +105,9 @@ type nftTraits @model @auth(rules: [{allow: public}]){
  
 type nft @model {
  id: ID!
+ address: ID! @index(name: "nftsByContract", sortKeyFields: ["token_id"])
  token_id: Int!
  num_sales: Int!
- address: String
  background_color: String
  image_url: String
  image_preview_url: String
@@ -116,6 +119,7 @@ type nft @model {
  description: String
  external_link: String
  perma_link: String
+ primary_asset_contract: nftAssetContract @belongsTo(fields: ["address"])
  createdAt: AWSDateTime
  updatedAt:AWSDateTime
 }

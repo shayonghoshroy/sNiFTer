@@ -186,22 +186,7 @@ export const onCreateCollection = /* GraphQL */ `
       image_url
       external_url
       primary_asset_contracts {
-        id
-        name
-        address
-        symbol
-        payout_address
-        asset_contract_type
-        created_date
-        description
-        image_url
-        total_supply
-        nft_version
-        opensea_version
-        schema_name
-        external_link
-        createdAt
-        updatedAt
+        nextToken
       }
       banner_image_url
       char_url
@@ -266,22 +251,7 @@ export const onUpdateCollection = /* GraphQL */ `
       image_url
       external_url
       primary_asset_contracts {
-        id
-        name
-        address
-        symbol
-        payout_address
-        asset_contract_type
-        created_date
-        description
-        image_url
-        total_supply
-        nft_version
-        opensea_version
-        schema_name
-        external_link
-        createdAt
-        updatedAt
+        nextToken
       }
       banner_image_url
       char_url
@@ -346,22 +316,7 @@ export const onDeleteCollection = /* GraphQL */ `
       image_url
       external_url
       primary_asset_contracts {
-        id
-        name
-        address
-        symbol
-        payout_address
-        asset_contract_type
-        created_date
-        description
-        image_url
-        total_supply
-        nft_version
-        opensea_version
-        schema_name
-        external_link
-        createdAt
-        updatedAt
+        nextToken
       }
       banner_image_url
       char_url
@@ -383,8 +338,12 @@ export const onCreateNftAssetContract = /* GraphQL */ `
   subscription OnCreateNftAssetContract {
     onCreateNftAssetContract {
       id
-      name
+      slug
       address
+      nfts {
+        nextToken
+      }
+      name
       symbol
       payout_address
       asset_contract_type
@@ -396,6 +355,27 @@ export const onCreateNftAssetContract = /* GraphQL */ `
       opensea_version
       schema_name
       external_link
+      collection {
+        id
+        slug
+        name
+        description
+        image_url
+        external_url
+        banner_image_url
+        char_url
+        created_date
+        discord_url
+        featured
+        featured_image_url
+        payout_address
+        telegram_url
+        twitter_username
+        instagram_username
+        wiki_url
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }
@@ -405,8 +385,12 @@ export const onUpdateNftAssetContract = /* GraphQL */ `
   subscription OnUpdateNftAssetContract {
     onUpdateNftAssetContract {
       id
-      name
+      slug
       address
+      nfts {
+        nextToken
+      }
+      name
       symbol
       payout_address
       asset_contract_type
@@ -418,6 +402,27 @@ export const onUpdateNftAssetContract = /* GraphQL */ `
       opensea_version
       schema_name
       external_link
+      collection {
+        id
+        slug
+        name
+        description
+        image_url
+        external_url
+        banner_image_url
+        char_url
+        created_date
+        discord_url
+        featured
+        featured_image_url
+        payout_address
+        telegram_url
+        twitter_username
+        instagram_username
+        wiki_url
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }
@@ -427,8 +432,12 @@ export const onDeleteNftAssetContract = /* GraphQL */ `
   subscription OnDeleteNftAssetContract {
     onDeleteNftAssetContract {
       id
-      name
+      slug
       address
+      nfts {
+        nextToken
+      }
+      name
       symbol
       payout_address
       asset_contract_type
@@ -440,6 +449,27 @@ export const onDeleteNftAssetContract = /* GraphQL */ `
       opensea_version
       schema_name
       external_link
+      collection {
+        id
+        slug
+        name
+        description
+        image_url
+        external_url
+        banner_image_url
+        char_url
+        created_date
+        discord_url
+        featured
+        featured_image_url
+        payout_address
+        telegram_url
+        twitter_username
+        instagram_username
+        wiki_url
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }
@@ -494,9 +524,9 @@ export const onCreateNft = /* GraphQL */ `
   subscription OnCreateNft {
     onCreateNft {
       id
+      address
       token_id
       num_sales
-      address
       background_color
       image_url
       image_preview_url
@@ -508,6 +538,25 @@ export const onCreateNft = /* GraphQL */ `
       description
       external_link
       perma_link
+      primary_asset_contract {
+        id
+        slug
+        address
+        name
+        symbol
+        payout_address
+        asset_contract_type
+        created_date
+        description
+        image_url
+        total_supply
+        nft_version
+        opensea_version
+        schema_name
+        external_link
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }
@@ -517,9 +566,9 @@ export const onUpdateNft = /* GraphQL */ `
   subscription OnUpdateNft {
     onUpdateNft {
       id
+      address
       token_id
       num_sales
-      address
       background_color
       image_url
       image_preview_url
@@ -531,6 +580,25 @@ export const onUpdateNft = /* GraphQL */ `
       description
       external_link
       perma_link
+      primary_asset_contract {
+        id
+        slug
+        address
+        name
+        symbol
+        payout_address
+        asset_contract_type
+        created_date
+        description
+        image_url
+        total_supply
+        nft_version
+        opensea_version
+        schema_name
+        external_link
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }
@@ -540,9 +608,9 @@ export const onDeleteNft = /* GraphQL */ `
   subscription OnDeleteNft {
     onDeleteNft {
       id
+      address
       token_id
       num_sales
-      address
       background_color
       image_url
       image_preview_url
@@ -554,6 +622,25 @@ export const onDeleteNft = /* GraphQL */ `
       description
       external_link
       perma_link
+      primary_asset_contract {
+        id
+        slug
+        address
+        name
+        symbol
+        payout_address
+        asset_contract_type
+        created_date
+        description
+        image_url
+        total_supply
+        nft_version
+        opensea_version
+        schema_name
+        external_link
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }

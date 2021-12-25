@@ -4,6 +4,8 @@ from datetime import datetime
 
 from typing import List, Optional
 
+from .nft import NFT
+
 class PaymentToken(BaseModel):
     id: str
     name: str
@@ -72,7 +74,6 @@ class CollectionStats(BaseModel):
 
 class Collection(BaseModel):
     id: str
-
     editors: List[str] = []
     slug: str
     name: str
@@ -99,6 +100,10 @@ class Collection(BaseModel):
 
     def __init__(self, **data) -> None:
         data['id'] = f"{data['slug']}-{data['name']}"
+
+        # Set collections slugs for model relationship in graphql
+        asset_contracts = data['primary_asset_contracts']
+        data['primary_asset_contracts'] = [(lambda contract: contract.update({'slug': data['slug']}) or contract)(contract) for contract in asset_contracts]
 
         super().__init__(**data)
    

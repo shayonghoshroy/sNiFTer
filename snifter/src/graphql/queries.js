@@ -154,22 +154,7 @@ export const getCollection = /* GraphQL */ `
       image_url
       external_url
       primary_asset_contracts {
-        id
-        name
-        address
-        symbol
-        payout_address
-        asset_contract_type
-        created_date
-        description
-        image_url
-        total_supply
-        nft_version
-        opensea_version
-        schema_name
-        external_link
-        createdAt
-        updatedAt
+        nextToken
       }
       banner_image_url
       char_url
@@ -223,8 +208,12 @@ export const getNftAssetContract = /* GraphQL */ `
   query GetNftAssetContract($id: ID!) {
     getNftAssetContract(id: $id) {
       id
-      name
+      slug
       address
+      nfts {
+        nextToken
+      }
+      name
       symbol
       payout_address
       asset_contract_type
@@ -236,6 +225,27 @@ export const getNftAssetContract = /* GraphQL */ `
       opensea_version
       schema_name
       external_link
+      collection {
+        id
+        slug
+        name
+        description
+        image_url
+        external_url
+        banner_image_url
+        char_url
+        created_date
+        discord_url
+        featured
+        featured_image_url
+        payout_address
+        telegram_url
+        twitter_username
+        instagram_username
+        wiki_url
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }
@@ -254,8 +264,9 @@ export const listNftAssetContracts = /* GraphQL */ `
     ) {
       items {
         id
-        name
+        slug
         address
+        name
         symbol
         payout_address
         asset_contract_type
@@ -315,9 +326,9 @@ export const getNft = /* GraphQL */ `
   query GetNft($id: ID!) {
     getNft(id: $id) {
       id
+      address
       token_id
       num_sales
-      address
       background_color
       image_url
       image_preview_url
@@ -329,6 +340,25 @@ export const getNft = /* GraphQL */ `
       description
       external_link
       perma_link
+      primary_asset_contract {
+        id
+        slug
+        address
+        name
+        symbol
+        payout_address
+        asset_contract_type
+        created_date
+        description
+        image_url
+        total_supply
+        nft_version
+        opensea_version
+        schema_name
+        external_link
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }
@@ -343,9 +373,9 @@ export const listNfts = /* GraphQL */ `
     listNfts(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
+        address
         token_id
         num_sales
-        address
         background_color
         image_url
         image_preview_url

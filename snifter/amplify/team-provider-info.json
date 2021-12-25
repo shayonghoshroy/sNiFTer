@@ -19,7 +19,7 @@
         },
         "nftScraper": {
           "deploymentBucketName": "amplify-snifter-dev-34702-deployment",
-          "s3Key": "amplify-builds/nftScraper-7139365343394144414e-build.zip"
+          "s3Key": "amplify-builds/nftScraper-364c304e4a44666a786a-build.zip"
         }
       },
       "auth": {
