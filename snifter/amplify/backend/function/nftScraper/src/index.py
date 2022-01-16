@@ -13,7 +13,7 @@ from scraper.services.nft_service import NFTService
 
 TABLE_MAP = {
     "collection": "collection-l6kkjo2j3jf55dllykn3b64e2u-dev",
-    "nft_asset_contract": "nftAssetContract-l6kkjo2j3jf55dllykn3b64e2u-dev",
+    "contract": "nftAssetContract-l6kkjo2j3jf55dllykn3b64e2u-dev",
     "nft": "nft-l6kkjo2j3jf55dllykn3b64e2u-dev"
 }
 
@@ -54,10 +54,10 @@ def format_item(data: dict):
     return item
 
 def put_item(data: dict, table_name):
-    data = dict(data)    
-    # Otherwise, save nft model to dynamoDB
+    data = dict(data)
+    import pprint
+    pprint.pprint(data)
     client = boto3.client('dynamodb')
-
     item = format_item(data)
     
     data = client.put_item(
@@ -85,14 +85,14 @@ def put_collection(collection: Collection):
             contract['collection'] = collection
             # Ensure that the contract slug is set
             contract.setdefault('slug', collection['slug'])
-            put_item(contract, TABLE_MAP['nft_asset_contract'])
+            put_item(contract, TABLE_MAP['contract'])
 
 def handler(event, context):
     # All events should contain event_type field for function switch
-    event_type = event.get("event_type", None)
+    event_type = event.get("resource", None).replace("/", "")
 
     # Bad Request
-    if event_type is None or not event_type in ["get_asset", "get_assets", "get_collection"]:
+    if event_type is None or not event_type in ["nft", "contract", "collection"]:
         return {
             'statusCode': 400,
             'headers': {
@@ -104,6 +104,7 @@ def handler(event, context):
 
     # Perform event
     nft_service = NFTService()
+    event = json.loads(event["body"])
     result = nft_service.function_switch(event_type, event)
 
     # If error resulting from external API
@@ -119,14 +120,14 @@ def handler(event, context):
         }
 
     # Iteratively insert into table for batch assets
-    if event_type == "get_assets":
+    if event_type == "contract":
         for data in result:
             contract_address, nft = data["asset_contract"], data["nft"]
 
             put_item(contract_address, "nftAssetContract-l6kkjo2j3jf55dllykn3b64e2u-dev")
             put_item(nft, "nft-l6kkjo2j3jf55dllykn3b64e2u-dev")
             
-    elif event_type == "get_collection":
+    elif event_type == "collection":
         put_collection(result)
     
     else:
