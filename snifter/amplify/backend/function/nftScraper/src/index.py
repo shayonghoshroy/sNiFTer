@@ -104,7 +104,7 @@ def handler(event, context):
 
     # Perform event
     nft_service = NFTService()
-    event = json.loads(event["body"])
+    event = event["body"]
     result = nft_service.function_switch(event_type, event)
 
     # If error resulting from external API
