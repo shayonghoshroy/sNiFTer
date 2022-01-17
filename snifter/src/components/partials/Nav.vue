@@ -28,9 +28,9 @@
             </router-link>
           </div>
           <div class="navbar-item">
-              <router-link to="/signin" class="button is-purple">
-                <div class="is-purple">Sign In</div>
-              </router-link>
+            <router-link to="/signin" class="button is-purple">
+              <div class="is-purple">Sign In</div>
+            </router-link>
           </div>
         </div>
       </div>
@@ -44,7 +44,7 @@ import SearchComponent from "../SearchComponent.vue";
 export default {
   name: "Nav",
   components: {
-    SearchComponent
+    SearchComponent,
   },
 };
 </script>
@@ -53,13 +53,7 @@ export default {
 nav {
   margin-top: 15px;
   margin-bottom: 20px;
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-    &.router-link-exact-active {
-      color: #6f36bc;
-    }
-  }
+  color: #2c3e50;
 }
 .logo-image {
   width: 40px;

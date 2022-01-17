@@ -34,11 +34,14 @@ export default {
 <style lang="css" scoped>
 .hero {
   text-align: center;
-  background-image: url("https://leumiusa.com/wp-content/uploads/2015/10/banner-industry-tech.jpg");
+  background-image: url("https://images.unsplash.com/photo-1620204082158-ed7780a38d4c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1934&q=80");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   height: 400px;
+}
+.blur {
+  filter: blur(4px);
 }
 .hero-body .title {
   text-shadow: 3px 3px 3px rgba(0, 0, 0, 0.6);
