@@ -361,6 +361,7 @@ export const getNft = /* GraphQL */ `
       }
       createdAt
       updatedAt
+      favorited_by
     }
   }
 `;
@@ -389,6 +390,7 @@ export const listNfts = /* GraphQL */ `
         perma_link
         createdAt
         updatedAt
+        favorited_by
       }
       nextToken
     }
