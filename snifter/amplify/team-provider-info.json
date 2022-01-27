@@ -15,11 +15,11 @@
       "function": {
         "scrapeTweets": {
           "deploymentBucketName": "amplify-snifter-dev-34702-deployment",
-          "s3Key": "amplify-builds/scrapeTweets-74745262397279457951-build.zip"
+          "s3Key": "amplify-builds/scrapeTweets-37525632617262443076-build.zip"
         },
         "nftScraper": {
           "deploymentBucketName": "amplify-snifter-dev-34702-deployment",
-          "s3Key": "amplify-builds/nftScraper-73477378454a37614136-build.zip"
+          "s3Key": "amplify-builds/nftScraper-4e593575724b68583336-build.zip"
         }
       },
       "auth": {
