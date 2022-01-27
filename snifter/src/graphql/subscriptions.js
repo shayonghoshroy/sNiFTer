@@ -559,6 +559,7 @@ export const onCreateNft = /* GraphQL */ `
       }
       createdAt
       updatedAt
+      favorited_by
     }
   }
 `;
@@ -601,6 +602,7 @@ export const onUpdateNft = /* GraphQL */ `
       }
       createdAt
       updatedAt
+      favorited_by
     }
   }
 `;
@@ -643,6 +645,7 @@ export const onDeleteNft = /* GraphQL */ `
       }
       createdAt
       updatedAt
+      favorited_by
     }
   }
 `;

@@ -122,5 +122,5 @@ type nft @model {
  primary_asset_contract: nftAssetContract @belongsTo(fields: ["address"])
  createdAt: AWSDateTime
  updatedAt:AWSDateTime
- favorited_by: [String!]
+ favorited_by: AWSJSON
 }
