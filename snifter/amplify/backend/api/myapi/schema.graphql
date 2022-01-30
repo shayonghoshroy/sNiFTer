@@ -127,5 +127,5 @@ type nft @model {
  primary_asset_contract: nftAssetContract @belongsTo(fields: ["address"])
  createdAt: AWSDateTime
  updatedAt:AWSDateTime
- favorited_by: [user] @manyToMany(relationName: "NftUser")
+ favorited_by: [user] @manyToMany(relationName: "UserNft")
 }
