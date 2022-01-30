@@ -13,10 +13,21 @@
         <p>Search for Collections, Tokens, Owners, and Creators!</p>
       </article>
     </div>
-    <div class="empty-search-results" v-else>
-      <va-alert class="search-alert mb-4" color="danger" icon="info">
-          No search results...
-      </va-alert>
+    <div v-else>
+      <div v-if="searchStatus === 'Fetching'" class="pending-search-result">
+        <va-inner-loading :loading="true" color="primary">
+          <va-card>
+            <va-card-content>
+              Fetching NFT...
+            </va-card-content>
+          </va-card>
+        </va-inner-loading>
+      </div>
+      <div class="empty-search-results" v-else>
+        <va-alert class="search-alert mb-4" color="danger" icon="info">
+            No search results...
+        </va-alert>
+      </div>
     </div>
   </div>
 </template>
@@ -37,12 +48,15 @@
     data() {
       return {
         nfts: [],
+        collections: [],
         searched: false,
+        searchStatus: 'None'
       }
     },
     methods: {
-      searchResult(nfts) {
-        this.nfts = nfts;
+      searchResult(event) {
+        this.searchStatus = event.searchStatus;
+        this.nfts = event.nfts;
         this.searched = true;
       }
     },

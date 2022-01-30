@@ -12,6 +12,7 @@ class NFTAssetContract(BaseModel):
     asset_contract_type: str
     created_date: str
     description: str
+    slug: str
     image_url: Optional[str]
 
     total_supply: Optional[str]
@@ -39,6 +40,7 @@ class NFT(BaseModel):
     token_id: int
     num_sales: int
     address: str
+    owner: str
 
     image_url: Optional[str]
     image_preview_url: Optional[str]

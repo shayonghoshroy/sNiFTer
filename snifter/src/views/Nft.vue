@@ -1,36 +1,97 @@
 <template>
   <div class="nft-container">
-    <va-card :src="nft" class="nft-card" style="height: 500px; width: 500px">
+    <div>
+      <va-card :src="nft" class="nft-card" style="width: 800px">
+          <div class="tester">
+            <div>
+              <va-image
+                  class="rounded-card"
+                  :src="nft.image_url"
+                  style="height: 250px; width: 250px"
+              />
+            </div>
+            <div>
+              <va-list>
+                <va-list-item class="info-item" v-if="collection">
+                  <va-list-item-section>
+                    {{ collection.name }}
+                  </va-list-item-section>
+                  <va-list-item-section>
+                    <img :src="collection.image_url" alt="Collection Logo" style="height: 50px; width: 50px">
+                  </va-list-item-section>
+                </va-list-item>
 
-        <va-image
-            class="rounded-card"
-            :src="nft.image_url"
-            style="height: 400px"
-        />
+                <va-list-item class="info-item">
+                  <va-list-item-section>
+                    #{{ nft.token_id }}
+                  </va-list-item-section>
+                  <va-list-item-section>
+                    {{ nft.owner || 'UNKNOWN OWNER' }}
+                  </va-list-item-section>
+                </va-list-item>
 
-        <va-card-title v-if="nft.name">{{ nft.name }}</va-card-title>
-        <va-card-title v-else></va-card-title>
+                <va-list-item class="list-interactable">
+                  <va-list-item-section>
+                    <va-list-item-label>
+                      Current Bid:
+                    </va-list-item-label>
+                  </va-list-item-section>
+                  <va-list-item-section>
+                    23.4
+                  </va-list-item-section>
+                </va-list-item>
 
-        <va-card-content>
-            {{ nft.name }} {{ nft.token_id }}
-        </va-card-content>
+                <va-list-item class="list-interactable">
+                  <va-list-item-section>
+                    <va-list-item-label>
+                      Add To Watchlist
+                    </va-list-item-label>
+                  </va-list-item-section>
+                  <va-list-item-section icon>
+                      <div>
+                        <va-icon
+                            name="add"
+                            color="#6f36bc"
+                        ></va-icon>
+                      </div>
+                  </va-list-item-section>
+                </va-list-item>
 
-        <va-collapse
-        v-model="showContract"
-        header="Contract Information">
-          <contract-stats
-          :contracts="nftContract">
-          </contract-stats>
-        </va-collapse>
-        <va-collapse
-        v-model="showCollection"
-        v-if="collection"
-        header="Collection Information">
-          <collection-info
-          :collection="collection">
-          </collection-info>
-        </va-collapse>
-    </va-card>
+                <va-list-item class="list-interactable">
+                  <va-list-item-section>
+                    <va-list-item-label>
+                      Price Trends
+                    </va-list-item-label>
+                  </va-list-item-section>
+                </va-list-item>
+              </va-list>
+            </div>
+          </div>
+
+          <va-card-title v-if="nft.name">{{ nft.name }}</va-card-title>
+          <va-card-title v-else></va-card-title>
+
+          <va-card-content>
+              {{ nft.name }} {{ nft.token_id }}
+          </va-card-content>
+
+          <va-collapse
+          v-model="showContract"
+          header="Contract Information">
+            <contract-stats
+            :contracts="nftContract">
+            </contract-stats>
+          </va-collapse>
+          <va-collapse
+          v-model="showCollection"
+          v-if="collection"
+          header="Collection Information">
+            <collection-info
+            :collection="collection">
+            </collection-info>
+          </va-collapse>
+      </va-card>
+    </div>
   </div>
 </template>
 
@@ -60,7 +121,7 @@ export default {
         showContract: false,
         showCollection: false,
         collapses: [
-        { title: 'Contract', content: 'first collapse content' },
+          { title: 'Contract', content: 'first collapse content' },
         ],
         nftContract: [],
         collection: null
@@ -108,11 +169,33 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;1,700&display=swap');
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 
+.tester {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.info-item {
+  color: white;
+}
+
+.list-interactable {
+  background-color: white;
+  color: black;
+  margin: 1em;
+}
+
 .nft-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.nft-card {
   display: flex;
   flex-flow: column;
   justify-content: center;
   align-items: center;
+  background-color: #6f36bc !important;
 }
 h1 {
   margin-top: 1em;

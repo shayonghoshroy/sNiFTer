@@ -557,6 +557,7 @@ export const onCreateNft = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      owner
       createdAt
       updatedAt
     }
@@ -599,6 +600,7 @@ export const onUpdateNft = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      owner
       createdAt
       updatedAt
     }
@@ -641,6 +643,7 @@ export const onDeleteNft = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      owner
       createdAt
       updatedAt
     }

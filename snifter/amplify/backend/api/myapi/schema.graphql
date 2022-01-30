@@ -102,7 +102,7 @@ type nftTraits @model @auth(rules: [{allow: public}]){
  createdAt: AWSDateTime
  updatedAt:AWSDateTime
 }
- 
+
 type nft @model {
  id: ID!
  address: ID! @index(name: "nftsByContract", sortKeyFields: ["token_id"])
@@ -120,6 +120,7 @@ type nft @model {
  external_link: String
  perma_link: String
  primary_asset_contract: nftAssetContract @belongsTo(fields: ["address"])
+ owner: String
  createdAt: AWSDateTime
  updatedAt:AWSDateTime
 }

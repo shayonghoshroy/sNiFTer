@@ -18,7 +18,15 @@
                 </va-list>
             </va-button-dropdown>
             <div>
-                <va-form class="search-input-form" v-if="searchIndex === 1">
+                <va-form class="search-input-form" v-if="searchIndex === 0">
+                    <va-input
+                        class="mb-4"
+                        v-model="collectionSlug"
+                        label="Collection Slug"
+                        placeholder="Required"
+                    />
+                </va-form>
+                <va-form class="search-input-form" v-else-if="searchIndex === 1">
                     <va-input
                         class="mb-4"
                         v-model="address"
@@ -28,6 +36,7 @@
                     <va-input
                         class="mb-4"
                         v-model="tokenid"
+                        :rules="[(v) => !isNaN(v)] || `Token ID must be a number`"
                         label="Token ID"
                         placeholder="Optional"
                     />
@@ -43,14 +52,16 @@
                 </va-form>
             </div>
 
-            <va-button @click="getNFTs()">Search</va-button>
+            <va-button 
+            :disabled="disableSearch"
+            @click="startSearch()">Search</va-button>
         </div>
     </div>
 </template>
 
 <script>
 import { API } from "aws-amplify";
-import { listNfts } from "../graphql/queries";
+import { listNfts, listCollections } from "../graphql/queries";
 
 export default {
     name: "SearchComponent",
@@ -62,14 +73,65 @@ export default {
         return {
             tokenid: "",
             address: "",
+            collectionSlug: "",
             nfts: [],
+            collecitions: [],
             searchTypes: [["Collection", "collections"], ["Token", 'generating_tokens'], ["Owner", 'account_balance_wallet'], ["Creator", 'palette']],
-            searchIndex: 0
+            searchIndex: 0,
+            requestCount: 0,
+            disableSearch: false
         };
     },
+    computed: {
+        searchType() {
+            return this.searchTypes[this.searchIndex][this.searchIndex];
+        }
+    },
     methods: {
+        startSearch: async function() {
+            this.disableSearch = true;
+            if (this.searchIndex === 0) {
+                console.log("Collection");
+                await this.getCollection();
+                if (this.collections.length === 0) {
+                    var response = await this.fetchCollection();
+                    if (response.ok) {
+                        console.log("Success");
+                        await this.getCollection();
+                        
+                        var event = {
+                            'searchStatus': 'Failure',
+                            'data': this.collections,
+                            'searchType': 'collection'
+                        }
+                        if (this.collections.length > 0) {
+                            event['searchStatus'] = 'Success';
+                        }
+
+                        this.$emit('getNFTs', event);
+                    }
+                }
+                console.log(this.collections[0].stats);
+            }
+
+            // NFT or Contract Search
+            else if (this.searchIndex === 1) {
+                await this.getNFTs();
+            }
+
+            this.disableSearch = false;
+        },
         getNFTs: async function() {
+            this.requestCount += 1
+            if (this.requestCount > 2) {
+                this.requestCount = 0;
+                return;
+            }
+
             try {
+                console.log("Starting Query");
+                this.address = this.address.toLowerCase();
+                debugger;
                 if(this.tokenid=="") {
                     const nfts = await API.graphql({
                         query: listNfts,
@@ -92,11 +154,127 @@ export default {
                     this.nfts = nfts.data.listNfts.items;
                     this.$emit('getNFTs', this.nfts)
                 }
-            } catch (e) {
-            console.error(e);
-      }
+
+                var event = {};
+                if(this.nfts.length === 0) {
+                    debugger;
+                    event = {
+                        'searchStatus': "Fetching",
+                        'nfts': []
+                    }
+                    debugger;
+                    this.$emit('getNFTs', event);
+                    var response = await this.fetchNFTs();
+                    debugger;
+                    if (response.status === 200)
+                        await this.getNFTs();
+                    else {
+                        event = {
+                            'searchStatus': 'Failed',
+                            'nfts': []
+                        }
+                        this.requestCount = 0;
+                        this.$emit('getNFTs', event);
+                    }
+                }
+
+                else {
+                    event = {
+                        'searchStatus': 'Success',
+                        'nfts': this.nfts
+                    }
+                    this.requestCount = 0;
+                    this.$emit('getNFTs', event);
+                }
+            } 
+            catch (e) {
+                event = {
+                            'searchStatus': 'Failed',
+                            'nfts': []
+                        }
+                this.requestCount = 0;
+                this.$emit('getNFTs', event);
+                console.error(e);
+            }
+        },
+        // Fetches NFT data from API
+        fetchNFTs: async function() {
+            var baseUrl = 'https://qjlxkgsn7g.execute-api.us-east-2.amazonaws.com/dev';
+
+            // Token Search
+            if (this.searchIndex === 1) {
+                var endpoint = "/contract";
+                
+                var body = {'contract-addresses': [this.address]};
+                if (this.tokenid !== '' && this.tokenid !== undefined) {
+                    body['token-ids'] = [parseInt(this.tokenid)];
+                }
+
+                return await fetch(baseUrl + endpoint, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(body)
+                })
+                .then(response =>{
+                    return response;
+                })
+                .then(data => data)
+                .catch((error) => {
+                    console.log('Error:', error.statusCode);
+                });
+            }
+        },
+        getCollection: async function() {
+            this.requestCount += 1
+            if (this.requestCount > 2) {
+                this.requestCount = 0;
+                return;
+            }
+
+            try {
+                console.log("Starting Query");
+                this.collectionSlug = this.collectionSlug.toLowerCase();
+                debugger;
+                const collection = await API.graphql({
+                    query: listCollections,
+                    variables: {
+                        filter: {slug: {eq: this.collectionSlug}}
+                    }
+                });
+                this.collections = collection.data.listCollections.items;
+            } 
+            catch (e) {
+                console.error(e);
+            }
+        },
+        fetchCollection: async function() {
+            var baseUrl = 'https://qjlxkgsn7g.execute-api.us-east-2.amazonaws.com/dev';
+
+            // Token Search
+            if (this.searchIndex === 0) {
+                var endpoint = "/collection";
+                
+                var body = {'collection-slug': this.collectionSlug};
+
+                return await fetch(baseUrl + endpoint, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(body)
+                })
+                .then(response =>{
+                    return response;
+                })
+                .then(data => data)
+                .catch((error) => {
+                    console.log('Error:', error.statusCode);
+                });
+            }
+        }
     },
-  },
 }
 </script>
 

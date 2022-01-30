@@ -12,9 +12,10 @@ from scraper.apis.exceptions import APIException
 from scraper.services.nft_service import NFTService
 
 TABLE_MAP = {
-    "collection": "collection-l6kkjo2j3jf55dllykn3b64e2u-dev",
-    "contract": "nftAssetContract-l6kkjo2j3jf55dllykn3b64e2u-dev",
-    "nft": "nft-l6kkjo2j3jf55dllykn3b64e2u-dev"
+    "collection": "collection-u7k5bta6mvfefdvl7fidjvr7ay-stephendev",
+    "contract": "nftAssetContract-u7k5bta6mvfefdvl7fidjvr7ay-stephendev",
+    "nft": "nft-u7k5bta6mvfefdvl7fidjvr7ay-stephendev",
+    "stats": "collectionStats-u7k5bta6mvfefdvl7fidjvr7ay-stephendev"
 }
 
 def format_item(data: dict):
@@ -73,9 +74,6 @@ def put_collection(collection: Collection):
     primary_asset_contracts = collection.pop('primary_asset_contracts')
 
     # Create collection object
-    collection = dict(collection)
-    dynamodb = boto3.resource('dynamodb')
-    table = dynamodb.Table('Collection')
     put_item(collection, TABLE_MAP["collection"])
 
     # Create Asset Contracts
@@ -99,12 +97,17 @@ def handler(event, context):
                 'Access-Control-Allow-Headers': '*',
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
-            }
+            },
+            'body': json.dumps({
+                'Exception': 'Invalid Event Type',
+                'Reason': f"{event_type} is not supported"
+            })
         }
 
     # Perform event
     nft_service = NFTService()
-    event = event["body"]
+    print(event)
+    event = json.loads(event["body"])
     result = nft_service.function_switch(event_type, event)
 
     # If error resulting from external API
@@ -116,7 +119,11 @@ def handler(event, context):
                 'Access-Control-Allow-Headers': '*',
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
-            }
+            },
+            'body': json.dumps({
+                "Exception": "API Exception",
+                "Reason": result.reason_phrase
+            })
         }
 
     # Iteratively insert into table for batch assets
@@ -124,16 +131,16 @@ def handler(event, context):
         for data in result:
             contract_address, nft = data["asset_contract"], data["nft"]
 
-            put_item(contract_address, "nftAssetContract-l6kkjo2j3jf55dllykn3b64e2u-dev")
-            put_item(nft, "nft-l6kkjo2j3jf55dllykn3b64e2u-dev")
+            put_item(contract_address, TABLE_MAP["contract"])
+            put_item(nft, TABLE_MAP["nft"])
             
     elif event_type == "collection":
         put_collection(result)
     
     else:
         contract_address, nft = result["asset_contract"], result["nft"]
-        put_item(contract_address, "nftAssetContract-l6kkjo2j3jf55dllykn3b64e2u-dev")
-        put_item(nft, "nft-l6kkjo2j3jf55dllykn3b64e2u-dev")
+        put_item(contract_address, TABLE_MAP["contract"])
+        put_item(nft, TABLE_MAP["nft"])
 
     return {
         'statusCode': 200,
@@ -141,5 +148,7 @@ def handler(event, context):
             'Access-Control-Allow-Headers': '*',
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
-        }
+        },
+        'body': '',
+        'isBase64Encoded': False
     }

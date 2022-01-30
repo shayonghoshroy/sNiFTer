@@ -1,7 +1,7 @@
 <template>
   <div id="nftcomponent">
     <simple-grid-container class="container" columnWidth="300px">
-      <div class="post" v-for="nft in nfts" :key="nft.id">
+      <div class="post" v-for="collection in collections" :key="collection.id">
         <div class="row div">
           <div class="flex md6 lg4">
             <router-link
@@ -9,18 +9,12 @@
                 query: nft
               }">
               <va-card class="nft-card" style="height: 300px; width: 250px">
-                <va-image v-if="nft.image_url"
+                <va-image v-if="collection.image_url"
                   class="rounded-card"
-                  :src="nft.image_url"
+                  :src="collection.image_url"
                   style="height: 200px"
                 />
-                <va-card-title>{{ nft.name }}</va-card-title>
-                <va-card-content class="card-content"
-                >
-                  <div>
-                    {{ nft.name }} {{ nft.token_id }}
-                  </div>
-                </va-card-content>
+                <va-card-title>{{ collection.name }}</va-card-title>
               </va-card>
             </router-link>
           </div>
@@ -32,7 +26,7 @@
 
 <script>
 export default {
-  name: "NFTComponent",
+  name: "CollectionDisplay",
   data() {
     return {
       name: "",
@@ -44,7 +38,7 @@ export default {
     };
   },
   props: {
-      nfts: {
+      collections: {
           type: Array,
           default: null
       },

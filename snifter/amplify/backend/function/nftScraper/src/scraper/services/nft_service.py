@@ -117,6 +117,16 @@ class NFTService():
             
             if asset_contract is not None:
                 elt["address"] = asset_contract["address"]
+            if collection is not None:
+                asset_contract["slug"] = collection["slug"]
+            else:
+                asset_contract["slug"] = "UNKNOWN"
+            
+            nft_owner = elt.get("owner", None)
+            if nft_owner is not None:
+                elt["owner"] = nft_owner["address"]
+            else:
+                elt["owner"] = 
             nft_model = NFT(**elt)
             asset_contract = NFTAssetContract(**asset_contract)
             models.append({"nft": nft_model, "asset_contract": asset_contract})

@@ -32,6 +32,130 @@
                 <va-list-item>
                     <p>{{ collection.description }}</p>
                 </va-list-item>
+                
+                <va-divider inset />
+
+                <va-list-item>
+                    <div class="va-table-responsive">
+                        <table class="va-table va-table--striped">
+                            <tbody>
+                                <!-- General Sales Data -->
+                                <tr>
+                                    <th class="table-row-header">Floor Price</th>
+                                    <td>{{ collection.stats.floor_price }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="table-row-header">Total Volume</th>
+                                    <td>{{ collection.stats.total_volume }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="table-row-header">Average Price</th>
+                                    <td>{{ collection.stats.average_price }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="table-row-header">Market Cap</th>
+                                    <td>{{ collection.stats.market_cap }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="table-row-header">Total Sales</th>
+                                    <td>{{ collection.stats.total_sales }}</td>
+                                </tr>
+                                <!-- General Ownership Data -->
+                                <tr>
+                                    <th class="table-row-header">Total Supply</th>
+                                    <td>{{ collection.stats.total_supply }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="table-row-header">Number of Owners</th>
+                                    <td>{{ collection.stats.num_owners }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </va-list-item>
+
+                <!-- Time Related Sales Data -->
+                <va-list-item>
+                    <va-collapse
+                    v-model="showStats[0]"
+                    header="Thirty Day Stats">
+                        <table class="va-table va-table--striped">
+                            <tbody>
+                                <!-- General Sales Data -->
+                                <tr>
+                                    <th class="table-row-header">Volume</th>
+                                    <td>{{ collection.stats.thirty_day_volume }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="table-row-header">Change</th>
+                                    <td>{{ collection.stats.thirty_day_change }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="table-row-header">Sales</th>
+                                    <td>{{ collection.stats.thirty_day_sales }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="table-row-header">Average Price</th>
+                                    <td>{{ collection.stats.thirty_day_average_price }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </va-collapse>
+                </va-list-item>
+                <va-list-item>
+                    <va-collapse
+                    v-model="showStats[1]"
+                    header="Weekly Stats">
+                        <table class="va-table va-table--striped">
+                            <tbody>
+                                <!-- General Sales Data -->
+                                <tr>
+                                    <th class="table-row-header">Volume</th>
+                                    <td>{{ collection.stats.seven_day_volume }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="table-row-header">Change</th>
+                                    <td>{{ collection.stats.seven_day_change }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="table-row-header">Sales</th>
+                                    <td>{{ collection.stats.seven_day_sales }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="table-row-header">Average Price</th>
+                                    <td>{{ collection.stats.seven_day_average_price }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </va-collapse>
+                </va-list-item>
+                <va-list-item>
+                    <va-collapse
+                    v-model="showStats[2]"
+                    header="Daily Stats">
+                        <table class="va-table va-table--striped">
+                            <tbody>
+                                <!-- General Sales Data -->
+                                <tr>
+                                    <th class="table-row-header">Volume</th>
+                                    <td>{{ collection.stats.one_day_volume }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="table-row-header">Change</th>
+                                    <td>{{ collection.stats.one_day_change }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="table-row-header">Sales</th>
+                                    <td>{{ collection.stats.one_day_sales }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="table-row-header">Average Price</th>
+                                    <td>{{ collection.stats.one_day_average_price }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </va-collapse>
+                </va-list-item>
             </va-list>
         </div>
     </div>
@@ -44,10 +168,18 @@ export default {
             type: Object,
             required: true
         }
+    },
+    methods: {
+        created() {
+            console.log(this.collection.stats);
+        }
+    },
+    data() {
+        return {
+            showStats: [false, false, false]
+        }
     }
-
 }
 </script>
 <style lang="css" scoped>
-    
 </style>
