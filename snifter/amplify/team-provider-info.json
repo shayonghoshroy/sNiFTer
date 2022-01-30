@@ -49,11 +49,11 @@
       "function": {
         "scrapeTweets": {
           "deploymentBucketName": "amplify-snifter-stephendev-193633-deployment",
-          "s3Key": "amplify-builds/scrapeTweets-73726748352b6735676b-build.zip"
+          "s3Key": "amplify-builds/scrapeTweets-30455a7a647536617369-build.zip"
         },
         "nftScraper": {
           "deploymentBucketName": "amplify-snifter-stephendev-193633-deployment",
-          "s3Key": "amplify-builds/nftScraper-73477378454a37614136-build.zip"
+          "s3Key": "amplify-builds/nftScraper-6665396b4b76724c4b58-build.zip"
         }
       },
       "hosting": {
