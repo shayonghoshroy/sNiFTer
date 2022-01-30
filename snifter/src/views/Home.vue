@@ -45,7 +45,7 @@ export default {
 }
 .hero-body .title {
   text-shadow: 3px 3px 3px rgba(0, 0, 0, 0.6);
-  padding: 40px 0 20px 0;
+  padding: 20px 0 20px 0;
   font-size: 60px;
   text-transform: none;
 }

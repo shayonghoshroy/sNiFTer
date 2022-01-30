@@ -40,12 +40,27 @@
 
 <script>
 import SearchComponent from "../SearchComponent.vue";
+import { Auth } from "aws-amplify";
+
+const checkUser = () => {
+  Auth.currentAuthenticatedUser().then((a) => {
+    console.log(a);
+  });
+};
+
+checkUser();
 
 export default {
   name: "Nav",
   components: {
     SearchComponent,
   },
+  data() {
+    return {
+      user: [],
+    };
+  },
+  methods: {},
 };
 </script>
 
