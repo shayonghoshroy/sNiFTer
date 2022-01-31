@@ -13,6 +13,13 @@ export default {
   components: {
     Nav,
   },
+  data() {
+    return { test: "test" };
+  },
+  methods: {
+    check() {},
+    refresh() {},
+  },
 };
 </script>
 

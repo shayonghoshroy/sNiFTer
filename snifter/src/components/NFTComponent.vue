@@ -4,10 +4,7 @@
       <div class="post" v-for="nft in nfts" :key="nft.id">
         <div class="row div">
           <div class="flex md6 lg4">
-            <router-link
-              :to="{ name: 'Nft', 
-                query: nft
-              }">
+            <router-link :to="{ name: 'Nft', query: nft }">
               <va-card class="nft-card" style="height: 300px; width: 250px">
                 <va-image v-if="nft.image_url"
                   class="rounded-card"
