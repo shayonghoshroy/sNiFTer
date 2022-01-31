@@ -76,11 +76,13 @@ amplify publish
 
 Our project uses the Jest testing framework for unit tests and Cypress for behavior tests.
 
+### Jest
 To unit test the Vue app, use the command:
 ```
 npm test
 ```
 
+### Cypress
 To run cypress for the behavior tests, ensure that the project is running with:
 ```
 npm run serve
@@ -90,6 +92,8 @@ Then Cypress can be run with the following command:
 npx cypress open
 ```
 Once there, click the desired test in the sNiFTer folder to run cypress.
+
+### Test Locations
 
 Tests are located in both the ./cypress folder for behavior tests and ./unit-tests folder for unit tests
 
