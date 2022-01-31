@@ -54,6 +54,10 @@
         "nftScraper": {
           "deploymentBucketName": "amplify-snifter-shayondev-153259-deployment",
           "s3Key": "amplify-builds/nftScraper-364c304e4a44666a786a-build.zip"
+        },
+        "createUserModelOnSignup": {
+          "deploymentBucketName": "amplify-snifter-shayondev-153259-deployment",
+          "s3Key": "amplify-builds/createUserModelOnSignup-49756369796d3263796e-build.zip"
         }
       },
       "hosting": {
