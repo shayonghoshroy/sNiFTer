@@ -91,6 +91,8 @@ npx cypress open
 ```
 Once there, click the desired test in the sNiFTer folder to run cypress.
 
+Tests are located in both the ./cypress folder for behavior tests and ./unit-tests folder for unit tests
+
 
 # Authors
 
