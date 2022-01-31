@@ -322,6 +322,36 @@ export const listNftTraits = /* GraphQL */ `
     }
   }
 `;
+export const getUser = /* GraphQL */ `
+  query GetUser($id: ID!) {
+    getUser(id: $id) {
+      username
+      favorite_nfts {
+        nextToken
+      }
+      createdAt
+      updatedAt
+      id
+    }
+  }
+`;
+export const listUsers = /* GraphQL */ `
+  query ListUsers(
+    $filter: ModelUserFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        username
+        createdAt
+        updatedAt
+        id
+      }
+      nextToken
+    }
+  }
+`;
 export const getNft = /* GraphQL */ `
   query GetNft($id: ID!) {
     getNft(id: $id) {
@@ -361,7 +391,9 @@ export const getNft = /* GraphQL */ `
       }
       createdAt
       updatedAt
-      favorited_by
+      favorited_by {
+        nextToken
+      }
     }
   }
 `;
@@ -390,7 +422,64 @@ export const listNfts = /* GraphQL */ `
         perma_link
         createdAt
         updatedAt
-        favorited_by
+      }
+      nextToken
+    }
+  }
+`;
+export const getUserFavoriteNft = /* GraphQL */ `
+  query GetUserFavoriteNft($id: ID!) {
+    getUserFavoriteNft(id: $id) {
+      id
+      userID
+      nftID
+      user {
+        username
+        createdAt
+        updatedAt
+        id
+      }
+      nft {
+        id
+        address
+        token_id
+        num_sales
+        background_color
+        image_url
+        image_preview_url
+        image_thumbnail_url
+        image_original_url
+        animation_url
+        animation_original_url
+        name
+        description
+        external_link
+        perma_link
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listUserFavoriteNfts = /* GraphQL */ `
+  query ListUserFavoriteNfts(
+    $filter: ModelUserFavoriteNftFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listUserFavoriteNfts(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        userID
+        nftID
+        createdAt
+        updatedAt
       }
       nextToken
     }

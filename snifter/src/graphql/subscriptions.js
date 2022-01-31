@@ -520,6 +520,45 @@ export const onDeleteNftTraits = /* GraphQL */ `
     }
   }
 `;
+export const onCreateUser = /* GraphQL */ `
+  subscription OnCreateUser {
+    onCreateUser {
+      username
+      favorite_nfts {
+        nextToken
+      }
+      createdAt
+      updatedAt
+      id
+    }
+  }
+`;
+export const onUpdateUser = /* GraphQL */ `
+  subscription OnUpdateUser {
+    onUpdateUser {
+      username
+      favorite_nfts {
+        nextToken
+      }
+      createdAt
+      updatedAt
+      id
+    }
+  }
+`;
+export const onDeleteUser = /* GraphQL */ `
+  subscription OnDeleteUser {
+    onDeleteUser {
+      username
+      favorite_nfts {
+        nextToken
+      }
+      createdAt
+      updatedAt
+      id
+    }
+  }
+`;
 export const onCreateNft = /* GraphQL */ `
   subscription OnCreateNft {
     onCreateNft {
@@ -559,7 +598,9 @@ export const onCreateNft = /* GraphQL */ `
       }
       createdAt
       updatedAt
-      favorited_by
+      favorited_by {
+        nextToken
+      }
     }
   }
 `;
@@ -602,7 +643,9 @@ export const onUpdateNft = /* GraphQL */ `
       }
       createdAt
       updatedAt
-      favorited_by
+      favorited_by {
+        nextToken
+      }
     }
   }
 `;
@@ -645,7 +688,117 @@ export const onDeleteNft = /* GraphQL */ `
       }
       createdAt
       updatedAt
-      favorited_by
+      favorited_by {
+        nextToken
+      }
+    }
+  }
+`;
+export const onCreateUserFavoriteNft = /* GraphQL */ `
+  subscription OnCreateUserFavoriteNft {
+    onCreateUserFavoriteNft {
+      id
+      userID
+      nftID
+      user {
+        username
+        createdAt
+        updatedAt
+        id
+      }
+      nft {
+        id
+        address
+        token_id
+        num_sales
+        background_color
+        image_url
+        image_preview_url
+        image_thumbnail_url
+        image_original_url
+        animation_url
+        animation_original_url
+        name
+        description
+        external_link
+        perma_link
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateUserFavoriteNft = /* GraphQL */ `
+  subscription OnUpdateUserFavoriteNft {
+    onUpdateUserFavoriteNft {
+      id
+      userID
+      nftID
+      user {
+        username
+        createdAt
+        updatedAt
+        id
+      }
+      nft {
+        id
+        address
+        token_id
+        num_sales
+        background_color
+        image_url
+        image_preview_url
+        image_thumbnail_url
+        image_original_url
+        animation_url
+        animation_original_url
+        name
+        description
+        external_link
+        perma_link
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteUserFavoriteNft = /* GraphQL */ `
+  subscription OnDeleteUserFavoriteNft {
+    onDeleteUserFavoriteNft {
+      id
+      userID
+      nftID
+      user {
+        username
+        createdAt
+        updatedAt
+        id
+      }
+      nft {
+        id
+        address
+        token_id
+        num_sales
+        background_color
+        image_url
+        image_preview_url
+        image_thumbnail_url
+        image_original_url
+        animation_url
+        animation_original_url
+        name
+        description
+        external_link
+        perma_link
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
     }
   }
 `;
