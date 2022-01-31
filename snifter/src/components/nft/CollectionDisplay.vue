@@ -4,19 +4,14 @@
       <div class="post" v-for="collection in collections" :key="collection.id">
         <div class="row div">
           <div class="flex md6 lg4">
-            <router-link
-              :to="{ name: 'Nft', 
-                query: nft
-              }">
-              <va-card class="nft-card" style="height: 300px; width: 250px">
-                <va-image v-if="collection.image_url"
-                  class="rounded-card"
-                  :src="collection.image_url"
-                  style="height: 200px"
-                />
-                <va-card-title>{{ collection.name }}</va-card-title>
-              </va-card>
-            </router-link>
+            <va-card class="collection-card" style="height: 300px; width: 250px">
+              <va-image v-if="collection.image_url"
+                class="rounded-card"
+                :src="collection.image_url"
+                style="height: 200px"
+              />
+              <va-card-title>{{ collection.name }}</va-card-title>
+            </va-card>
           </div>
         </div>
       </div>
@@ -67,7 +62,7 @@ export default {
   border-radius: 5px;
 }
 
-.nft-card:hover {
+.collection-card:hover {
   cursor: pointer;
   box-shadow: 15px 5px 15px 5px grey;
 }

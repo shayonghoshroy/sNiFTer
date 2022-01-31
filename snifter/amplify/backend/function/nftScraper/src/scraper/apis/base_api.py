@@ -23,18 +23,19 @@ class BaseAPI:
 
             formatted_params = []
             # Format query params
-            for key, val in params.items():
-                # Each item in list gets appended with key=val
-                if isinstance(val, list):
-                    for element in val:
-                        formatted_params.append(f"{key}={element}")
+            if params != {}:
+                for key, val in params.items():
+                    # Each item in list gets appended with key=val
+                    if isinstance(val, list):
+                        for element in val:
+                            formatted_params.append(f"{key}={element}")
 
-                else:
-                    if val is not None:
-                        formatted_params.append(f"{key}={val}")
-            
-            # Append query params to endpoint
-            endpoint += "?" + "&".join(formatted_params)
+                    else:
+                        if val is not None:
+                            formatted_params.append(f"{key}={val}")
+                
+                # Append query params to endpoint
+                endpoint += "?" + "&".join(formatted_params)
 
             request = client.build_request("get", endpoint)
             if headers is not None:

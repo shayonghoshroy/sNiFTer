@@ -66,9 +66,6 @@ import { listNfts, listCollections } from "../graphql/queries";
 export default {
     name: "SearchComponent",
     components: { },
-    async created() {
-        //this.getNFTs();
-    },
     data() {
         return {
             tokenid: "",
@@ -90,48 +87,90 @@ export default {
     methods: {
         startSearch: async function() {
             this.disableSearch = true;
+            var response = null;
+            var event = {
+                'searchStatus': 'Failure',
+                'data': [],
+                'searchType': ''
+            };
+
+            // Collection search
+            debugger;
             if (this.searchIndex === 0) {
-                console.log("Collection");
+                event['searchType'] = 'collection';
+
                 await this.getCollection();
+                debugger;
+                
+                // Fetch collecton from API
                 if (this.collections.length === 0) {
-                    var response = await this.fetchCollection();
+                    event['searchStatus'] = 'Fetching';
+                    this.$emit('getNFTs', event);
+
+                    response = await this.fetchCollection();
+                    
+                    // Successful search
                     if (response.ok) {
-                        console.log("Success");
+                        debugger;
                         await this.getCollection();
                         
-                        var event = {
-                            'searchStatus': 'Failure',
-                            'data': this.collections,
-                            'searchType': 'collection'
-                        }
+                        event['data'] = this.collections;
                         if (this.collections.length > 0) {
                             event['searchStatus'] = 'Success';
                         }
-
-                        this.$emit('getNFTs', event);
                     }
+
+                    else {
+                        event['searchStatus'] = 'Failure';
+                    }
+
+                    this.$emit('getNFTs', event);
                 }
-                console.log(this.collections[0].stats);
+
+                // Already in database
+                else {
+                    event['searchStatus'] = 'Success';
+                    event['data'] = this.collections;
+                    console.log(this.collections);
+                    this.$emit('getNFTs', event);
+                }
             }
 
             // NFT or Contract Search
             else if (this.searchIndex === 1) {
+                event['searchType'] = 'nft';
                 await this.getNFTs();
+
+                if(this.nfts.length === 0) {
+                    event['searchStatus'] = 'Fetching';
+                    this.$emit('getNFTs', event);
+
+                    response = await this.fetchNFTs();
+                    if (response.ok) {
+                        await this.getNFTs();
+                        
+                        event['data'] = this.nfts;
+                        if(this.nfts.length > 0) {
+                            event['searchStatus'] = 'Success';
+                        }
+                    }
+
+                    this.$emit('getNFTs', event);
+                }
+
+                else {
+                    event['searchStatus'] = 'Success';
+                    event['data'] = this.nfts;
+                    this.$emit('getNFTs', event);
+                }
             }
 
             this.disableSearch = false;
         },
         getNFTs: async function() {
-            this.requestCount += 1
-            if (this.requestCount > 2) {
-                this.requestCount = 0;
-                return;
-            }
-
             try {
                 console.log("Starting Query");
                 this.address = this.address.toLowerCase();
-                debugger;
                 if(this.tokenid=="") {
                     const nfts = await API.graphql({
                         query: listNfts,
@@ -154,46 +193,8 @@ export default {
                     this.nfts = nfts.data.listNfts.items;
                     this.$emit('getNFTs', this.nfts)
                 }
-
-                var event = {};
-                if(this.nfts.length === 0) {
-                    debugger;
-                    event = {
-                        'searchStatus': "Fetching",
-                        'nfts': []
-                    }
-                    debugger;
-                    this.$emit('getNFTs', event);
-                    var response = await this.fetchNFTs();
-                    debugger;
-                    if (response.status === 200)
-                        await this.getNFTs();
-                    else {
-                        event = {
-                            'searchStatus': 'Failed',
-                            'nfts': []
-                        }
-                        this.requestCount = 0;
-                        this.$emit('getNFTs', event);
-                    }
-                }
-
-                else {
-                    event = {
-                        'searchStatus': 'Success',
-                        'nfts': this.nfts
-                    }
-                    this.requestCount = 0;
-                    this.$emit('getNFTs', event);
-                }
             } 
             catch (e) {
-                event = {
-                            'searchStatus': 'Failed',
-                            'nfts': []
-                        }
-                this.requestCount = 0;
-                this.$emit('getNFTs', event);
                 console.error(e);
             }
         },
@@ -227,12 +228,6 @@ export default {
             }
         },
         getCollection: async function() {
-            this.requestCount += 1
-            if (this.requestCount > 2) {
-                this.requestCount = 0;
-                return;
-            }
-
             try {
                 console.log("Starting Query");
                 this.collectionSlug = this.collectionSlug.toLowerCase();

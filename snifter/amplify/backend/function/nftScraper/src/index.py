@@ -101,7 +101,8 @@ def handler(event, context):
             'body': json.dumps({
                 'Exception': 'Invalid Event Type',
                 'Reason': f"{event_type} is not supported"
-            })
+            }),
+            'isBase64Encoded': False
         }
 
     # Perform event
@@ -123,7 +124,8 @@ def handler(event, context):
             'body': json.dumps({
                 "Exception": "API Exception",
                 "Reason": result.reason_phrase
-            })
+            }),
+            'isBase64Encoded': False
         }
 
     # Iteratively insert into table for batch assets
