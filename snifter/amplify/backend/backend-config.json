@@ -125,6 +125,20 @@
             "GraphQLAPIEndpointOutput",
             "GraphQLAPIKeyOutput"
           ]
+        },
+        {
+          "category": "function",
+          "resourceName": "scrapeTweets",
+          "attributes": [
+            "Name"
+          ]
+        },
+        {
+          "category": "function",
+          "resourceName": "nftScraper",
+          "attributes": [
+            "Name"
+          ]
         }
       ]
     }
