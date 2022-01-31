@@ -57,7 +57,7 @@
         },
         "createUserModelOnSignup": {
           "deploymentBucketName": "amplify-snifter-shayondev-153259-deployment",
-          "s3Key": "amplify-builds/createUserModelOnSignup-49756369796d3263796e-build.zip"
+          "s3Key": "amplify-builds/createUserModelOnSignup-36466c616b4f58574369-build.zip"
         }
       },
       "hosting": {
