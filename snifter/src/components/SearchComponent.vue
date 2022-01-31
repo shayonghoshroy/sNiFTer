@@ -62,6 +62,7 @@
 <script>
 import { API } from "aws-amplify";
 import { listNfts, listCollections } from "../graphql/queries";
+import { fetchCollection, fetchNFTs } from "../services/nftScraperService";
 
 export default {
     name: "SearchComponent",
@@ -96,73 +97,85 @@ export default {
 
             // Collection search
             debugger;
-            if (this.searchIndex === 0) {
-                event['searchType'] = 'collection';
+            try {
+                if (this.searchIndex === 0) {
+                    event['searchType'] = 'collection';
 
-                await this.getCollection();
-                debugger;
-                
-                // Fetch collecton from API
-                if (this.collections.length === 0) {
-                    event['searchStatus'] = 'Fetching';
-                    this.$emit('getNFTs', event);
-
-                    response = await this.fetchCollection();
+                    await this.getCollection();
+                    debugger;
                     
-                    // Successful search
-                    if (response.ok) {
-                        debugger;
-                        await this.getCollection();
+                    // Fetch collecton from API
+                    if (this.collections.length === 0) {
+                        event['searchStatus'] = 'Fetching';
+                        this.$emit('getNFTs', event);
+
+                        response = await fetchCollection(this.collectionSlug);
                         
-                        event['data'] = this.collections;
-                        if (this.collections.length > 0) {
-                            event['searchStatus'] = 'Success';
+                        // Successful search
+                        if (response.ok) {
+                            debugger;
+                            await this.getCollection();
+                            
+                            event['data'] = this.collections;
+                            if (this.collections.length > 0) {
+                                event['searchStatus'] = 'Success';
+                            }
                         }
+
+                        else {
+                            event['searchStatus'] = 'Failure';
+                        }
+
+                        this.$emit('getNFTs', event);
+                    }
+
+                    // Already in database
+                    else {
+                        event['searchStatus'] = 'Success';
+                        event['data'] = this.collections;
+                        console.log(this.collections);
+                        this.$emit('getNFTs', event);
+                    }
+                }
+
+                // NFT or Contract Search
+                else if (this.searchIndex === 1) {
+                    event['searchType'] = 'nft';
+                    await this.getNFTs();
+
+                    if(this.nfts.length === 0) {
+                        event['searchStatus'] = 'Fetching';
+                        this.$emit('getNFTs', event);
+
+                        response = await fetchNFTs(this.address, this.tokenid);
+                        debugger;
+                        if (response.ok) {
+                            await this.getNFTs();
+                            
+                            event['data'] = this.nfts;
+                            if(this.nfts.length > 0) {
+                                event['searchStatus'] = 'Success';
+                            }
+                        }
+                        
+                        else {
+                            event['searchStatus'] = 'Failure';
+                        }
+
+                        this.$emit('getNFTs', event);
                     }
 
                     else {
-                        event['searchStatus'] = 'Failure';
+                        event['searchStatus'] = 'Success';
+                        event['data'] = this.nfts;
+                        this.$emit('getNFTs', event);
                     }
-
-                    this.$emit('getNFTs', event);
-                }
-
-                // Already in database
-                else {
-                    event['searchStatus'] = 'Success';
-                    event['data'] = this.collections;
-                    console.log(this.collections);
-                    this.$emit('getNFTs', event);
                 }
             }
 
-            // NFT or Contract Search
-            else if (this.searchIndex === 1) {
-                event['searchType'] = 'nft';
-                await this.getNFTs();
-
-                if(this.nfts.length === 0) {
-                    event['searchStatus'] = 'Fetching';
-                    this.$emit('getNFTs', event);
-
-                    response = await this.fetchNFTs();
-                    if (response.ok) {
-                        await this.getNFTs();
-                        
-                        event['data'] = this.nfts;
-                        if(this.nfts.length > 0) {
-                            event['searchStatus'] = 'Success';
-                        }
-                    }
-
-                    this.$emit('getNFTs', event);
-                }
-
-                else {
-                    event['searchStatus'] = 'Success';
-                    event['data'] = this.nfts;
-                    this.$emit('getNFTs', event);
-                }
+            catch (e) {
+                event['searchStatus'] = 'Failure';
+                this.$emit(event);
             }
 
             this.disableSearch = false;
@@ -198,35 +211,6 @@ export default {
                 console.error(e);
             }
         },
-        // Fetches NFT data from API
-        fetchNFTs: async function() {
-            var baseUrl = 'https://qjlxkgsn7g.execute-api.us-east-2.amazonaws.com/dev';
-
-            // Token Search
-            if (this.searchIndex === 1) {
-                var endpoint = "/contract";
-                
-                var body = {'contract-addresses': [this.address]};
-                if (this.tokenid !== '' && this.tokenid !== undefined) {
-                    body['token-ids'] = [parseInt(this.tokenid)];
-                }
-
-                return await fetch(baseUrl + endpoint, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(body)
-                })
-                .then(response =>{
-                    return response;
-                })
-                .then(data => data)
-                .catch((error) => {
-                    console.log('Error:', error.statusCode);
-                });
-            }
-        },
         getCollection: async function() {
             try {
                 console.log("Starting Query");
@@ -242,31 +226,6 @@ export default {
             } 
             catch (e) {
                 console.error(e);
-            }
-        },
-        fetchCollection: async function() {
-            var baseUrl = 'https://qjlxkgsn7g.execute-api.us-east-2.amazonaws.com/dev';
-
-            // Token Search
-            if (this.searchIndex === 0) {
-                var endpoint = "/collection";
-                
-                var body = {'collection-slug': this.collectionSlug};
-
-                return await fetch(baseUrl + endpoint, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(body)
-                })
-                .then(response =>{
-                    return response;
-                })
-                .then(data => data)
-                .catch((error) => {
-                    console.log('Error:', error.statusCode);
-                });
             }
         }
     },
