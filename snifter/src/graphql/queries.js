@@ -427,9 +427,9 @@ export const listNfts = /* GraphQL */ `
     }
   }
 `;
-export const getUserNft = /* GraphQL */ `
-  query GetUserNft($id: ID!) {
-    getUserNft(id: $id) {
+export const getUserFavoriteNft = /* GraphQL */ `
+  query GetUserFavoriteNft($id: ID!) {
+    getUserFavoriteNft(id: $id) {
       id
       userID
       nftID
@@ -463,13 +463,17 @@ export const getUserNft = /* GraphQL */ `
     }
   }
 `;
-export const listUserNfts = /* GraphQL */ `
-  query ListUserNfts(
-    $filter: ModelUserNftFilterInput
+export const listUserFavoriteNfts = /* GraphQL */ `
+  query ListUserFavoriteNfts(
+    $filter: ModelUserFavoriteNftFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    listUserNfts(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    listUserFavoriteNfts(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
       items {
         id
         userID

@@ -757,12 +757,12 @@ export const deleteNft = /* GraphQL */ `
     }
   }
 `;
-export const createUserNft = /* GraphQL */ `
-  mutation CreateUserNft(
-    $input: CreateUserNftInput!
-    $condition: ModelUserNftConditionInput
+export const createUserFavoriteNft = /* GraphQL */ `
+  mutation CreateUserFavoriteNft(
+    $input: CreateUserFavoriteNftInput!
+    $condition: ModelUserFavoriteNftConditionInput
   ) {
-    createUserNft(input: $input, condition: $condition) {
+    createUserFavoriteNft(input: $input, condition: $condition) {
       id
       userID
       nftID
@@ -796,12 +796,12 @@ export const createUserNft = /* GraphQL */ `
     }
   }
 `;
-export const updateUserNft = /* GraphQL */ `
-  mutation UpdateUserNft(
-    $input: UpdateUserNftInput!
-    $condition: ModelUserNftConditionInput
+export const updateUserFavoriteNft = /* GraphQL */ `
+  mutation UpdateUserFavoriteNft(
+    $input: UpdateUserFavoriteNftInput!
+    $condition: ModelUserFavoriteNftConditionInput
   ) {
-    updateUserNft(input: $input, condition: $condition) {
+    updateUserFavoriteNft(input: $input, condition: $condition) {
       id
       userID
       nftID
@@ -835,12 +835,12 @@ export const updateUserNft = /* GraphQL */ `
     }
   }
 `;
-export const deleteUserNft = /* GraphQL */ `
-  mutation DeleteUserNft(
-    $input: DeleteUserNftInput!
-    $condition: ModelUserNftConditionInput
+export const deleteUserFavoriteNft = /* GraphQL */ `
+  mutation DeleteUserFavoriteNft(
+    $input: DeleteUserFavoriteNftInput!
+    $condition: ModelUserFavoriteNftConditionInput
   ) {
-    deleteUserNft(input: $input, condition: $condition) {
+    deleteUserFavoriteNft(input: $input, condition: $condition) {
       id
       userID
       nftID

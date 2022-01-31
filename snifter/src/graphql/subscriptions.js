@@ -694,9 +694,9 @@ export const onDeleteNft = /* GraphQL */ `
     }
   }
 `;
-export const onCreateUserNft = /* GraphQL */ `
-  subscription OnCreateUserNft {
-    onCreateUserNft {
+export const onCreateUserFavoriteNft = /* GraphQL */ `
+  subscription OnCreateUserFavoriteNft {
+    onCreateUserFavoriteNft {
       id
       userID
       nftID
@@ -730,9 +730,9 @@ export const onCreateUserNft = /* GraphQL */ `
     }
   }
 `;
-export const onUpdateUserNft = /* GraphQL */ `
-  subscription OnUpdateUserNft {
-    onUpdateUserNft {
+export const onUpdateUserFavoriteNft = /* GraphQL */ `
+  subscription OnUpdateUserFavoriteNft {
+    onUpdateUserFavoriteNft {
       id
       userID
       nftID
@@ -766,9 +766,9 @@ export const onUpdateUserNft = /* GraphQL */ `
     }
   }
 `;
-export const onDeleteUserNft = /* GraphQL */ `
-  subscription OnDeleteUserNft {
-    onDeleteUserNft {
+export const onDeleteUserFavoriteNft = /* GraphQL */ `
+  subscription OnDeleteUserFavoriteNft {
+    onDeleteUserFavoriteNft {
       id
       userID
       nftID
