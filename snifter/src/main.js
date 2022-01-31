@@ -3,7 +3,6 @@ import App from "./App.vue";
 import router from "./router";
 import "bulma/css/bulma.css";
 import { VuesticPlugin } from "vuestic-ui";
-import "vuestic-ui/dist/vuestic-ui.css";
 import Amplify from "aws-amplify";
 import awsconfig from "./aws-exports";
 import {

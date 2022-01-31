@@ -1,35 +1,26 @@
 <template>
   <div class="nft-container">
     <va-card :src="nft" class="nft-card" style="height: 500px; width: 500px">
+      <va-image
+        class="rounded-card"
+        :src="nft.image_url"
+        style="height: 400px"
+      />
+      <va-card-title v-if="nft.name">{{ nft.name }}</va-card-title>
+      <va-card-title v-else></va-card-title>
 
-        <va-image
-            class="rounded-card"
-            :src="nft.image_url"
-            style="height: 400px"
-        />
+      <va-card-content> {{ nft.name }} {{ nft.token_id }} </va-card-content>
 
-        <va-card-title v-if="nft.name">{{ nft.name }}</va-card-title>
-        <va-card-title v-else></va-card-title>
-
-        <va-card-content>
-            {{ nft.name }} {{ nft.token_id }}
-        </va-card-content>
-
-        <va-collapse
-        v-model="showContract"
-        header="Contract Information">
-          <contract-stats
-          :contracts="nftContract">
-          </contract-stats>
-        </va-collapse>
-        <va-collapse
+      <va-collapse v-model="showContract" header="Contract Information">
+        <contract-stats :contracts="nftContract"> </contract-stats>
+      </va-collapse>
+      <va-collapse
         v-model="showCollection"
         v-if="collection"
-        header="Collection Information">
-          <collection-info
-          :collection="collection">
-          </collection-info>
-        </va-collapse>
+        header="Collection Information"
+      >
+        <collection-info :collection="collection"> </collection-info>
+      </va-collapse>
     </va-card>
   </div>
 </template>
@@ -40,13 +31,13 @@ import { listCollections, listNftAssetContracts } from "../graphql/queries";
 import ContractStats from "../components/ContractInfo";
 import CollectionInfo from "../components/nft/CollectionInfo";
 
-export default {    
+export default {
   name: "Nft",
   components: {
     ContractStats,
-    CollectionInfo
+    CollectionInfo,
   },
-  async created(){
+  async created() {
     console.log(this.$route.query);
     this.nftData = this.$route.query;
 
@@ -56,57 +47,59 @@ export default {
   },
   data() {
     return {
-        nftData: null,
-        showContract: false,
-        showCollection: false,
-        collapses: [
-        { title: 'Contract', content: 'first collapse content' },
-        ],
-        nftContract: [],
-        collection: null
-    }
+      nftData: null,
+      showContract: false,
+      showCollection: false,
+      collapses: [{ title: "Contract", content: "first collapse content" }],
+      nftContract: [],
+      collection: null,
+    };
   },
   computed: {
-      nft() {
-        return this.nftData;
-      }
+    nft() {
+      return this.nftData;
+    },
   },
   methods: {
     async getNFTs(address) {
-        console.log("fetching");
-        try {
-            const contracts = await API.graphql({
-                query: listNftAssetContracts,
-                variables: {
-                filter: {address: {eq: address}}
-                },
-            });
-            this.nftContract = contracts.data.listNftAssetContracts.items;
+      console.log("fetching");
+      try {
+        const contracts = await API.graphql({
+          query: listNftAssetContracts,
+          variables: {
+            filter: { address: { eq: address } },
+          },
+        });
+        this.nftContract = contracts.data.listNftAssetContracts.items;
 
-            // Convert Proxy object returned by query into JS object to access slug
-            var currentContract = JSON.parse(JSON.stringify(this.nftContract)).at(0);
+        // Convert Proxy object returned by query into JS object to access slug
+        var currentContract = JSON.parse(JSON.stringify(this.nftContract)).at(
+          0
+        );
 
-            // Query collections for matching slug
-            const collection = await API.graphql({
-                query: listCollections,
-                variables: {
-                filter: {slug: {eq: currentContract.slug}}
-                },
-            });
-            
-            // There should only be one collection for each contract
-            this.collection = JSON.parse(JSON.stringify(collection.data.listCollections.items)).at(0);
-        } catch (e) {
-            console.error(e);
-        }
-    }
-  }
+        // Query collections for matching slug
+        const collection = await API.graphql({
+          query: listCollections,
+          variables: {
+            filter: { slug: { eq: currentContract.slug } },
+          },
+        });
+
+        // There should only be one collection for each contract
+        this.collection = JSON.parse(
+          JSON.stringify(collection.data.listCollections.items)
+        ).at(0);
+      } catch (e) {
+        console.error(e);
+      }
+    },
+  },
 };
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;1,700&display=swap');
-@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+@import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;1,700&display=swap");
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
 
 .nft-container {
   display: flex;
@@ -123,7 +116,7 @@ h1 {
 }
 
 .contract-table > tr > td {
-    padding-bottom: 1em;
+  padding-bottom: 1em;
 }
 
 @media (max-width: 700px) {
