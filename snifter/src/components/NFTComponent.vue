@@ -5,9 +5,9 @@
         <div class="row div">
           <div class="flex md6 lg4">
             <router-link
-              :to="{ name: 'Nft', 
-                query: nft
-              }">
+            :to="{ name: 'Nft', 
+            query: nft
+            }">
               <va-card class="nft-card" style="height: 300px; width: 250px">
                 <va-image v-if="nft.image_url"
                   class="rounded-card"
@@ -16,7 +16,22 @@
                 />
                 <va-card-title>{{ nft.name }}</va-card-title>
                 <va-card-content
-                  >{{ nft.name }} {{ nft.token_id }}
+                  >
+                  <div class="nft-stub">
+                    <div class="nft-icon">
+                      <va-icon
+                      v-if="hasFavorited"
+                      name="favorite"
+                      size="medium"
+                      color="red"
+                      @click="hasFavorited = false"></va-icon>
+                      <va-icon
+                      v-else
+                      name="favorite_border"
+                      size="medium"
+                      @click="hasFavorited = true"></va-icon>
+                    </div>
+                  </div>
                 </va-card-content>
               </va-card>
             </router-link>
@@ -44,6 +59,7 @@ export default {
       image_preview_url: "",
       token_id: "",
       nfts: [],
+      hasFavorited: false
     };
   },
   methods: {
@@ -59,6 +75,11 @@ export default {
       } catch (e) {
         console.error(e);
       }
+    },
+    truncateName(nftName) {
+      if(nftName === null || nftName.length < 14)
+        return nftName;
+      return nftName.substring(0, 14) + '...';
     }
   },
 };
@@ -92,6 +113,23 @@ export default {
 .nft-card:hover {
   cursor: pointer;
   box-shadow: 15px 5px 15px 5px grey;
+}
+
+.nft-name {
+  text-align: center;
+  display: inline-block;
+}
+
+.nft-icon {
+  position: absolute;
+  right: 1em;
+  display: inline-block;
+  z-index: 2;
+}
+
+.nft-icon:hover {
+  cursor: pointer;
+  color: red;
 }
 
 </style>
