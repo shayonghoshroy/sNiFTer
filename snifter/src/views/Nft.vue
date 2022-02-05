@@ -38,13 +38,13 @@
         v-if="hasFavorited"
         name="favorite"
         size="large"
-        @click="favorite('shayon', nft.id)"
+        @click="favorite(this.user, nft.id)"
         ></va-icon>
         <va-icon
         v-else
         name="favorite_border"
         size="large"
-        @click="favorite('shayon', nft.id)"></va-icon>
+        @click="favorite(this.user, nft.id)"></va-icon>
       </div>
     </div>
     <p>{{ this.totalFavorites }}</p>
@@ -56,7 +56,6 @@
 import { API } from "aws-amplify";
 import { listCollections, listNftAssetContracts, listUserFavoriteNfts } from "../graphql/queries";
 import { createUserFavoriteNft, deleteUserFavoriteNft } from '../graphql/mutations';
-import { onCreateUserFavoriteNft, onDeleteUserFavoriteNft } from '../graphql/subscriptions';
 import ContractStats from "../components/ContractInfo";
 import CollectionInfo from "../components/nft/CollectionInfo";
 
@@ -74,11 +73,8 @@ export default {
     console.log(this.nftContract);
     console.log(this.collection);
 
-    this.getFavoriteStatus("shayon", this.nftData.id);
-    this.getTotalFavorites(this.nftData.id);
-    
-    this.subscribeToCreateFavorite();
-    this.subscribeToDeleteFavorite();
+    this.setFavoriteStatus(this.user, this.nftData.id);
+    this.setTotalFavorites(this.nftData.id);
   },
   data() {
     return {
@@ -91,7 +87,8 @@ export default {
         nftContract: [],
         collection: null,
         hasFavorited: false,
-        totalFavorites: null
+        totalFavorites: null,
+        user: "shayon"
     }
   },
   computed: {
@@ -100,7 +97,7 @@ export default {
       },
   },
   methods: {
-    async getTotalFavorites(nftID) {
+    async setTotalFavorites(nftID) {
       try {
         const count = await API.graphql({
           query: listUserFavoriteNfts,
@@ -108,13 +105,12 @@ export default {
             filter: {nftID: {eq: nftID}}
           }
         });
-        console.log("total favorites:", Object.keys(count.data.listUserFavoriteNfts.items).length);
         this.totalFavorites = Object.keys(count.data.listUserFavoriteNfts.items).length
       } catch (e) {
         console.error(e);
       }
     },
-    async getFavoriteStatus(userID, nftID) {
+    async setFavoriteStatus(userID, nftID) {
       try {
         const has_favorited = await API.graphql({
           query: listUserFavoriteNfts,
@@ -132,25 +128,10 @@ export default {
         console.error(e);
       }
     },
-    subscribeToCreateFavorite() {
-      API.graphql({ query: onCreateUserFavoriteNft })
-      .subscribe({
-        next: (data) => {
-          console.log("SUBSCRIPTION nft:", data.value.data.onCreateUserFavoriteNft.nftID, "userID", data.value.data.onCreateUserFavoriteNft.userID);
-          this.hasFavorited = true;
-        }
-      })
-    },
-    subscribeToDeleteFavorite() {
-      API.graphql({ query: onDeleteUserFavoriteNft })
-      .subscribe({
-        next: (data) => {
-          console.log("SUBSCRIPTION nft:", data.value.data.onDeleteUserFavoriteNft.nftID, "userID", data.value.data.onDeleteUserFavoriteNft.userID);
-          this.hasFavorited = false;
-        }
-      })
-    },
+    // if user has favorited, remove favorite
+    // else add favorite
     async favorite(userID, nftID) {
+      this.hasFavorited = !this.hasFavorited;
       try {
         const has_favorited = await API.graphql({
           query: listUserFavoriteNfts,
@@ -161,24 +142,17 @@ export default {
 
         if (typeof has_favorited.data.listUserFavoriteNfts.items[0] !== "undefined") {
           const userFavoriteNftId = {id: has_favorited.data.listUserFavoriteNfts.items[0].id};
-
-          console.log('favorite relationship between username:' + userID + ' and nft ID:' + nftID + ' exists');
           console.log('removing favorite');
-
           this.totalFavorites -= 1;
-          console.log('total favorites', this.totalFavorites);
-          
+   
           await API.graphql({
             query: deleteUserFavoriteNft,
             variables: {input: userFavoriteNftId},
           });
         } else {
-          console.log('favorite relationship between username:' + userID + ' and nft ID:' + nftID + ' does not exist');
           console.log('adding favorite');
-
           this.totalFavorites += 1;
-          console.log('total favorites', this.totalFavorites);
-
+     
           const userFavoriteNft = {userID, nftID};
           await API.graphql({
             query: createUserFavoriteNft,
