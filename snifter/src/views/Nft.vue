@@ -38,9 +38,8 @@
         v-if="hasFavorited"
         name="favorite"
         size="large"
-        color="red"
-        
-        @click="hasFavorited = false"></va-icon>
+        @click="favorite('shayon', nft.id)"
+        ></va-icon>
         <va-icon
         v-else
         name="favorite_border"
@@ -51,11 +50,12 @@
   </div>
   
 </template>
-
 <script>
+
 import { API } from "aws-amplify";
 import { listCollections, listNftAssetContracts, listUserFavoriteNfts } from "../graphql/queries";
 import { createUserFavoriteNft, deleteUserFavoriteNft } from '../graphql/mutations';
+import { onCreateUserFavoriteNft, onDeleteUserFavoriteNft } from '../graphql/subscriptions';
 import ContractStats from "../components/ContractInfo";
 import CollectionInfo from "../components/nft/CollectionInfo";
 
@@ -72,6 +72,10 @@ export default {
     await this.getNFTs(this.nftData.address);
     console.log(this.nftContract);
     console.log(this.collection);
+
+    this.getFavoriteStatus("shayon", this.nftData.id);
+    this.subscribeToCreateFavorite();
+    this.subscribeToDeleteFavorite();
   },
   data() {
     return {
@@ -83,6 +87,7 @@ export default {
         ],
         nftContract: [],
         collection: null,
+        hasFavorited: false
     }
   },
   computed: {
@@ -91,19 +96,53 @@ export default {
       },
   },
   methods: {
-    async favorite(userID, nftID) {
+    async getFavoriteStatus(userID, nftID) {
       try {
-        // if the user has favorited this nft, remove the relationship
-        // else create the relationship
-        const hasFavorited = await API.graphql({
+        const has_favorited = await API.graphql({
           query: listUserFavoriteNfts,
           variables: {
             filter: {userID: {eq: userID}, nftID: {eq: nftID}}
           }
         });
 
-        if (typeof hasFavorited.data.listUserFavoriteNfts.items[0] !== "undefined") {
-          const userFavoriteNftId = {id: hasFavorited.data.listUserFavoriteNfts.items[0].id};
+        if (typeof has_favorited.data.listUserFavoriteNfts.items[0] !== "undefined") {
+          this.hasFavorited = true;
+        } else {
+          this.hasFavorited = false;
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    subscribeToCreateFavorite() {
+      API.graphql({ query: onCreateUserFavoriteNft })
+      .subscribe({
+        next: (data) => {
+          console.log("SUBSCRIPTION nft:", data.value.data.onCreateUserFavoriteNft.nftID, "userID", data.value.data.onCreateUserFavoriteNft.userID);
+          this.hasFavorited = true;
+        }
+      })
+    },
+    subscribeToDeleteFavorite() {
+      API.graphql({ query: onDeleteUserFavoriteNft })
+      .subscribe({
+        next: (data) => {
+          console.log("SUBSCRIPTION nft:", data.value.data.onDeleteUserFavoriteNft.nftID, "userID", data.value.data.onDeleteUserFavoriteNft.userID);
+          this.hasFavorited = false;
+        }
+      })
+    },
+    async favorite(userID, nftID) {
+      try {
+        const has_favorited = await API.graphql({
+          query: listUserFavoriteNfts,
+          variables: {
+            filter: {userID: {eq: userID}, nftID: {eq: nftID}}
+          }
+        });
+
+        if (typeof has_favorited.data.listUserFavoriteNfts.items[0] !== "undefined") {
+          const userFavoriteNftId = {id: has_favorited.data.listUserFavoriteNfts.items[0].id};
 
           console.log('favorite relationship between username:' + userID + ' and nft ID:' + nftID + ' exists');
           console.log('removing favorite');
