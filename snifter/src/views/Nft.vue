@@ -47,6 +47,7 @@
         @click="favorite('shayon', nft.id)"></va-icon>
       </div>
     </div>
+    <p>{{ this.totalFavorites }}</p>
   </div>
   
 </template>
@@ -74,6 +75,8 @@ export default {
     console.log(this.collection);
 
     this.getFavoriteStatus("shayon", this.nftData.id);
+    this.getTotalFavorites(this.nftData.id);
+    
     this.subscribeToCreateFavorite();
     this.subscribeToDeleteFavorite();
   },
@@ -87,7 +90,8 @@ export default {
         ],
         nftContract: [],
         collection: null,
-        hasFavorited: false
+        hasFavorited: false,
+        totalFavorites: null
     }
   },
   computed: {
@@ -96,6 +100,20 @@ export default {
       },
   },
   methods: {
+    async getTotalFavorites(nftID) {
+      try {
+        const count = await API.graphql({
+          query: listUserFavoriteNfts,
+          variables: {
+            filter: {nftID: {eq: nftID}}
+          }
+        });
+        console.log("total favorites:", Object.keys(count.data.listUserFavoriteNfts.items).length);
+        this.totalFavorites = Object.keys(count.data.listUserFavoriteNfts.items).length
+      } catch (e) {
+        console.error(e);
+      }
+    },
     async getFavoriteStatus(userID, nftID) {
       try {
         const has_favorited = await API.graphql({
@@ -146,6 +164,9 @@ export default {
 
           console.log('favorite relationship between username:' + userID + ' and nft ID:' + nftID + ' exists');
           console.log('removing favorite');
+
+          this.totalFavorites -= 1;
+          console.log('total favorites', this.totalFavorites);
           
           await API.graphql({
             query: deleteUserFavoriteNft,
@@ -154,6 +175,9 @@ export default {
         } else {
           console.log('favorite relationship between username:' + userID + ' and nft ID:' + nftID + ' does not exist');
           console.log('adding favorite');
+
+          this.totalFavorites += 1;
+          console.log('total favorites', this.totalFavorites);
 
           const userFavoriteNft = {userID, nftID};
           await API.graphql({
