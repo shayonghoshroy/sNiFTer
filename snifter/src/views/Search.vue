@@ -4,9 +4,9 @@
       <h2>Take your pick</h2>
       <p>You've already got your eye on these</p>
     </article>
-    <SearchComponent ref="searchComponent" @getNFTs="searchResult($event)"/>
+    <SearchComponent ref="searchComponent" @getNFTs="searchResult($event)" />
     <div v-if="nfts.length > 0">
-      <NFTDisplay :nfts="nfts"/>
+      <NFTDisplay :nfts="nfts" />
     </div>
     <div class="search-description" v-else-if="!searched">
       <article>
@@ -15,38 +15,38 @@
     </div>
     <div class="empty-search-results" v-else>
       <va-alert class="search-alert mb-4" color="danger" icon="info">
-          No search results...
+        No search results...
       </va-alert>
     </div>
   </div>
 </template>
 
 <script>
-  import SearchComponent from "../components/SearchComponent";
-  import NFTDisplay from "../components/nft/NFTDisplay.vue";
+import SearchComponent from "../components/SearchComponent";
+import NFTDisplay from "../components/nft/NFTDisplay.vue";
 
-  export default {
-    name: "Search",
-    components: { 
-      SearchComponent,
-      NFTDisplay
+export default {
+  name: "Search",
+  components: {
+    SearchComponent,
+    NFTDisplay,
+  },
+  setup() {
+    return {};
+  },
+  data() {
+    return {
+      nfts: [],
+      searched: false,
+    };
+  },
+  methods: {
+    searchResult(nfts) {
+      this.nfts = nfts;
+      this.searched = true;
     },
-    setup() {
-      return {};
-    },
-    data() {
-      return {
-        nfts: [],
-        searched: false,
-      }
-    },
-    methods: {
-      searchResult(nfts) {
-        this.nfts = nfts;
-        this.searched = true;
-      }
-    },
-  };
+  },
+};
 </script>
 
 <style scoped>
