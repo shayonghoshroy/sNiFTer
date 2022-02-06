@@ -5,7 +5,7 @@
             <div class="contract-information">
                 <va-list-item>
                     <va-list-item-section avatar>
-                        <img :src="contract.image_url">
+                        <img :src="contract.image_url" :height="imageHeight" :width="imageWidth">
                     </va-list-item-section>
 
                     <va-list-item-section>
@@ -31,7 +31,13 @@
                 </va-list-item>
 
                 <va-list-item>
-                    <p>{{ contract.description }}</p>
+                    <p>{{ cleanContractDescription }}</p>
+                </va-list-item>
+
+                <va-list-item v-for="(linkObject, index) in contractLinks" :key="index">
+                    <va-list-item-section>
+                        <a :href="linkObject[2]" target="_blank" rel="noopener noreferrer">{{ linkObject[1].replaceAll('**', '') }}</a>
+                    </va-list-item-section>
                 </va-list-item>
 
                 <va-divider inset />
@@ -73,11 +79,34 @@ export default {
             type: Array,
             default: null
         },
+        imageHeight: {
+            type: Number,
+            default: 200
+        },
+        imageWidth: {
+            type: Number,
+            default: 200
+        }
     },
     computed: {
         contractStats() {
             console.log(this.contract[0]);
             return this.contract[0];
+        },
+        cleanContractDescription() {
+            const link = /\[(.*?)\]\((.*?)\)/gim;
+            const linkNames = /\*\*(.*)\*\*/gim;
+
+            return this.contracts[0].description.replaceAll(link, '').replaceAll(linkNames, '');
+        },
+        contractLinks() {
+            const link = /\[(.*?)\]\((.*?)\)/gim;
+            
+            var contractDescription = this.contracts[0].description;
+            if (contractDescription === null || contractDescription === undefined)
+                return [];
+            
+            return [...contractDescription.matchAll(link)];
         }
     }
 }
@@ -85,16 +114,12 @@ export default {
 
 <style lang="css" scoped>
 
-.va-list {
-    border-width: 0 1px 1px 1px;
-    border-style: solid;
-    border-color: grey;
-
-    border-radius: 0 0 1em 1em;
+.va-table-responsive {
+    width: 100%;
 }
 
-.va-table-responsive {
-    overflow: auto;
+.va-table {
+    width: 100%;
 }
 
 .external-link:hover {
@@ -103,6 +128,11 @@ export default {
 
 .table-row-header {
     border: none;
+}
+
+.contract-information {
+    word-wrap: normal;
+    overflow: wrap;
 }
 
 </style>

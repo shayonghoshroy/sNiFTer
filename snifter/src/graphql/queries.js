@@ -1,6 +1,165 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const searchCollections = /* GraphQL */ `
+  query SearchCollections(
+    $filter: SearchablecollectionFilterInput
+    $sort: [SearchablecollectionSortInput]
+    $limit: Int
+    $nextToken: String
+    $from: Int
+    $aggregates: [SearchablecollectionAggregationInput]
+  ) {
+    searchCollections(
+      filter: $filter
+      sort: $sort
+      limit: $limit
+      nextToken: $nextToken
+      from: $from
+      aggregates: $aggregates
+    ) {
+      items {
+        id
+        slug
+        name
+        description
+        image_url
+        external_url
+        banner_image_url
+        char_url
+        created_date
+        discord_url
+        featured
+        featured_image_url
+        payout_address
+        telegram_url
+        twitter_username
+        instagram_username
+        wiki_url
+        createdAt
+        updatedAt
+      }
+      nextToken
+      total
+      aggregateItems {
+        name
+        result {
+          ... on SearchableAggregateScalarResult {
+            value
+          }
+          ... on SearchableAggregateBucketResult {
+            buckets {
+              key
+              doc_count
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+export const searchTransactions = /* GraphQL */ `
+  query SearchTransactions(
+    $filter: SearchableTransactionFilterInput
+    $sort: [SearchableTransactionSortInput]
+    $limit: Int
+    $nextToken: String
+    $from: Int
+    $aggregates: [SearchableTransactionAggregationInput]
+  ) {
+    searchTransactions(
+      filter: $filter
+      sort: $sort
+      limit: $limit
+      nextToken: $nextToken
+      from: $from
+      aggregates: $aggregates
+    ) {
+      items {
+        id
+        block_hash
+        transaction_hash
+        block_number
+        from_account
+        to_account
+        transaction_index
+        timestamp
+        createdAt
+        updatedAt
+      }
+      nextToken
+      total
+      aggregateItems {
+        name
+        result {
+          ... on SearchableAggregateScalarResult {
+            value
+          }
+          ... on SearchableAggregateBucketResult {
+            buckets {
+              key
+              doc_count
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+export const searchNftEvents = /* GraphQL */ `
+  query SearchNftEvents(
+    $filter: SearchablenftEventFilterInput
+    $sort: [SearchablenftEventSortInput]
+    $limit: Int
+    $nextToken: String
+    $from: Int
+    $aggregates: [SearchablenftEventAggregationInput]
+  ) {
+    searchNftEvents(
+      filter: $filter
+      sort: $sort
+      limit: $limit
+      nextToken: $nextToken
+      from: $from
+      aggregates: $aggregates
+    ) {
+      items {
+        id
+        event_type
+        auction_type
+        bid_amount
+        collection_slug
+        contract_address
+        listing_time
+        address
+        token_id
+        created_date
+        from_account
+        to_account
+        is_private
+        total_price
+        createdAt
+        updatedAt
+      }
+      nextToken
+      total
+      aggregateItems {
+        name
+        result {
+          ... on SearchableAggregateScalarResult {
+            value
+          }
+          ... on SearchableAggregateBucketResult {
+            buckets {
+              key
+              doc_count
+            }
+          }
+        }
+      }
+    }
+  }
+`;
 export const getTweet = /* GraphQL */ `
   query GetTweet($id: ID!) {
     getTweet(id: $id) {
@@ -183,6 +342,18 @@ export const listCollections = /* GraphQL */ `
         id
         slug
         name
+        description
+        traits {
+          id
+          trait_type
+          value
+          display_type
+          max_value
+          trait_count
+          order
+          createdAt
+          updatedAt
+        }
         stats {
           id
           one_day_volume
@@ -209,7 +380,6 @@ export const listCollections = /* GraphQL */ `
           createdAt
           updatedAt
         }
-        description
         image_url
         external_url
         banner_image_url
@@ -386,6 +556,17 @@ export const getNft = /* GraphQL */ `
         updatedAt
       }
       owner
+      traits {
+        id
+        trait_type
+        value
+        display_type
+        max_value
+        trait_count
+        order
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }
@@ -415,6 +596,119 @@ export const listNfts = /* GraphQL */ `
         external_link
         perma_link
         owner
+        traits {
+          id
+          trait_type
+          value
+          display_type
+          max_value
+          trait_count
+          order
+          createdAt
+          updatedAt
+        }
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getTransaction = /* GraphQL */ `
+  query GetTransaction($id: ID!) {
+    getTransaction(id: $id) {
+      id
+      block_hash
+      transaction_hash
+      block_number
+      from_account
+      to_account
+      transaction_index
+      timestamp
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listTransactions = /* GraphQL */ `
+  query ListTransactions(
+    $filter: ModelTransactionFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listTransactions(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        block_hash
+        transaction_hash
+        block_number
+        from_account
+        to_account
+        transaction_index
+        timestamp
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getNftEvent = /* GraphQL */ `
+  query GetNftEvent($id: ID!) {
+    getNftEvent(id: $id) {
+      id
+      event_type
+      auction_type
+      bid_amount
+      collection_slug
+      contract_address
+      listing_time
+      address
+      token_id
+      created_date
+      from_account
+      to_account
+      is_private
+      transaction {
+        id
+        block_hash
+        transaction_hash
+        block_number
+        from_account
+        to_account
+        transaction_index
+        timestamp
+        createdAt
+        updatedAt
+      }
+      total_price
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listNftEvents = /* GraphQL */ `
+  query ListNftEvents(
+    $filter: ModelNftEventFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listNftEvents(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        event_type
+        auction_type
+        bid_amount
+        collection_slug
+        contract_address
+        listing_time
+        address
+        token_id
+        created_date
+        from_account
+        to_account
+        is_private
+        total_price
         createdAt
         updatedAt
       }

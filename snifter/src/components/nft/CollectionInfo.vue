@@ -4,7 +4,7 @@
             <va-list>
                 <va-list-item>
                     <va-list-item-section avatar>
-                        <img :src="collection.image_url">
+                        <img :src="collection.image_url" :height="imageHeight" :width="imageWidth">
                     </va-list-item-section>
 
                     <va-list-item-section>
@@ -167,6 +167,14 @@ export default {
         collection: {
             type: Object,
             required: true
+        },
+        imageHeight: {
+            type: Number,
+            default: 200
+        },
+        imageWidth: {
+            type: Number,
+            default: 200
         }
     },
     methods: {

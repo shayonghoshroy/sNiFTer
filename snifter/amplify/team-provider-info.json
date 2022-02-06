@@ -53,7 +53,11 @@
         },
         "nftScraper": {
           "deploymentBucketName": "amplify-snifter-stephendev-193633-deployment",
-          "s3Key": "amplify-builds/nftScraper-613337775054786a5037-build.zip"
+          "s3Key": "amplify-builds/nftScraper-34534b597030766c4d77-build.zip"
+        },
+        "openSearch": {
+          "deploymentBucketName": "amplify-snifter-stephendev-193633-deployment",
+          "s3Key": "amplify-builds/openSearch-58657444425650586f78-build.zip"
         }
       },
       "hosting": {

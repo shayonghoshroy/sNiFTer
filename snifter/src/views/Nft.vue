@@ -1,138 +1,275 @@
 <template>
-  <div class="nft-container">
-    <div>
-      <va-card :src="nft" class="nft-card" style="width: 800px">
-          <div class="tester">
-            <div>
-              <va-image
-                  class="rounded-card"
-                  :src="nft.image_url"
-                  style="height: 250px; width: 250px"
-              />
+  <div class="nft-container" :class="nft?.background_color ? 'nft-background-color' : 'nft-default-background'">
+    <div v-if="nft" :src="nft" class="nft-card">
+      <div class="top-row">
+        <div class="nft-image">
+          <div class="nft-header">
+            <h1 v-if="nft.name">
+              {{ nft.name }}
+            </h1>
+            <h1 v-else-if="currentContract">
+              {{ currentContract.name + ' #' + nft.token_id }}
+            </h1>
+          </div>
+          <va-image
+              class="rounded-card"
+              :src="nft.image_url"
+              style="height: 500px; width: 500px"
+          />
+          <div class="nft-interactions">
+            <div class="nft-interaction-icon">
+              <va-icon
+                name="visibility"
+                color="#6f36bc"
+                size="3em"
+              ></va-icon>
             </div>
-            <div>
+            <div class="nft-interaction-icon">
+              <va-icon
+                name="favorite_border"
+                color="#6f36bc"
+                size="3em"
+              ></va-icon>
+            </div>
+            <div class="nft-interaction-icon">
+              <va-icon
+                name="monetization_on"
+                color="#6f36bc"
+                size="3em"
+              ></va-icon>
+            </div>
+          </div>
+        </div>
+
+        <div class="nft-traits">
+          <va-accordion v-model="showNftAccordion" class="nft-traits-accordion">
+            <va-collapse
+              v-for="(collapse, index) in nftCollapses"
+              :key="index"
+              :header="collapse.title"
+            >
+              <div v-if="collapse.title === 'Ownership'" class="nft-ownership">
+                <EntityCardList 
+                  v-if="entityListData"
+                  :entities="entityListData" />
+              </div>
+              <div v-else-if="collapse.title === 'Traits'" style="width: 100%;">
+                <TraitTable 
+                  v-if="nft.traits"
+                  :traits="nft.traits"
+                />
+              </div>
+            </va-collapse>
+          </va-accordion>
+        </div>
+
+        <!-- <div class="nft-ownership">
+          <va-list class="nft-ownership-list">
+            <va-list-item class="info-item" v-if="collection">
+              <va-list-item-section>
+                {{ collection.name }}
+              </va-list-item-section>
+              <va-list-item-section>
+                {{ collection.symbol }}
+              </va-list-item-section>
+              <va-list-item-section>
+                <img :src="collection.image_url" alt="Collection Logo" style="height: 50px; width: 50px">
+              </va-list-item-section>
+            </va-list-item>
+            <va-list-item v-if="currentContract">
+              <p>
+                {{ currentContract.name }}
+              </p>
+            </va-list-item>
+            <va-list-item>
+              <p v-if="nft.name">{{ nft.name }}</p>
+              <p v-else>No Name</p>
+            </va-list-item>
+            <va-list-item class="info-item">
+              <va-list-item-section>
+                Owned By:
+              </va-list-item-section>
+              <va-list-item-section>
+                {{ nft.owner || 'UNKNOWN OWNER' }}
+              </va-list-item-section>
+            </va-list-item>
+          </va-list>
+        </div> -->
+      </div>
+
+        <div class="transaction-section">
+          <div class="recent-sales-info">
+            <div class="recent-info">
               <va-list>
-                <va-list-item class="info-item" v-if="collection">
+                <va-list-item>
                   <va-list-item-section>
-                    {{ collection.name }}
+                    <p>Current Bid: </p>
                   </va-list-item-section>
                   <va-list-item-section>
-                    <img :src="collection.image_url" alt="Collection Logo" style="height: 50px; width: 50px">
-                  </va-list-item-section>
-                </va-list-item>
-
-                <va-list-item class="info-item">
-                  <va-list-item-section>
-                    #{{ nft.token_id }}
-                  </va-list-item-section>
-                  <va-list-item-section>
-                    {{ nft.owner || 'UNKNOWN OWNER' }}
+                    <p>3 eth</p>
                   </va-list-item-section>
                 </va-list-item>
-
-                <va-list-item class="list-interactable">
+                <va-list-item>
                   <va-list-item-section>
-                    <va-list-item-label>
-                      Current Bid:
-                    </va-list-item-label>
+                    <p>Last Sale: </p>
                   </va-list-item-section>
                   <va-list-item-section>
-                    23.4
+                    <p>2.5 eth</p>
                   </va-list-item-section>
                 </va-list-item>
-
-                <va-list-item class="list-interactable">
+                <va-list-item>
                   <va-list-item-section>
-                    <va-list-item-label>
-                      Add To Watchlist
-                    </va-list-item-label>
+                    <p>Average Sale: </p>
                   </va-list-item-section>
-                  <va-list-item-section icon>
-                      <div>
-                        <va-icon
-                            name="add"
-                            color="#6f36bc"
-                        ></va-icon>
-                      </div>
+                  <va-list-item-section>
+                    <p>2.75 eth</p>
                   </va-list-item-section>
                 </va-list-item>
-
-                <va-list-item class="list-interactable">
+              </va-list>
+            </div>
+            <div class="total-info">
+              <va-list>
+                <va-list-item>
                   <va-list-item-section>
-                    <va-list-item-label>
-                      Price Trends
-                    </va-list-item-label>
+                    <p>Number of Sales:</p>
+                  </va-list-item-section>
+                  <va-list-item-section>
+                    <p>{{ nft.num_sales }}</p>
+                  </va-list-item-section>
+                </va-list-item>
+                <va-list-item>
+                  <va-list-item-section>
+                    <p>Total Sales:</p>
+                  </va-list-item-section>
+                  <va-list-item-section>
+                    <p>27.5 eth</p>
                   </va-list-item-section>
                 </va-list-item>
               </va-list>
             </div>
           </div>
+          <div>
+            <p>Transactions Go Here...</p>
+          </div>
+        </div>
 
-          <va-card-title v-if="nft.name">{{ nft.name }}</va-card-title>
-          <va-card-title v-else></va-card-title>
-
-          <va-card-content>
-              {{ nft.name }} {{ nft.token_id }}
-          </va-card-content>
-
-          <va-collapse
-          v-model="showContract"
-          header="Contract Information">
-            <contract-stats
+        <div class="contract-section">
+          <contract-stats
             :contracts="nftContract">
-            </contract-stats>
-          </va-collapse>
-          <va-collapse
-          v-model="showCollection"
-          v-if="collection"
-          header="Collection Information">
-            <collection-info
-            :collection="collection">
-            </collection-info>
-          </va-collapse>
-      </va-card>
+          </contract-stats>
+        </div>
+
+        <div class="collection-section">
+          <CollectionInfo :collection="collection" />
+        </div>
     </div>
   </div>
 </template>
 
 <script>
 import { API } from "aws-amplify";
-import { listCollections, listNftAssetContracts } from "../graphql/queries";
+import { listCollections, listNftAssetContracts, listNfts } from "../graphql/queries";
+import { fetchCollection } from '../services/nftScraperService';
 import ContractStats from "../components/ContractInfo";
 import CollectionInfo from "../components/nft/CollectionInfo";
+import TraitTable from "../components/nft/TraitTable";
+import EntityCardList from "../components/nft/EntityCardList";
 
 export default {    
   name: "Nft",
   components: {
     ContractStats,
-    CollectionInfo
+    CollectionInfo,
+    TraitTable,
+    EntityCardList
   },
   async created(){
     console.log(this.$route.query);
     this.nftData = this.$route.query;
 
+    await this.getNFT();
+    console.log(this.nft);
     await this.getNFTs(this.nftData.address);
+
+    if(this.collection === null || this.collection === undefined) {
+      await this.collectionRequest(this.currentContract.slug);
+    }
+
     console.log(this.nftContract);
     console.log(this.collection);
   },
   data() {
     return {
         nftData: null,
+        nft: null,
         showContract: false,
         showCollection: false,
-        collapses: [
-          { title: 'Contract', content: 'first collapse content' },
+        nftCollapses: [
+          { title: 'Ownership' },
+          { title: 'Traits' },
         ],
         nftContract: [],
-        collection: null
+        currentContract: null,
+        collection: null,
+        showNftAccordion: [false, false]
     }
   },
   computed: {
-      nft() {
-        return this.nftData;
+    traitColumnFields() {
+      return ['type', 'value', 'count', 'rarity']
+    },
+    entityListData() {
+      var entities = [];
+
+      if(this.collection) {
+        entities.push({
+          'type': 'Collection', 'name': this.collection.name, 'image_url': this.collection.image_url
+        });
       }
+
+      if(this.currentContract) {
+        entities.push({
+          'type': 'Contract', 'name': this.currentContract.name, 'image_url': this.currentContract.image_url
+        });
+      }
+
+      if(this.nft.owner && this.currentContract) {
+        entities.push({
+          'type': 'Owner', 'name': this.nft.owner, 'image_url': this.currentContract.image_url
+        });
+      }
+
+      console.log(entities);
+
+      return entities;
+    }
   },
   methods: {
+    async initSubscriptions() {
+      
+    },
+    async getNFT() {
+      try {
+        var token_id = this.nftData.token_id;
+        var address = this.nftData.address;
+
+        const nfts = await API.graphql({
+          query: listNfts,
+          variables: {
+            filter: {
+              address: {eq: address},
+              token_id: {eq: token_id}
+            }
+          }
+        });
+
+        this.nft = nfts.data.listNfts.items.at(0);
+      }
+      catch(error) {
+        console.log(error);
+        return null;
+      }
+    },
     async getNFTs(address) {
         console.log("fetching");
         try {
@@ -146,6 +283,7 @@ export default {
 
             // Convert Proxy object returned by query into JS object to access slug
             var currentContract = JSON.parse(JSON.stringify(this.nftContract)).at(0);
+            this.currentContract = currentContract;
 
             // Query collections for matching slug
             const collection = await API.graphql({
@@ -160,6 +298,30 @@ export default {
         } catch (e) {
             console.error(e);
         }
+    },
+    async getCollection(collectionSlug) {
+        // Query collections for matching slug
+        try {
+          const collection = await API.graphql({
+              query: listCollections,
+              variables: {
+              filter: {slug: {eq: collectionSlug}}
+              },
+          });
+          
+          // There should only be one collection for each contract
+          this.collection = JSON.parse(JSON.stringify(collection.data.listCollections.items)).at(0);
+        }
+        catch(error) {
+          console.log(error);
+        }
+    },
+    async collectionRequest(collectionSlug) {
+      console.log("Fetching...");
+      var response = await fetchCollection(collectionSlug);
+      if(response.ok) {
+        await this.getCollection();
+      }
     }
   }
 };
@@ -172,21 +334,83 @@ export default {
 .tester {
   display: flex;
   justify-content: flex-start;
+  width: 100%;
 }
 
-.info-item {
-  color: white;
+.top-row {
+  display: flex;
+  justify-content: flex-start;
+  border-bottom: solid black 1px;
+  width: 100%;
+  max-height: 800px;
+}
+
+.nft-image {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1em 0 1em 2em;
+}
+
+.nft-ownership {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  text-align: left;
+  padding-left: 0;
+}
+
+.nft-ownership-list {
+  padding: 0;
+}
+
+.nft-header {
+  margin-bottom: 1em;
+  font-size: 2rem;
+}
+
+.nft-interactions {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 75%;
+  padding: 1em 0 1em 0;
+}
+
+.nft-interaction-icon:hover {
+  cursor: pointer;
+}
+
+.transaction-section {
+  width: 100%;
+  border-bottom: solid black 1px;
+}
+
+.recent-sales-info {
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
 }
 
 .list-interactable {
-  background-color: white;
   color: black;
   margin: 1em;
 }
 
+.contract-section {
+  width: inherit;
+  margin: 0 2em 0 2em;
+  border-bottom: solid black 1px;
+}
+
 .nft-container {
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
+  margin-left: 16em;
+  margin-right: 16em;
   align-items: center;
 }
 
@@ -195,7 +419,8 @@ export default {
   flex-flow: column;
   justify-content: center;
   align-items: center;
-  background-color: #6f36bc !important;
+  border: solid black 1px;
+  border-radius: 2rem;
 }
 h1 {
   margin-top: 1em;
@@ -209,6 +434,26 @@ h1 {
     padding-bottom: 1em;
 }
 
+.tweet-component {
+  overflow: scroll;
+  overflow-x: hidden;
+  padding-bottom: 2em;
+  margin-top: 2em;
+  margin-bottom: 4em;
+}
+
+.nft-traits {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 8em;
+  width: 100%;
+}
+
+.nft-traits-accordion {
+  width: 100%;
+}
+
 @media (max-width: 700px) {
   div {
     padding: 4em 0em;
@@ -216,6 +461,12 @@ h1 {
   .description {
     text-align: justify;
     width: 90vw;
+  }
+  .top-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
 }
 </style>

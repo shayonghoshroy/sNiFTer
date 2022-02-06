@@ -18,7 +18,14 @@
                 <va-card-content class="card-content"
                 >
                   <div>
-                    {{ nft.name }} {{ nft.token_id }}
+                    <div>
+                      {{ nft.name }} {{ nft.token_id }}
+                    </div>
+                    <div>
+                      <va-icon
+                      name="favorite_border"
+                      color="primary"></va-icon>
+                    </div>
                   </div>
                 </va-card-content>
               </va-card>

@@ -60,11 +60,11 @@ class OpenSeaAPI(BaseAPI):
 
         return result.json()
 
-    async def get_events(self, params):
+    async def get_events(self, params = {}):
         endpoint = "/events"
 
         result = await self.make_get_request(endpoint, params)
         if isinstance(result, APIException):
             return result
 
-        return result.json()
+        return result.json()['asset_events']

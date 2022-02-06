@@ -31,14 +31,6 @@
     "apimyapiGraphQLAPIKeyOutput": {
       "Type": "String",
       "Default": "apimyapiGraphQLAPIKeyOutput"
-    },
-    "functionscrapeTweetsName": {
-      "Type": "String",
-      "Default": "functionscrapeTweetsName"
-    },
-    "functionopenSearchName": {
-      "Type": "String",
-      "Default": "functionopenSearchName"
     }
   },
   "Conditions": {
@@ -71,12 +63,12 @@
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "nftScraper",
+            "openSearch",
             {
               "Fn::Join": [
                 "",
                 [
-                  "nftScraper",
+                  "openSearch",
                   "-",
                   {
                     "Ref": "env"
@@ -106,15 +98,12 @@
             "API_MYAPI_GRAPHQLAPIKEYOUTPUT": {
               "Ref": "apimyapiGraphQLAPIKeyOutput"
             },
-            "FUNCTION_SCRAPETWEETS_NAME": {
-              "Ref": "functionscrapeTweetsName"
-            },
-            "API_MYAPI_TWEETTABLE_NAME": {
+            "API_MYAPI_COLLECTIONSTATSTABLE_NAME": {
               "Fn::ImportValue": {
-                "Fn::Sub": "${apimyapiGraphQLAPIIdOutput}:GetAtt:tweetTable:Name"
+                "Fn::Sub": "${apimyapiGraphQLAPIIdOutput}:GetAtt:collectionStatsTable:Name"
               }
             },
-            "API_MYAPI_TWEETTABLE_ARN": {
+            "API_MYAPI_COLLECTIONSTATSTABLE_ARN": {
               "Fn::Join": [
                 "",
                 [
@@ -129,7 +118,33 @@
                   ":table/",
                   {
                     "Fn::ImportValue": {
-                      "Fn::Sub": "${apimyapiGraphQLAPIIdOutput}:GetAtt:tweetTable:Name"
+                      "Fn::Sub": "${apimyapiGraphQLAPIIdOutput}:GetAtt:collectionStatsTable:Name"
+                    }
+                  }
+                ]
+              ]
+            },
+            "API_MYAPI_COLLECTIONTABLE_NAME": {
+              "Fn::ImportValue": {
+                "Fn::Sub": "${apimyapiGraphQLAPIIdOutput}:GetAtt:collectionTable:Name"
+              }
+            },
+            "API_MYAPI_COLLECTIONTABLE_ARN": {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:aws:dynamodb:",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ":",
+                  {
+                    "Ref": "AWS::AccountId"
+                  },
+                  ":table/",
+                  {
+                    "Fn::ImportValue": {
+                      "Fn::Sub": "${apimyapiGraphQLAPIIdOutput}:GetAtt:collectionTable:Name"
                     }
                   }
                 ]
@@ -212,113 +227,6 @@
                   }
                 ]
               ]
-            },
-            "API_MYAPI_COLLECTIONSTATSTABLE_NAME": {
-              "Fn::ImportValue": {
-                "Fn::Sub": "${apimyapiGraphQLAPIIdOutput}:GetAtt:collectionStatsTable:Name"
-              }
-            },
-            "API_MYAPI_COLLECTIONSTATSTABLE_ARN": {
-              "Fn::Join": [
-                "",
-                [
-                  "arn:aws:dynamodb:",
-                  {
-                    "Ref": "AWS::Region"
-                  },
-                  ":",
-                  {
-                    "Ref": "AWS::AccountId"
-                  },
-                  ":table/",
-                  {
-                    "Fn::ImportValue": {
-                      "Fn::Sub": "${apimyapiGraphQLAPIIdOutput}:GetAtt:collectionStatsTable:Name"
-                    }
-                  }
-                ]
-              ]
-            },
-            "API_MYAPI_COLLECTIONTABLE_NAME": {
-              "Fn::ImportValue": {
-                "Fn::Sub": "${apimyapiGraphQLAPIIdOutput}:GetAtt:collectionTable:Name"
-              }
-            },
-            "API_MYAPI_COLLECTIONTABLE_ARN": {
-              "Fn::Join": [
-                "",
-                [
-                  "arn:aws:dynamodb:",
-                  {
-                    "Ref": "AWS::Region"
-                  },
-                  ":",
-                  {
-                    "Ref": "AWS::AccountId"
-                  },
-                  ":table/",
-                  {
-                    "Fn::ImportValue": {
-                      "Fn::Sub": "${apimyapiGraphQLAPIIdOutput}:GetAtt:collectionTable:Name"
-                    }
-                  }
-                ]
-              ]
-            },
-            "FUNCTION_OPENSEARCH_NAME": {
-              "Ref": "functionopenSearchName"
-            },
-            "API_MYAPI_TRANSACTIONTABLE_NAME": {
-              "Fn::ImportValue": {
-                "Fn::Sub": "${apimyapiGraphQLAPIIdOutput}:GetAtt:TransactionTable:Name"
-              }
-            },
-            "API_MYAPI_TRANSACTIONTABLE_ARN": {
-              "Fn::Join": [
-                "",
-                [
-                  "arn:aws:dynamodb:",
-                  {
-                    "Ref": "AWS::Region"
-                  },
-                  ":",
-                  {
-                    "Ref": "AWS::AccountId"
-                  },
-                  ":table/",
-                  {
-                    "Fn::ImportValue": {
-                      "Fn::Sub": "${apimyapiGraphQLAPIIdOutput}:GetAtt:TransactionTable:Name"
-                    }
-                  }
-                ]
-              ]
-            },
-            "API_MYAPI_NFTEVENTTABLE_NAME": {
-              "Fn::ImportValue": {
-                "Fn::Sub": "${apimyapiGraphQLAPIIdOutput}:GetAtt:nftEventTable:Name"
-              }
-            },
-            "API_MYAPI_NFTEVENTTABLE_ARN": {
-              "Fn::Join": [
-                "",
-                [
-                  "arn:aws:dynamodb:",
-                  {
-                    "Ref": "AWS::Region"
-                  },
-                  ":",
-                  {
-                    "Ref": "AWS::AccountId"
-                  },
-                  ":table/",
-                  {
-                    "Fn::ImportValue": {
-                      "Fn::Sub": "${apimyapiGraphQLAPIIdOutput}:GetAtt:nftEventTable:Name"
-                    }
-                  }
-                ]
-              ]
             }
           }
         },
@@ -339,12 +247,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "snifterLambdaRoled8f838e5",
+            "snifterLambdaRole25d8244a",
             {
               "Fn::Join": [
                 "",
                 [
-                  "snifterLambdaRoled8f838e5",
+                  "snifterLambdaRole25d8244a",
                   "-",
                   {
                     "Ref": "env"
@@ -608,138 +516,6 @@
             {
               "Effect": "Allow",
               "Action": [
-                "lambda:Create*",
-                "lambda:Put*",
-                "lambda:Add*",
-                "lambda:Get*",
-                "lambda:List*",
-                "lambda:Invoke*",
-                "lambda:Update*",
-                "lambda:Delete*",
-                "lambda:Remove*"
-              ],
-              "Resource": [
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:lambda:",
-                      {
-                        "Ref": "AWS::Region"
-                      },
-                      ":",
-                      {
-                        "Ref": "AWS::AccountId"
-                      },
-                      ":function:",
-                      {
-                        "Ref": "functionscrapeTweetsName"
-                      }
-                    ]
-                  ]
-                }
-              ]
-            },
-            {
-              "Effect": "Allow",
-              "Action": [
-                "lambda:Create*",
-                "lambda:Put*",
-                "lambda:Add*",
-                "lambda:Get*",
-                "lambda:List*",
-                "lambda:Invoke*",
-                "lambda:Update*",
-                "lambda:Delete*",
-                "lambda:Remove*"
-              ],
-              "Resource": [
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:lambda:",
-                      {
-                        "Ref": "AWS::Region"
-                      },
-                      ":",
-                      {
-                        "Ref": "AWS::AccountId"
-                      },
-                      ":function:",
-                      {
-                        "Ref": "functionopenSearchName"
-                      }
-                    ]
-                  ]
-                }
-              ]
-            },
-            {
-              "Effect": "Allow",
-              "Action": [
-                "dynamodb:Put*",
-                "dynamodb:Create*",
-                "dynamodb:BatchWriteItem",
-                "dynamodb:Get*",
-                "dynamodb:BatchGetItem",
-                "dynamodb:List*",
-                "dynamodb:Describe*",
-                "dynamodb:Scan",
-                "dynamodb:Query",
-                "dynamodb:Update*",
-                "dynamodb:RestoreTable*",
-                "dynamodb:Delete*"
-              ],
-              "Resource": [
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:dynamodb:",
-                      {
-                        "Ref": "AWS::Region"
-                      },
-                      ":",
-                      {
-                        "Ref": "AWS::AccountId"
-                      },
-                      ":table/",
-                      {
-                        "Fn::ImportValue": {
-                          "Fn::Sub": "${apimyapiGraphQLAPIIdOutput}:GetAtt:tweetTable:Name"
-                        }
-                      }
-                    ]
-                  ]
-                },
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:dynamodb:",
-                      {
-                        "Ref": "AWS::Region"
-                      },
-                      ":",
-                      {
-                        "Ref": "AWS::AccountId"
-                      },
-                      ":table/",
-                      {
-                        "Fn::ImportValue": {
-                          "Fn::Sub": "${apimyapiGraphQLAPIIdOutput}:GetAtt:tweetTable:Name"
-                        }
-                      },
-                      "/index/*"
-                    ]
-                  ]
-                }
-              ]
-            },
-            {
-              "Effect": "Allow",
-              "Action": [
                 "dynamodb:Put*",
                 "dynamodb:Create*",
                 "dynamodb:BatchWriteItem",
@@ -1039,130 +815,6 @@
                       {
                         "Fn::ImportValue": {
                           "Fn::Sub": "${apimyapiGraphQLAPIIdOutput}:GetAtt:nftTable:Name"
-                        }
-                      },
-                      "/index/*"
-                    ]
-                  ]
-                }
-              ]
-            },
-            {
-              "Effect": "Allow",
-              "Action": [
-                "dynamodb:Put*",
-                "dynamodb:Create*",
-                "dynamodb:BatchWriteItem",
-                "dynamodb:Get*",
-                "dynamodb:BatchGetItem",
-                "dynamodb:List*",
-                "dynamodb:Describe*",
-                "dynamodb:Scan",
-                "dynamodb:Query",
-                "dynamodb:Update*",
-                "dynamodb:RestoreTable*",
-                "dynamodb:Delete*"
-              ],
-              "Resource": [
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:dynamodb:",
-                      {
-                        "Ref": "AWS::Region"
-                      },
-                      ":",
-                      {
-                        "Ref": "AWS::AccountId"
-                      },
-                      ":table/",
-                      {
-                        "Fn::ImportValue": {
-                          "Fn::Sub": "${apimyapiGraphQLAPIIdOutput}:GetAtt:TransactionTable:Name"
-                        }
-                      }
-                    ]
-                  ]
-                },
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:dynamodb:",
-                      {
-                        "Ref": "AWS::Region"
-                      },
-                      ":",
-                      {
-                        "Ref": "AWS::AccountId"
-                      },
-                      ":table/",
-                      {
-                        "Fn::ImportValue": {
-                          "Fn::Sub": "${apimyapiGraphQLAPIIdOutput}:GetAtt:TransactionTable:Name"
-                        }
-                      },
-                      "/index/*"
-                    ]
-                  ]
-                }
-              ]
-            },
-            {
-              "Effect": "Allow",
-              "Action": [
-                "dynamodb:Put*",
-                "dynamodb:Create*",
-                "dynamodb:BatchWriteItem",
-                "dynamodb:Get*",
-                "dynamodb:BatchGetItem",
-                "dynamodb:List*",
-                "dynamodb:Describe*",
-                "dynamodb:Scan",
-                "dynamodb:Query",
-                "dynamodb:Update*",
-                "dynamodb:RestoreTable*",
-                "dynamodb:Delete*"
-              ],
-              "Resource": [
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:dynamodb:",
-                      {
-                        "Ref": "AWS::Region"
-                      },
-                      ":",
-                      {
-                        "Ref": "AWS::AccountId"
-                      },
-                      ":table/",
-                      {
-                        "Fn::ImportValue": {
-                          "Fn::Sub": "${apimyapiGraphQLAPIIdOutput}:GetAtt:nftEventTable:Name"
-                        }
-                      }
-                    ]
-                  ]
-                },
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:dynamodb:",
-                      {
-                        "Ref": "AWS::Region"
-                      },
-                      ":",
-                      {
-                        "Ref": "AWS::AccountId"
-                      },
-                      ":table/",
-                      {
-                        "Fn::ImportValue": {
-                          "Fn::Sub": "${apimyapiGraphQLAPIIdOutput}:GetAtt:nftEventTable:Name"
                         }
                       },
                       "/index/*"

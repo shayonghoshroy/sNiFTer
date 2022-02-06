@@ -73,7 +73,7 @@ export default {
             address: "",
             collectionSlug: "",
             nfts: [],
-            collecitions: [],
+            collections: [],
             searchTypes: [["Collection", "collections"], ["Token", 'generating_tokens'], ["Owner", 'account_balance_wallet'], ["Creator", 'palette']],
             searchIndex: 0,
             requestCount: 0,
@@ -96,7 +96,6 @@ export default {
             };
 
             // Collection search
-            debugger;
             try {
                 if (this.searchIndex === 0) {
                     event['searchType'] = 'collection';
