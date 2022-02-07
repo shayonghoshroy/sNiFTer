@@ -1,17 +1,17 @@
 <template>
-<div class="background-height">
-  <div class="height">
-    <authenticator>
-      <template v-slot="{ user, signOut }">
-        <h1>Hello {{ user.username }}!</h1>
-        <div class="padding">
-          <button class="button is-purple" @click="signOut">
-            <div class="is-white">Sign Out</div>
-          </button>
-        </div>
-      </template>
-    </authenticator>
-  </div>
+  <div class="background-height">
+    <div class="height">
+      <authenticator>
+        <template v-slot="{ user, signOut }">
+          <h1>Hello {{ user.username }}!</h1>
+          <div class="padding">
+            <button class="button is-purple" @click="signOut">
+              <div class="is-white">Sign Out</div>
+            </button>
+          </div>
+        </template>
+      </authenticator>
+    </div>
   </div>
 </template>
 

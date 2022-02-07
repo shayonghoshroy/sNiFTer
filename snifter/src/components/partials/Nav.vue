@@ -5,13 +5,13 @@
         <div class="logo-image">
           <img src="../../assets/logo-white.png" />
         </div>
-        <a class="navbar-item" href="/">
+        <a class="navbar-item router-hover" href="/">
           <strong class="is-size-4">sNiFTer</strong>
         </a>
-        <router-link to="/about" class="navbar-item">About</router-link>
-        <router-link to="/news" class="navbar-item">News</router-link>
-        <router-link to="/browse" class="navbar-item">Browse</router-link>
-        <router-link to="/search" class="navbar-item">Search</router-link>
+        <a class="navbar-item router-hover" href="/about">About</a>
+        <a class="navbar-item router-hover" href="/news">News</a>
+        <a class="navbar-item router-hover" href="/browse">Browse</a>
+        <a class="navbar-item router-hover" href="/search">Search</a>
       </va-navbar-item>
     </template>
     <template #right class="mb-2">
@@ -77,7 +77,7 @@ export default {
 <style lang="css" scoped>
 nav {
   margin-bottom: 20px;
-  color: #2c3e50;
+  color: #ffffff;
 }
 .logo-image {
   width: 40px;
@@ -97,9 +97,6 @@ nav {
   justify-content: center;
   align-items: center;
 }
-.buttons {
-  display: flex;
-}
 .nav-center {
   position: absolute;
   left: 50%;
@@ -107,6 +104,11 @@ nav {
 }
 .navbar-item {
   margin-left: 5px;
+  color: #ffffff;
+}
+.router-hover:hover {
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.2);
   color: #ffffff;
 }
 </style>

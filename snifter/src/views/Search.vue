@@ -1,5 +1,5 @@
 <template>
-  <div class="search">
+  <div class="search description">
     <article>
       <h2>Take your pick</h2>
       <p>You've already got your eye on these</p>
@@ -62,8 +62,8 @@ h1 {
 }
 
 .description {
-  width: 60vw;
-  height: 100vh;
+  width: 100vw;
+  height: 90vh;
 }
 p {
   font-size: clamp(16px, 1.2vw, 1.2vw);
