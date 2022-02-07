@@ -1,8 +1,8 @@
 <template>
   <div>
     <article>
-      <h2>Take a look</h2>
-      <p>You should definitely keep your eye on these</p>
+      <h2 style="color: white">Take a look</h2>
+      <p style="color: white">You should definitely keep your eye on these</p>
     </article>
     <NFTComponent />
   </div>

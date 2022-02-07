@@ -6,7 +6,8 @@
           <div class="flex md6 lg4">
             <router-link :to="{ name: 'Nft', query: nft }">
               <va-card class="nft-card" style="height: 300px; width: 250px">
-                <va-image v-if="nft.image_url"
+                <va-image
+                  v-if="nft.image_url"
                   class="rounded-card"
                   :src="nft.image_url"
                   style="height: 200px"
@@ -56,25 +57,22 @@ export default {
       } catch (e) {
         console.error(e);
       }
-    }
+    },
   },
 };
 </script>
 <style scoped>
 .post {
-  background: #fff;
   padding: 1.5em;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
-
 .post h2 {
   font-size: 1.3em;
   padding-bottom: 0.25rem;
 }
-
 .post p {
   color: #888;
 }
@@ -85,10 +83,8 @@ export default {
 .rounded-card {
   border-radius: 5px;
 }
-
 .nft-card:hover {
   cursor: pointer;
-  box-shadow: 15px 5px 15px 5px grey;
+  box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.5);
 }
-
 </style>

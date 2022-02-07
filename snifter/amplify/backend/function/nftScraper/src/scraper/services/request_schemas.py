@@ -19,5 +19,4 @@ class AssetsRequest(BaseModel):
     order_direction: str = None
     offset: str = None
     limit: int = None
-    collection: str = None
     owner: str = None

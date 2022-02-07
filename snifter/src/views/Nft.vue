@@ -1,27 +1,29 @@
 <template>
-  <div class="nft-container">
-    <va-card :src="nft" class="nft-card" style="height: 500px; width: 500px">
-      <va-image
-        class="rounded-card"
-        :src="nft.image_url"
-        style="height: 400px"
-      />
-      <va-card-title v-if="nft.name">{{ nft.name }}</va-card-title>
-      <va-card-title v-else></va-card-title>
+  <div class="background-height">
+    <div class="nft-container">
+      <va-card :src="nft" class="nft-card" style="height: 500px; width: 500px">
+        <va-image
+          class="rounded-card"
+          :src="nft.image_url"
+          style="height: 400px"
+        />
+        <va-card-title v-if="nft.name">{{ nft.name }}</va-card-title>
+        <va-card-title v-else></va-card-title>
 
-      <va-card-content> {{ nft.name }} {{ nft.token_id }} </va-card-content>
+        <va-card-content> {{ nft.name }} {{ nft.token_id }} </va-card-content>
 
-      <va-collapse v-model="showContract" header="Contract Information">
-        <contract-stats :contracts="nftContract"> </contract-stats>
-      </va-collapse>
-      <va-collapse
-        v-model="showCollection"
-        v-if="collection"
-        header="Collection Information"
-      >
-        <collection-info :collection="collection"> </collection-info>
-      </va-collapse>
-    </va-card>
+        <va-collapse v-model="showContract" header="Contract Information">
+          <contract-stats :contracts="nftContract"> </contract-stats>
+        </va-collapse>
+        <va-collapse
+          v-model="showCollection"
+          v-if="collection"
+          header="Collection Information"
+        >
+          <collection-info :collection="collection"> </collection-info>
+        </va-collapse>
+      </va-card>
+    </div>
   </div>
 </template>
 
@@ -103,9 +105,11 @@ export default {
 
 .nft-container {
   display: flex;
-  flex-flow: column;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+}
+.background-height {
+  height: 90vh;
 }
 h1 {
   margin-top: 1em;

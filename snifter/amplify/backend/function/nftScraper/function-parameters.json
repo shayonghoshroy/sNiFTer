@@ -21,6 +21,12 @@
         "read",
         "update",
         "delete"
+      ],
+      "openSearch": [
+        "create",
+        "read",
+        "update",
+        "delete"
       ]
     },
     "storage": {
@@ -55,6 +61,18 @@
         "delete"
       ],
       "nft:@model(appsync)": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "Transaction:@model(appsync)": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "nftEvent:@model(appsync)": [
         "create",
         "read",
         "update",
