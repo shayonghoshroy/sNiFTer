@@ -51,12 +51,10 @@ export default {
   background: #fff;
   padding: 1.5em;
 }
-
 .post h2 {
   font-size: 1.3em;
   padding-bottom: 0.25rem;
 }
-
 .post p {
   color: #888;
 }
@@ -67,7 +65,6 @@ export default {
 .rounded-card {
   border-radius: 5px;
 }
-
 .nft-card:hover {
   cursor: pointer;
   box-shadow: 15px 5px 15px 5px grey;

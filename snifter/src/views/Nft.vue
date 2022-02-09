@@ -1,33 +1,61 @@
 <template>
-  <div class="nft-container">
-    <va-card :src="nft" class="nft-card" style="height: 500px; width: 500px">
-      <va-image
-        class="rounded-card"
-        :src="nft.image_url"
-        style="height: 400px"
-      />
-      <va-card-title v-if="nft.name">{{ nft.name }}</va-card-title>
-      <va-card-title v-else></va-card-title>
+  <div class="flex-container">
+    <div class="nft-container">
+      <va-card :src="nft" class="nft-card" style="height: 500px; width: 500px">
+          <va-image
+              class="rounded-card"
+              :src="nft.image_url"
+              style="height: 400px"
+          />
+          <va-card-title v-if="nft.name">{{ nft.name }}</va-card-title>
+          <va-card-title v-else></va-card-title>
 
-      <va-card-content> {{ nft.name }} {{ nft.token_id }} </va-card-content>
+          <va-card-content>
+              {{ nft.token_id }}
+          </va-card-content>
 
-      <va-collapse v-model="showContract" header="Contract Information">
-        <contract-stats :contracts="nftContract"> </contract-stats>
-      </va-collapse>
-      <va-collapse
-        v-model="showCollection"
-        v-if="collection"
-        header="Collection Information"
-      >
-        <collection-info :collection="collection"> </collection-info>
-      </va-collapse>
-    </va-card>
+          <va-collapse
+          v-model="showContract"
+          header="Contract Information">
+            <contract-stats
+            :contracts="nftContract">
+            </contract-stats>
+          </va-collapse>
+          <va-collapse
+          v-model="showCollection"
+          v-if="collection"
+          header="Collection Information">
+            <collection-info
+            :collection="collection">
+            </collection-info>
+          </va-collapse>
+      </va-card>
+    </div>
+    
+    <div class="nft-stub">
+      <div class="nft-icon">
+        <va-icon
+        v-if="hasFavorited"
+        name="favorite"
+        size="large"
+        @click="favorite(this.user, nft.id)"
+        ></va-icon>
+        <va-icon
+        v-else
+        name="favorite_border"
+        size="large"
+        @click="favorite(this.user, nft.id)"></va-icon>
+      </div>
+    </div>
+    <p>{{ this.totalFavorites }}</p>
   </div>
+  
 </template>
-
 <script>
+
 import { API } from "aws-amplify";
-import { listCollections, listNftAssetContracts } from "../graphql/queries";
+import { listCollections, listNftAssetContracts, listUserFavoriteNfts } from "../graphql/queries";
+import { createUserFavoriteNft, deleteUserFavoriteNft } from '../graphql/mutations';
 import ContractStats from "../components/ContractInfo";
 import CollectionInfo from "../components/nft/CollectionInfo";
 
@@ -44,23 +72,97 @@ export default {
     await this.getNFTs(this.nftData.address);
     console.log(this.nftContract);
     console.log(this.collection);
+
+    this.setFavoriteStatus(this.user, this.nftData.id);
+    this.setTotalFavorites(this.nftData.id);
   },
   data() {
     return {
-      nftData: null,
-      showContract: false,
-      showCollection: false,
-      collapses: [{ title: "Contract", content: "first collapse content" }],
-      nftContract: [],
-      collection: null,
-    };
+        nftData: null,
+        showContract: false,
+        showCollection: false,
+        collapses: [
+        { title: 'Contract', content: 'first collapse content' },
+        ],
+        nftContract: [],
+        collection: null,
+        hasFavorited: false,
+        totalFavorites: null,
+        user: "shayon"
+    }
   },
   computed: {
-    nft() {
-      return this.nftData;
-    },
+      nft() {
+        return this.nftData;
+      },
   },
   methods: {
+    async setTotalFavorites(nftID) {
+      try {
+        const count = await API.graphql({
+          query: listUserFavoriteNfts,
+          variables: {
+            filter: {nftID: {eq: nftID}}
+          }
+        });
+        this.totalFavorites = Object.keys(count.data.listUserFavoriteNfts.items).length
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    async setFavoriteStatus(userID, nftID) {
+      try {
+        const has_favorited = await API.graphql({
+          query: listUserFavoriteNfts,
+          variables: {
+            filter: {userID: {eq: userID}, nftID: {eq: nftID}}
+          }
+        });
+
+        if (typeof has_favorited.data.listUserFavoriteNfts.items[0] !== "undefined") {
+          this.hasFavorited = true;
+        } else {
+          this.hasFavorited = false;
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    // if user has favorited, remove favorite
+    // else add favorite
+    async favorite(userID, nftID) {
+      this.hasFavorited = !this.hasFavorited;
+      try {
+        const has_favorited = await API.graphql({
+          query: listUserFavoriteNfts,
+          variables: {
+            filter: {userID: {eq: userID}, nftID: {eq: nftID}}
+          }
+        });
+
+        if (typeof has_favorited.data.listUserFavoriteNfts.items[0] !== "undefined") {
+          const userFavoriteNftId = {id: has_favorited.data.listUserFavoriteNfts.items[0].id};
+          console.log('removing favorite');
+          this.totalFavorites -= 1;
+   
+          await API.graphql({
+            query: deleteUserFavoriteNft,
+            variables: {input: userFavoriteNftId},
+          });
+        } else {
+          console.log('adding favorite');
+          this.totalFavorites += 1;
+     
+          const userFavoriteNft = {userID, nftID};
+          await API.graphql({
+            query: createUserFavoriteNft,
+            variables: {input: userFavoriteNft},
+          });
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    },
     async getNFTs(address) {
       console.log("fetching");
       try {
@@ -101,6 +203,12 @@ export default {
 @import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;1,700&display=swap");
 @import url("https://fonts.googleapis.com/icon?family=Material+Icons");
 
+.flex-container {
+  display: flex;
+  /*align-items: center;*/
+  justify-content: center;
+}
+
 .nft-container {
   display: flex;
   flex-flow: column;
@@ -128,4 +236,15 @@ h1 {
     width: 90vw;
   }
 }
+
+.nft-icon {
+  display: inline-block;
+  margin-left: 1em;
+}
+
+.nft-icon:hover {
+  cursor: pointer;
+  color: red;
+}
+
 </style>
