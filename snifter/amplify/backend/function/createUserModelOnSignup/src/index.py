@@ -10,10 +10,10 @@ def handler(event, context):
 
   # initialize boto client
   client = boto3.client('dynamodb')
-  
+
   # create new user model
   data = client.put_item(
-    TableName='user-ic7gmhldrbcyjaekjqst7cutma-shayondev',
+    TableName='user-l6kkjo2j3jf55dllykn3b64e2u-dev',
     Item={
         'id': {
             'S': username

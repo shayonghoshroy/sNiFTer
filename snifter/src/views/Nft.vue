@@ -59,13 +59,13 @@ import { createUserFavoriteNft, deleteUserFavoriteNft } from '../graphql/mutatio
 import ContractStats from "../components/ContractInfo";
 import CollectionInfo from "../components/nft/CollectionInfo";
 
-export default {    
+export default {
   name: "Nft",
   components: {
     ContractStats,
-    CollectionInfo
+    CollectionInfo,
   },
-  async created(){
+  async created() {
     console.log(this.$route.query);
     this.nftData = this.$route.query;
 
@@ -164,40 +164,44 @@ export default {
       }
     },
     async getNFTs(address) {
-        console.log("fetching");
-        try {
-            const contracts = await API.graphql({
-                query: listNftAssetContracts,
-                variables: {
-                filter: {address: {eq: address}}
-                },
-            });
-            this.nftContract = contracts.data.listNftAssetContracts.items;
+      console.log("fetching");
+      try {
+        const contracts = await API.graphql({
+          query: listNftAssetContracts,
+          variables: {
+            filter: { address: { eq: address } },
+          },
+        });
+        this.nftContract = contracts.data.listNftAssetContracts.items;
 
-            // Convert Proxy object returned by query into JS object to access slug
-            var currentContract = JSON.parse(JSON.stringify(this.nftContract)).at(0);
+        // Convert Proxy object returned by query into JS object to access slug
+        var currentContract = JSON.parse(JSON.stringify(this.nftContract)).at(
+          0
+        );
 
-            // Query collections for matching slug
-            const collection = await API.graphql({
-                query: listCollections,
-                variables: {
-                filter: {slug: {eq: currentContract.slug}}
-                },
-            });
-            
-            // There should only be one collection for each contract
-            this.collection = JSON.parse(JSON.stringify(collection.data.listCollections.items)).at(0);
-        } catch (e) {
-            console.error(e);
-        }
-    }
-  }
+        // Query collections for matching slug
+        const collection = await API.graphql({
+          query: listCollections,
+          variables: {
+            filter: { slug: { eq: currentContract.slug } },
+          },
+        });
+
+        // There should only be one collection for each contract
+        this.collection = JSON.parse(
+          JSON.stringify(collection.data.listCollections.items)
+        ).at(0);
+      } catch (e) {
+        console.error(e);
+      }
+    },
+  },
 };
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;1,700&display=swap');
-@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+@import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;1,700&display=swap");
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
 
 .flex-container {
   display: flex;
@@ -220,7 +224,7 @@ h1 {
 }
 
 .contract-table > tr > td {
-    padding-bottom: 1em;
+  padding-bottom: 1em;
 }
 
 @media (max-width: 700px) {

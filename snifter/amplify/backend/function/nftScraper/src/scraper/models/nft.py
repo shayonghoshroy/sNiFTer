@@ -8,11 +8,11 @@ class NFTAssetContract(BaseModel):
     name: str
     address: str
     symbol: str
-    payout_address: str
+    payout_address: Optional[str]
     asset_contract_type: str
-    created_date: datetime
+    created_date: str
     description: str
-    image_url: str
+    image_url: Optional[str]
 
     total_supply: Optional[str]
     nft_version: Optional[str]

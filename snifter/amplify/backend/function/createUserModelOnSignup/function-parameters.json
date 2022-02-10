@@ -15,6 +15,20 @@
         "Subscription"
       ]
     },
+    "function": {
+      "scrapeTweets": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "nftScraper": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    },
     "storage": {
       "tweet:@model(appsync)": [
         "create",

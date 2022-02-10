@@ -17,23 +17,25 @@ class NFTService():
         self.block_chair_api = BlockChairAPI()
 
     def function_switch(self, event_type: str, event: dict):
-        if event_type == "get_asset":
-            contract_address = event.pop("contract_address")
-            token_id = event.pop("token_id")
+        if event_type == "nft":
+            contract_address = event.get("contract-address", None)
+            token_id = event.get("token-id", None)
+            print("Address: ", contract_address)
+            print("Token ID: ", token_id)
 
             loop = asyncio.get_event_loop()
             return loop.run_until_complete(self.get_asset(contract_address, token_id))
 
-        elif event_type == "get_collection":
-            collection_slug = event.pop("collection_slug")
+        elif event_type == "collection":
+            collection_slug = event.pop("collection-slug")
             
             loop = asyncio.get_event_loop()
             return loop.run_until_complete(self.get_nft_collection(collection_slug))
 
         else:
-            contract_addresses = event.get("contract_addresses", None)
-            token_ids = event.get("token_ids", None)
-            options = event.get("options", None)
+            contract_addresses = event.get("contract-addresses", None)
+            token_ids = event.get("token-ids", None)
+            options = event.get("options", {})
 
             loop = asyncio.get_event_loop()
             return loop.run_until_complete(self.get_assets(contract_addresses, token_ids, **options))
@@ -60,7 +62,7 @@ class NFTService():
     def parse_nft_data(self, **data):
         pass
 
-    async def get_asset(self, contract_address: str, token_id: str):
+    async def get_asset(self, contract_address: str, token_id: int):
         result = await self.opensea_api.get_asset(contract_address, token_id)
         if isinstance(result, APIException):
             return result
@@ -69,6 +71,10 @@ class NFTService():
         asset_contract = result.get("asset_contract", None)
         if asset_contract is not None:
             result["address"] = asset_contract["address"]
+
+        # Make sure that address and token id match original request
+        result["address"] = contract_address
+        result["token_id"] = int(token_id)
     
         return {
             "nft": NFT(**result),
@@ -107,6 +113,8 @@ class NFTService():
         for elt in data:
             elt.pop("id")
             asset_contract = elt.get("asset_contract", None)
+            collection = elt.get("collection", None)
+            
             if asset_contract is not None:
                 elt["address"] = asset_contract["address"]
             nft_model = NFT(**elt)

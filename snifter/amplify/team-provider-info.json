@@ -15,21 +15,25 @@
       "function": {
         "scrapeTweets": {
           "deploymentBucketName": "amplify-snifter-dev-34702-deployment",
-          "s3Key": "amplify-builds/scrapeTweets-74745262397279457951-build.zip"
+          "s3Key": "amplify-builds/scrapeTweets-37525632617262443076-build.zip"
         },
         "nftScraper": {
           "deploymentBucketName": "amplify-snifter-dev-34702-deployment",
-          "s3Key": "amplify-builds/nftScraper-364c304e4a44666a786a-build.zip"
+          "s3Key": "amplify-builds/nftScraper-4e593575724b68583336-build.zip"
+        },
+        "createUserModelOnSignup": {
+          "deploymentBucketName": "amplify-snifter-dev-34702-deployment",
+          "s3Key": "amplify-builds/createUserModelOnSignup-6937375642705a454943-build.zip"
         }
-      },
-      "auth": {
-        "snifter40205934": {}
       },
       "hosting": {
         "amplifyhosting": {
           "appId": "d22d1odtojlp9e",
           "type": "manual"
         }
+      },
+      "auth": {
+        "snifter40205934": {}
       }
     }
   },
@@ -62,6 +66,40 @@
         "sendEmails": {
           "deploymentBucketName": "amplify-snifter-shayondev-153259-deployment",
           "s3Key": "amplify-builds/sendEmails-4f4f49544d38385a734c-build.zip"
+        }
+      },
+      "hosting": {
+        "amplifyhosting": {
+          "appId": "d22d1odtojlp9e",
+          "type": "manual"
+        }
+      },
+      "auth": {
+        "snifter40205934": {}
+      }
+    }
+  },
+  "matthewdev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-snifter-matthewdev-185648-authRole",
+      "UnauthRoleArn": "arn:aws:iam::722766780721:role/amplify-snifter-matthewdev-185648-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::722766780721:role/amplify-snifter-matthewdev-185648-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-snifter-matthewdev-185648-deployment",
+      "UnauthRoleName": "amplify-snifter-matthewdev-185648-unauthRole",
+      "StackName": "amplify-snifter-matthewdev-185648",
+      "StackId": "arn:aws:cloudformation:us-east-2:722766780721:stack/amplify-snifter-matthewdev-185648/fa1cbce0-7727-11ec-9599-02602f394520",
+      "AmplifyAppId": "d22d1odtojlp9e"
+    },
+    "categories": {
+      "function": {
+        "scrapeTweets": {
+          "deploymentBucketName": "amplify-snifter-matthewdev-185648-deployment",
+          "s3Key": "amplify-builds/scrapeTweets-73726748352b6735676b-build.zip"
+        },
+        "nftScraper": {
+          "deploymentBucketName": "amplify-snifter-matthewdev-185648-deployment",
+          "s3Key": "amplify-builds/nftScraper-6c4b795738456f6f382b-build.zip"
         }
       },
       "hosting": {

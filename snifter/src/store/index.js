@@ -1,9 +1,13 @@
-import Vue from "vue";
 import Vuex from "vuex";
-import { auth } from "./auth/auth";
+import Vue from "vue";
+import nav from "./modules/nav";
 
+// Load Vuex
 Vue.use(Vuex);
 
+//Create store
 export default new Vuex.Store({
-  modules: { auth },
+  modules: {
+    nav,
+  },
 });
