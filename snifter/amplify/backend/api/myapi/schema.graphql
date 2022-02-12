@@ -143,7 +143,7 @@ type nftEvent @model @searchable {
     id: ID!
     event_type: String!
     auction_type: String
-    bid_amount: String
+    bid_amount: Float
     collection_slug: String
     contract_address: String
     listing_time: String
@@ -154,7 +154,7 @@ type nftEvent @model @searchable {
     to_account: String
     is_private: Boolean
     transaction: Transaction
-    total_price: Int
+    total_price: Float
     createdAt: AWSDateTime
     updatedAt:AWSDateTime
 }

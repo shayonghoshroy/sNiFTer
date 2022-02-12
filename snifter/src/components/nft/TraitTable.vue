@@ -26,6 +26,10 @@ export default {
         traits: {
             type: Array,
             require: true
+        },
+        totalSupply: {
+            type: Number,
+            require: true
         }
     },
     computed: {
@@ -35,7 +39,7 @@ export default {
                     type: trait.trait_type,
                     value: trait.value,
                     count: trait.trait_count,
-                    rarity: trait.trait_count / 10000
+                    rarity: trait.trait_count / this.totalSupply
                 };
             });
         }

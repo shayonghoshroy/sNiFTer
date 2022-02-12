@@ -342,7 +342,6 @@ export const listCollections = /* GraphQL */ `
         id
         slug
         name
-        description
         traits {
           id
           trait_type
@@ -380,6 +379,7 @@ export const listCollections = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        description
         image_url
         external_url
         banner_image_url
@@ -592,10 +592,6 @@ export const listNfts = /* GraphQL */ `
         animation_url
         animation_original_url
         name
-        description
-        external_link
-        perma_link
-        owner
         traits {
           id
           trait_type
@@ -607,6 +603,10 @@ export const listNfts = /* GraphQL */ `
           createdAt
           updatedAt
         }
+        description
+        external_link
+        perma_link
+        owner
         createdAt
         updatedAt
       }

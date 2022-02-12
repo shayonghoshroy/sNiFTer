@@ -32,6 +32,12 @@
                 <va-list-item>
                     <p>{{ collection.description }}</p>
                 </va-list-item>
+
+                <TraitTable 
+                    v-if="collection.traits"
+                    :traits="collection.traits"
+                    :totalSupply="10000"
+                  />
                 
                 <va-divider inset />
 
@@ -161,8 +167,13 @@
     </div>
 </template>
 <script>
+import TraitTable from "../nft/TraitTable";
+
 export default {
     name: "CollectionInfo",
+    components: {
+        TraitTable
+    },
     props: {
         collection: {
             type: Object,

@@ -32,6 +32,9 @@
                 <div class="is-purple">Sign In</div>
               </router-link>
           </div>
+          <div @click="connectToMetaMask()">
+            <va-icon name="account_balance_wallet" size="large" />
+          </div>
         </div>
       </div>
     </template>
@@ -45,6 +48,16 @@ export default {
   name: "Nav",
   components: {
     SearchComponent
+  },
+  methods: {
+    connectToMetaMask() {
+      console.log('connecting...');
+      if (window.ethereum !== undefined) {
+        console.log('ethereum defined');
+        const accounts = window.ethereum.request({ method: "eth_requestAccounts" });
+        console.log(accounts);
+      }
+    }
   },
 };
 </script>
@@ -87,6 +100,7 @@ nav {
 
 .buttons {
   display: flex;
+  align-items: center;
 }
 
 .nav-center {

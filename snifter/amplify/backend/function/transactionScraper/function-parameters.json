@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "api": {
+      "myapi": [
+        "Query",
+        "Mutation",
+        "Subscription"
+      ]
+    },
+    "storage": {
+      "Transaction:@model(appsync)": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "nftEvent:@model(appsync)": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}
