@@ -1,6 +1,6 @@
 # sNiFTer
 
-sNiFTer is an information platform, with the goal to decrease the learning curve, increase engagement, and provide realiable, actionable information for the NFT space. sNiFTer aims to tackle this challenge on 3 fronts; insights and tracking into the performance of and engagement with an NFT entity, interactive educational resources on NFT and BlockChain technology, and interaction between users in a social manner for community engagement. 
+sNiFTer is an information platform, with the goal to decrease the learning curve, increase engagement, and provide reliable, actionable information for the NFT space. sNiFTer aims to tackle this challenge on 3 fronts; insights and tracking into the performance of and engagement with an NFT entity, interactive educational resources on NFT and BlockChain technology, and interaction between users in a social manner for community engagement. 
 
 View our proof of concept demo site here: https://dev.d22d1odtojlp9e.amplifyapp.com/
 
@@ -74,12 +74,29 @@ amplify publish
 
 # Testing
 
-Our project uses the Jest testing framework.
+Our project uses the Jest testing framework for unit tests and Cypress for behavior tests.
 
-To test the Vue app, use the command:
+### Jest
+To unit test the Vue app, use the command:
 ```
-npm test [jest options]
+npm test
 ```
+
+### Cypress
+To run cypress for the behavior tests, ensure that the project is running with:
+```
+npm run serve
+```
+Then Cypress can be run with the following command:
+```
+npx cypress open
+```
+Once there, click the desired test in the sNiFTer folder to run cypress.
+
+### Test Locations
+
+Tests are located in both the ./cypress folder for behavior tests and ./unit-tests folder for unit tests
+
 
 # Authors
 

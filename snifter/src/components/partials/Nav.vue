@@ -28,9 +28,9 @@
             </router-link>
           </div>
           <div class="navbar-item">
-              <router-link to="/signin" class="button is-purple">
-                <div class="is-purple">Sign In</div>
-              </router-link>
+            <router-link to="/signin" class="button is-purple">
+              <div class="is-purple">Sign In</div>
+            </router-link>
           </div>
           <div @click="connectToMetaMask()">
             <va-icon name="account_balance_wallet" size="large" />
@@ -43,11 +43,25 @@
 
 <script>
 import SearchComponent from "../SearchComponent.vue";
+// import { Auth } from "aws-amplify";
+
+// const checkUser = () => {
+//   Auth.currentAuthenticatedUser().then((a) => {
+//     console.log(a);
+//   });
+// };
+
+// checkUser();
 
 export default {
   name: "Nav",
   components: {
-    SearchComponent
+    SearchComponent,
+  },
+  data() {
+    return {
+      user: [],
+    };
   },
   methods: {
     connectToMetaMask() {
@@ -66,13 +80,7 @@ export default {
 nav {
   margin-top: 15px;
   margin-bottom: 20px;
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-    &.router-link-exact-active {
-      color: #6f36bc;
-    }
-  }
+  color: #2c3e50;
 }
 .logo-image {
   width: 40px;

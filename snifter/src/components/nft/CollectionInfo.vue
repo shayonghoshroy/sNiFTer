@@ -7,27 +7,28 @@
                         <img :src="collection.image_url" :height="imageHeight" :width="imageWidth">
                     </va-list-item-section>
 
-                    <va-list-item-section>
-                        <va-list-item-label>
-                            {{ collection.name }}
-                        </va-list-item-label>
+          <va-list-item-section>
+            <va-list-item-label>
+              {{ collection.name }}
+            </va-list-item-label>
 
-                        <va-list-item-label caption>
-                            {{ collection.slug }}
-                        </va-list-item-label>
-                    </va-list-item-section>
+            <va-list-item-label caption>
+              {{ collection.slug }}
+            </va-list-item-label>
+          </va-list-item-section>
 
-                    <va-list-item-section v-if="collection.external_url" icon>
-                        <div class="external-link">
-                            <a :href="collection.external_url" target="blank">
-                                <va-icon class="external-link"
-                                    name="link"
-                                    color="#6f36bc"
-                                ></va-icon>
-                            </a>
-                        </div>
-                    </va-list-item-section>
-                </va-list-item>
+          <va-list-item-section v-if="collection.external_url" icon>
+            <div class="external-link">
+              <a :href="collection.external_url" target="blank">
+                <va-icon
+                  class="external-link"
+                  name="link"
+                  color="#6f36bc"
+                ></va-icon>
+              </a>
+            </div>
+          </va-list-item-section>
+        </va-list-item>
 
                 <va-list-item>
                     <p>{{ collection.description }}</p>
