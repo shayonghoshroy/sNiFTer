@@ -174,8 +174,8 @@
 <script>
 
 import { API } from "aws-amplify";
-import { listCollections, listNftAssetContracts, listNfts, listNftEvents, listUserFavoriteNft } from "../graphql/queries";
-import { fetchCollection } from '../services/nftScraperService';
+import { listCollections, listNftAssetContracts, listNfts, listNftEvents, listUserFavoriteNfts } from "../graphql/queries";
+import { fetchCollection, nftEventQueue } from '../services/nftScraperService';
 import { createUserFavoriteNft, deleteUserFavoriteNft } from '../graphql/mutations';
 import ContractStats from "../components/ContractInfo";
 import CollectionInfo from "../components/nft/CollectionInfo";
@@ -211,6 +211,12 @@ export default {
     console.log(this.nftContract);
     console.log(this.collection);
     console.log(this.nftEvents, "NFTEVENTS");
+
+    if (this.nftEvents.length === 0) {
+      var resp = await this.fetchNFTEvents(this.nft.address, this.nft.token_id);
+      if (resp.ok)
+        await this.getNFTEvents(this.nft.address, this.nft.token_id);
+    }
 
     this.setFavoriteStatus(this.user, this.nftData.id);
     this.setTotalFavorites(this.nftData.id);
@@ -360,6 +366,14 @@ export default {
 
       this.nftEvents = this.nftEvents.concat(nftEvents.data.listNftEvents.items);
       return nftEvents.data.listNftEvents.nextToken;
+    },
+    async fetchNFTEvents(contractAddress, tokenId) {
+      var body = {
+        'asset-contract-address': contractAddress,
+        'token-id': tokenId
+      };
+
+      return await nftEventQueue(body);
     },
     async setTotalFavorites(nftID) {
       try {

@@ -572,9 +572,6 @@ export const createUser = /* GraphQL */ `
   ) {
     createUser(input: $input, condition: $condition) {
       username
-      favorite_nfts {
-        nextToken
-      }
       createdAt
       updatedAt
       id
@@ -588,9 +585,6 @@ export const updateUser = /* GraphQL */ `
   ) {
     updateUser(input: $input, condition: $condition) {
       username
-      favorite_nfts {
-        nextToken
-      }
       createdAt
       updatedAt
       id
@@ -604,9 +598,6 @@ export const deleteUser = /* GraphQL */ `
   ) {
     deleteUser(input: $input, condition: $condition) {
       username
-      favorite_nfts {
-        nextToken
-      }
       createdAt
       updatedAt
       id
@@ -667,9 +658,6 @@ export const createNft = /* GraphQL */ `
       }
       createdAt
       updatedAt
-      favorited_by {
-        nextToken
-      }
     }
   }
 `;
@@ -727,9 +715,6 @@ export const updateNft = /* GraphQL */ `
       }
       createdAt
       updatedAt
-      favorited_by {
-        nextToken
-      }
     }
   }
 `;
@@ -955,124 +940,49 @@ export const deleteNftEvent = /* GraphQL */ `
       total_price
       createdAt
       updatedAt
-      favorited_by {
-        nextToken
-      }
     }
   }
 `;
-export const createUserFavoriteNft = /* GraphQL */ `
-  mutation CreateUserFavoriteNft(
-    $input: CreateUserFavoriteNftInput!
-    $condition: ModelUserFavoriteNftConditionInput
+export const createNftEventCheckpoint = /* GraphQL */ `
+  mutation CreateNftEventCheckpoint(
+    $input: CreateNftEventCheckpointInput!
+    $condition: ModelNftEventCheckpointConditionInput
   ) {
-    createUserFavoriteNft(input: $input, condition: $condition) {
+    createNftEventCheckpoint(input: $input, condition: $condition) {
       id
-      userID
-      nftID
-      user {
-        username
-        createdAt
-        updatedAt
-        id
-      }
-      nft {
-        id
-        address
-        token_id
-        num_sales
-        background_color
-        image_url
-        image_preview_url
-        image_thumbnail_url
-        image_original_url
-        animation_url
-        animation_original_url
-        name
-        description
-        external_link
-        perma_link
-        createdAt
-        updatedAt
-      }
+      saved_events
+      total_events
+      status
       createdAt
       updatedAt
     }
   }
 `;
-export const updateUserFavoriteNft = /* GraphQL */ `
-  mutation UpdateUserFavoriteNft(
-    $input: UpdateUserFavoriteNftInput!
-    $condition: ModelUserFavoriteNftConditionInput
+export const updateNftEventCheckpoint = /* GraphQL */ `
+  mutation UpdateNftEventCheckpoint(
+    $input: UpdateNftEventCheckpointInput!
+    $condition: ModelNftEventCheckpointConditionInput
   ) {
-    updateUserFavoriteNft(input: $input, condition: $condition) {
+    updateNftEventCheckpoint(input: $input, condition: $condition) {
       id
-      userID
-      nftID
-      user {
-        username
-        createdAt
-        updatedAt
-        id
-      }
-      nft {
-        id
-        address
-        token_id
-        num_sales
-        background_color
-        image_url
-        image_preview_url
-        image_thumbnail_url
-        image_original_url
-        animation_url
-        animation_original_url
-        name
-        description
-        external_link
-        perma_link
-        createdAt
-        updatedAt
-      }
+      saved_events
+      total_events
+      status
       createdAt
       updatedAt
     }
   }
 `;
-export const deleteUserFavoriteNft = /* GraphQL */ `
-  mutation DeleteUserFavoriteNft(
-    $input: DeleteUserFavoriteNftInput!
-    $condition: ModelUserFavoriteNftConditionInput
+export const deleteNftEventCheckpoint = /* GraphQL */ `
+  mutation DeleteNftEventCheckpoint(
+    $input: DeleteNftEventCheckpointInput!
+    $condition: ModelNftEventCheckpointConditionInput
   ) {
-    deleteUserFavoriteNft(input: $input, condition: $condition) {
+    deleteNftEventCheckpoint(input: $input, condition: $condition) {
       id
-      userID
-      nftID
-      user {
-        username
-        createdAt
-        updatedAt
-        id
-      }
-      nft {
-        id
-        address
-        token_id
-        num_sales
-        background_color
-        image_url
-        image_preview_url
-        image_thumbnail_url
-        image_original_url
-        animation_url
-        animation_original_url
-        name
-        description
-        external_link
-        perma_link
-        createdAt
-        updatedAt
-      }
+      saved_events
+      total_events
+      status
       createdAt
       updatedAt
     }

@@ -125,11 +125,11 @@
       "function": {
         "scrapeTweets": {
           "deploymentBucketName": "amplify-snifter-stephendev-193633-deployment",
-          "s3Key": "amplify-builds/scrapeTweets-30455a7a647536617369-build.zip"
+          "s3Key": "amplify-builds/scrapeTweets-4b702b55623577596353-build.zip"
         },
         "nftScraper": {
           "deploymentBucketName": "amplify-snifter-stephendev-193633-deployment",
-          "s3Key": "amplify-builds/nftScraper-54674a4f48596b38452b-build.zip"
+          "s3Key": "amplify-builds/nftScraper-7441334a45416a387854-build.zip"
         },
         "openSearch": {
           "deploymentBucketName": "amplify-snifter-stephendev-193633-deployment",
@@ -137,7 +137,7 @@
         },
         "transactionScraper": {
           "deploymentBucketName": "amplify-snifter-stephendev-193633-deployment",
-          "s3Key": "amplify-builds/transactionScraper-42663437504a6f534261-build.zip"
+          "s3Key": "amplify-builds/transactionScraper-6875496233726c703968-build.zip"
         }
       },
       "hosting": {

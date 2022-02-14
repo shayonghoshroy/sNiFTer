@@ -131,8 +131,7 @@ class NFTEvent(BaseModel):
 
                 # Append the hashes of the transactions
                 else:
-                    hashes = [transaction['hash'] for transaction in val]
-                    decoded_id += "-".join(hashes)
+                    decoded_id += f"-{val['hash']}"
 
         # Calculate sha256 id (hash)
         encoded_id = hashlib.sha256(decoded_id.encode('utf-8')).hexdigest()

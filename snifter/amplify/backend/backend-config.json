@@ -187,6 +187,12 @@
           ]
         }
       ]
+    },
+    "gatewayQueueProxy": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": []
     }
   },
   "hosting": {

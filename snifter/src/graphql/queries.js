@@ -342,43 +342,6 @@ export const listCollections = /* GraphQL */ `
         id
         slug
         name
-        traits {
-          id
-          trait_type
-          value
-          display_type
-          max_value
-          trait_count
-          order
-          createdAt
-          updatedAt
-        }
-        stats {
-          id
-          one_day_volume
-          one_day_change
-          one_day_sales
-          one_day_average_price
-          seven_day_volume
-          seven_day_change
-          seven_day_sales
-          seven_day_average_price
-          thirty_day_volume
-          thirty_day_change
-          thirty_day_sales
-          thirty_day_average_price
-          total_volume
-          total_sales
-          total_supply
-          count
-          num_owners
-          average_price
-          num_reports
-          market_cap
-          floor_price
-          createdAt
-          updatedAt
-        }
         description
         image_url
         external_url
@@ -522,9 +485,6 @@ export const getUser = /* GraphQL */ `
   query GetUser($id: ID!) {
     getUser(id: $id) {
       username
-      favorite_nfts {
-        nextToken
-      }
       createdAt
       updatedAt
       id
@@ -599,9 +559,6 @@ export const getNft = /* GraphQL */ `
       }
       createdAt
       updatedAt
-      favorited_by {
-        nextToken
-      }
     }
   }
 `;
@@ -625,17 +582,6 @@ export const listNfts = /* GraphQL */ `
         animation_url
         animation_original_url
         name
-        traits {
-          id
-          trait_type
-          value
-          display_type
-          max_value
-          trait_count
-          order
-          createdAt
-          updatedAt
-        }
         description
         external_link
         perma_link
@@ -749,57 +695,34 @@ export const listNftEvents = /* GraphQL */ `
     }
   }
 `;
-export const getUserFavoriteNft = /* GraphQL */ `
-  query GetUserFavoriteNft($id: ID!) {
-    getUserFavoriteNft(id: $id) {
+export const getNftEventCheckpoint = /* GraphQL */ `
+  query GetNftEventCheckpoint($id: ID!) {
+    getNftEventCheckpoint(id: $id) {
       id
-      userID
-      nftID
-      user {
-        username
-        createdAt
-        updatedAt
-        id
-      }
-      nft {
-        id
-        address
-        token_id
-        num_sales
-        background_color
-        image_url
-        image_preview_url
-        image_thumbnail_url
-        image_original_url
-        animation_url
-        animation_original_url
-        name
-        description
-        external_link
-        perma_link
-        createdAt
-        updatedAt
-      }
+      saved_events
+      total_events
+      status
       createdAt
       updatedAt
     }
   }
 `;
-export const listUserFavoriteNfts = /* GraphQL */ `
-  query ListUserFavoriteNfts(
-    $filter: ModelUserFavoriteNftFilterInput
+export const listNftEventCheckpoints = /* GraphQL */ `
+  query ListNftEventCheckpoints(
+    $filter: ModelNftEventCheckpointFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    listUserFavoriteNfts(
+    listNftEventCheckpoints(
       filter: $filter
       limit: $limit
       nextToken: $nextToken
     ) {
       items {
         id
-        userID
-        nftID
+        saved_events
+        total_events
+        status
         createdAt
         updatedAt
       }
