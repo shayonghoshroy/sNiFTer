@@ -2,60 +2,61 @@
   <div class="flex-container">
     <div class="nft-container">
       <va-card :src="nft" class="nft-card" style="height: 500px; width: 500px">
-          <va-image
-              class="rounded-card"
-              :src="nft.image_url"
-              style="height: 400px"
-          />
-          <va-card-title v-if="nft.name">{{ nft.name }}</va-card-title>
-          <va-card-title v-else></va-card-title>
+        <va-image
+          class="rounded-card"
+          :src="nft.image_url"
+          style="height: 400px"
+        />
+        <va-card-title v-if="nft.name">{{ nft.name }}</va-card-title>
+        <va-card-title v-else></va-card-title>
 
-          <va-card-content>
-              {{ nft.token_id }}
-          </va-card-content>
+        <va-card-content>
+          {{ nft.token_id }}
+        </va-card-content>
 
-          <va-collapse
-          v-model="showContract"
-          header="Contract Information">
-            <contract-stats
-            :contracts="nftContract">
-            </contract-stats>
-          </va-collapse>
-          <va-collapse
+        <va-collapse v-model="showContract" header="Contract Information">
+          <contract-stats :contracts="nftContract"> </contract-stats>
+        </va-collapse>
+        <va-collapse
           v-model="showCollection"
           v-if="collection"
-          header="Collection Information">
-            <collection-info
-            :collection="collection">
-            </collection-info>
-          </va-collapse>
+          header="Collection Information"
+        >
+          <collection-info :collection="collection"> </collection-info>
+        </va-collapse>
       </va-card>
     </div>
-    
+
     <div class="nft-stub">
       <div class="nft-icon">
         <va-icon
-        v-if="hasFavorited"
-        name="favorite"
-        size="large"
-        @click="favorite(this.user, nft.id)"
+          v-if="hasFavorited"
+          name="favorite"
+          size="large"
+          @click="favorite(this.user, nft.id)"
         ></va-icon>
         <va-icon
-        v-else
-        name="favorite_border"
-        size="large"
-        @click="favorite(this.user, nft.id)"></va-icon>
+          v-else
+          name="favorite_border"
+          size="large"
+          @click="favorite(this.user, nft.id)"
+        ></va-icon>
       </div>
     </div>
     <p>{{ this.totalFavorites }}</p>
   </div>
-  
 </template>
 <script>
-
 import { API } from "aws-amplify";
-import { listCollections, listNftAssetContracts, listUserFavoriteNfts } from "../graphql/queries";
-import { createUserFavoriteNft, deleteUserFavoriteNft } from '../graphql/mutations';
+import {
+  listCollections,
+  listNftAssetContracts,
+  listUserFavoriteNfts,
+} from "../graphql/queries";
+import {
+  createUserFavoriteNft,
+  deleteUserFavoriteNft,
+} from "../graphql/mutations";
 import ContractStats from "../components/ContractInfo";
 import CollectionInfo from "../components/nft/CollectionInfo";
 
@@ -78,23 +79,21 @@ export default {
   },
   data() {
     return {
-        nftData: null,
-        showContract: false,
-        showCollection: false,
-        collapses: [
-        { title: 'Contract', content: 'first collapse content' },
-        ],
-        nftContract: [],
-        collection: null,
-        hasFavorited: false,
-        totalFavorites: null,
-        user: "shayon"
-    }
+      nftData: null,
+      showContract: false,
+      showCollection: false,
+      collapses: [{ title: "Contract", content: "first collapse content" }],
+      nftContract: [],
+      collection: null,
+      hasFavorited: false,
+      totalFavorites: null,
+      user: "shayon",
+    };
   },
   computed: {
-      nft() {
-        return this.nftData;
-      },
+    nft() {
+      return this.nftData;
+    },
   },
   methods: {
     async setTotalFavorites(nftID) {
@@ -102,10 +101,12 @@ export default {
         const count = await API.graphql({
           query: listUserFavoriteNfts,
           variables: {
-            filter: {nftID: {eq: nftID}}
-          }
+            filter: { nftID: { eq: nftID } },
+          },
         });
-        this.totalFavorites = Object.keys(count.data.listUserFavoriteNfts.items).length
+        this.totalFavorites = Object.keys(
+          count.data.listUserFavoriteNfts.items
+        ).length;
       } catch (e) {
         console.error(e);
       }
@@ -115,11 +116,14 @@ export default {
         const has_favorited = await API.graphql({
           query: listUserFavoriteNfts,
           variables: {
-            filter: {userID: {eq: userID}, nftID: {eq: nftID}}
-          }
+            filter: { userID: { eq: userID }, nftID: { eq: nftID } },
+          },
         });
 
-        if (typeof has_favorited.data.listUserFavoriteNfts.items[0] !== "undefined") {
+        if (
+          typeof has_favorited.data.listUserFavoriteNfts.items[0] !==
+          "undefined"
+        ) {
           this.hasFavorited = true;
         } else {
           this.hasFavorited = false;
@@ -136,27 +140,32 @@ export default {
         const has_favorited = await API.graphql({
           query: listUserFavoriteNfts,
           variables: {
-            filter: {userID: {eq: userID}, nftID: {eq: nftID}}
-          }
+            filter: { userID: { eq: userID }, nftID: { eq: nftID } },
+          },
         });
 
-        if (typeof has_favorited.data.listUserFavoriteNfts.items[0] !== "undefined") {
-          const userFavoriteNftId = {id: has_favorited.data.listUserFavoriteNfts.items[0].id};
-          console.log('removing favorite');
+        if (
+          typeof has_favorited.data.listUserFavoriteNfts.items[0] !==
+          "undefined"
+        ) {
+          const userFavoriteNftId = {
+            id: has_favorited.data.listUserFavoriteNfts.items[0].id,
+          };
+          console.log("removing favorite");
           this.totalFavorites -= 1;
-   
+
           await API.graphql({
             query: deleteUserFavoriteNft,
-            variables: {input: userFavoriteNftId},
+            variables: { input: userFavoriteNftId },
           });
         } else {
-          console.log('adding favorite');
+          console.log("adding favorite");
           this.totalFavorites += 1;
-     
-          const userFavoriteNft = {userID, nftID};
+
+          const userFavoriteNft = { userID, nftID };
           await API.graphql({
             query: createUserFavoriteNft,
-            variables: {input: userFavoriteNft},
+            variables: { input: userFavoriteNft },
           });
         }
       } catch (e) {
@@ -211,9 +220,11 @@ export default {
 
 .nft-container {
   display: flex;
-  flex-flow: column;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+}
+.background-height {
+  height: 90vh;
 }
 h1 {
   margin-top: 1em;
@@ -246,5 +257,4 @@ h1 {
   cursor: pointer;
   color: red;
 }
-
 </style>

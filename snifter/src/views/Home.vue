@@ -1,19 +1,11 @@
 <template>
   <div class="home">
-    <section class="hero is-dark">
-      <div class="hero-body">
-        <div class="container">
-          <h1 class="title">Welcome to sNiFTer</h1>
-          <h2 class="subtitle">First round's on us</h2>
-          <div class="button-block">
-            <button class="button is-xl is-purple">
-              <router-link to="/register">Register Now</router-link>
-            </button>
-          </div>
-        </div>
-      </div>
-    </section>
-    <div class="is-purple">
+    <article>
+      <h2>Welcome to sNiFTer</h2>
+      <p>First round's on us</p>
+    </article>
+    <div>
+      <SearchComponent />
       <NFTComponent />
     </div>
   </div>
@@ -21,10 +13,11 @@
 
 <script>
 import NFTComponent from "../components/NFTComponent";
+import SearchComponent from "../components/SearchComponent.vue";
 
 export default {
   name: "Home",
-  components: { NFTComponent },
+  components: { NFTComponent, SearchComponent },
   setup() {
     return {};
   },
@@ -34,11 +27,6 @@ export default {
 <style lang="css" scoped>
 .hero {
   text-align: center;
-  background-image: url("https://images.unsplash.com/photo-1620204082158-ed7780a38d4c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1934&q=80");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  height: 400px;
 }
 .blur {
   filter: blur(4px);
@@ -85,5 +73,16 @@ export default {
   padding-right: 50px;
   padding-bottom: 50px;
   padding-left: 50px;
+}
+p {
+  font-size: clamp(16px, 1.2vw, 1.2vw);
+  line-height: 2;
+  color: #ffffff;
+}
+h2 {
+  font-size: clamp(24px, 3vw, 3vw);
+  font-weight: 300;
+  margin: 0;
+  color: #ffffff;
 }
 </style>

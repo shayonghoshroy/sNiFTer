@@ -49,15 +49,12 @@ export default {
 </script>
 <style scoped>
 .post {
-  background: #fff;
   padding: 1.5em;
 }
-
 .post h2 {
   font-size: 1.3em;
   padding-bottom: 0.25rem;
 }
-
 .post p {
   color: #888;
 }

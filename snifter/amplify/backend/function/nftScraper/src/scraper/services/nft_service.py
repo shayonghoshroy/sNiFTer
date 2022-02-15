@@ -6,6 +6,7 @@ from .request_schemas import AssetsRequest, EventRequest
 
 from ..models.nft import NFT, NFTAssetContract
 from ..models.collection import Collection
+from ..models.nft_event import NFTEvent
 
 from ..apis.exceptions import APIException
 from ..apis.block_chair import BlockChairAPI
@@ -17,27 +18,35 @@ class NFTService():
         self.block_chair_api = BlockChairAPI()
 
     def function_switch(self, event_type: str, event: dict):
+        loop = asyncio.get_event_loop()
+
         if event_type == "nft":
             contract_address = event.get("contract-address", None)
             token_id = event.get("token-id", None)
             print("Address: ", contract_address)
             print("Token ID: ", token_id)
 
-            loop = asyncio.get_event_loop()
             return loop.run_until_complete(self.get_asset(contract_address, token_id))
 
         elif event_type == "collection":
             collection_slug = event.pop("collection-slug")
             
-            loop = asyncio.get_event_loop()
             return loop.run_until_complete(self.get_nft_collection(collection_slug))
+        
+        elif event_type == "nftevent":
+            contract_address = event.get("contract-address", None)
+            collection_slug = event.get("collection-slug", None)
+            token_id = event.get("token-id", None)
+            account_address = event.get("account-address", None)
+            transaction_type = event.get("transaction-type", "successful")
+
+            return loop.run_until_complete(self.get_nft_events(contract_address, collection_slug, token_id, account_address, transaction_type))
 
         else:
             contract_addresses = event.get("contract-addresses", None)
             token_ids = event.get("token-ids", None)
             options = event.get("options", {})
 
-            loop = asyncio.get_event_loop()
             return loop.run_until_complete(self.get_assets(contract_addresses, token_ids, **options))
     
     async def get_nft_data(self, contract_address: str, token_id: int):
@@ -117,6 +126,11 @@ class NFTService():
             
             if asset_contract is not None:
                 elt["address"] = asset_contract["address"]
+            if collection is not None:
+                asset_contract["slug"] = collection["slug"]
+            else:
+                asset_contract["slug"] = "UNKNOWN"
+
             nft_model = NFT(**elt)
             asset_contract = NFTAssetContract(**asset_contract)
             models.append({"nft": nft_model, "asset_contract": asset_contract})
@@ -152,7 +166,7 @@ class NFTService():
         return await self.opensea_api.get_collection_stats(collection_slug)
     
     #TODO:// Clean this up
-    async def get_nft_events(self, contract_address, **options):
+    async def get_nft_events(self, contract_address=None, collection_slug=None, token_id=None, account_address=None, transaction_type="successful", **options):
         """
         event_types:
             created
@@ -163,21 +177,44 @@ class NFTService():
             approve
             cancelled
         options:
-            only_opensea: bool, 
-            token_id: int,
-            account_address: str,
-            collection_slug: str,
+            only_opensea: bool,
             occured_before: datetime,
             occured_after: datetime,
             auction_type: string,
             offset: int,
             limit: int
         """
-        params = {key: val for key, val in options.items() if val is not None}
+        params = {}
+        if contract_address is not None:
+            params['asset_contract_address'] = contract_address
         
-        params["asset_contract_address"] = contract_address
+        if collection_slug is not None:
+            params['collection_slug'] = collection_slug
         
-        return await self.opensea_api.get_events(params)
+        if token_id is not None:
+            params['token_id'] = token_id
+        
+        if account_address is not None:
+            params['account_address'] = account_address
+
+        params['event_type'] = transaction_type
+
+        options.setdefault('offset', 0)
+        options.setdefault('limit', 50)
+
+        for key, val in options.items():
+            params[key] = val
+        
+        return self.parse_nft_events(await self.opensea_api.get_events(params))
+
+    def parse_nft_events(self, nftEvents):
+        if isinstance(nftEvents, APIException):
+            return nftEvents
+        
+        if not isinstance(nftEvents, list):
+            nftEvents = [nftEvents]
+
+        return [NFTEvent(**nftEvent) for nftEvent in nftEvents]
 
     async def get_nft_user_events(self, account_address: str, options: EventRequest):
         params = {

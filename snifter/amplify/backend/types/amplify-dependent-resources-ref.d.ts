@@ -31,7 +31,7 @@ export type AmplifyDependentResourcesAttributes = {
             "Region": "string",
             "LambdaExecutionRole": "string"
         },
-        "createUserModelOnSignup": {
+        "openSearch": {
             "Name": "string",
             "Arn": "string",
             "Region": "string",

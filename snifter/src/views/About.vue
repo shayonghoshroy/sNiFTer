@@ -25,14 +25,6 @@ h1 {
 }
 .description {
   width: 60vw;
-}
-@media (max-width: 700px) {
-  div {
-    padding: 4em 0em;
-  }
-  .description {
-    text-align: justify;
-    width: 90vw;
-  }
+  height: 90vh;
 }
 </style>
