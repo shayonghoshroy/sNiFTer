@@ -329,6 +329,9 @@ export const getUser = /* GraphQL */ `
       favorite_nfts {
         nextToken
       }
+      watchlist_nfts {
+        nextToken
+      }
       createdAt
       updatedAt
       id
@@ -392,6 +395,9 @@ export const getNft = /* GraphQL */ `
       createdAt
       updatedAt
       favorited_by {
+        nextToken
+      }
+      watched_by {
         nextToken
       }
     }
@@ -470,6 +476,64 @@ export const listUserFavoriteNfts = /* GraphQL */ `
     $nextToken: String
   ) {
     listUserFavoriteNfts(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        userID
+        nftID
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getUserWatchlistNft = /* GraphQL */ `
+  query GetUserWatchlistNft($id: ID!) {
+    getUserWatchlistNft(id: $id) {
+      id
+      userID
+      nftID
+      user {
+        username
+        createdAt
+        updatedAt
+        id
+      }
+      nft {
+        id
+        address
+        token_id
+        num_sales
+        background_color
+        image_url
+        image_preview_url
+        image_thumbnail_url
+        image_original_url
+        animation_url
+        animation_original_url
+        name
+        description
+        external_link
+        perma_link
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listUserWatchlistNfts = /* GraphQL */ `
+  query ListUserWatchlistNfts(
+    $filter: ModelUserWatchlistNftFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listUserWatchlistNfts(
       filter: $filter
       limit: $limit
       nextToken: $nextToken
