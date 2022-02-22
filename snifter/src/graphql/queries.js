@@ -326,6 +326,7 @@ export const getUser = /* GraphQL */ `
   query GetUser($id: ID!) {
     getUser(id: $id) {
       username
+      email
       favorite_nfts {
         nextToken
       }
@@ -347,6 +348,7 @@ export const listUsers = /* GraphQL */ `
     listUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         username
+        email
         createdAt
         updatedAt
         id
@@ -441,6 +443,7 @@ export const getUserFavoriteNft = /* GraphQL */ `
       nftID
       user {
         username
+        email
         createdAt
         updatedAt
         id
@@ -499,6 +502,7 @@ export const getUserWatchlistNft = /* GraphQL */ `
       nftID
       user {
         username
+        email
         createdAt
         updatedAt
         id

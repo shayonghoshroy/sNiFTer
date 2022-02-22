@@ -572,6 +572,7 @@ export const createUser = /* GraphQL */ `
   ) {
     createUser(input: $input, condition: $condition) {
       username
+      email
       favorite_nfts {
         nextToken
       }
@@ -591,6 +592,7 @@ export const updateUser = /* GraphQL */ `
   ) {
     updateUser(input: $input, condition: $condition) {
       username
+      email
       favorite_nfts {
         nextToken
       }
@@ -610,6 +612,7 @@ export const deleteUser = /* GraphQL */ `
   ) {
     deleteUser(input: $input, condition: $condition) {
       username
+      email
       favorite_nfts {
         nextToken
       }
@@ -786,6 +789,7 @@ export const createUserFavoriteNft = /* GraphQL */ `
       nftID
       user {
         username
+        email
         createdAt
         updatedAt
         id
@@ -825,6 +829,7 @@ export const updateUserFavoriteNft = /* GraphQL */ `
       nftID
       user {
         username
+        email
         createdAt
         updatedAt
         id
@@ -864,6 +869,7 @@ export const deleteUserFavoriteNft = /* GraphQL */ `
       nftID
       user {
         username
+        email
         createdAt
         updatedAt
         id
@@ -903,6 +909,7 @@ export const createUserWatchlistNft = /* GraphQL */ `
       nftID
       user {
         username
+        email
         createdAt
         updatedAt
         id
@@ -942,6 +949,7 @@ export const updateUserWatchlistNft = /* GraphQL */ `
       nftID
       user {
         username
+        email
         createdAt
         updatedAt
         id
@@ -981,6 +989,7 @@ export const deleteUserWatchlistNft = /* GraphQL */ `
       nftID
       user {
         username
+        email
         createdAt
         updatedAt
         id

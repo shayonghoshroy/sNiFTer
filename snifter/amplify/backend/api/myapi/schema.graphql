@@ -105,6 +105,7 @@ type nftTraits @model @auth(rules: [{allow: public}]){
 
 type user @model {
     username: ID!
+    email: String
     favorite_nfts: [nft] @manyToMany(relationName: "UserFavoriteNft")
     watchlist_nfts: [nft] @manyToMany(relationName: "UserWatchlistNft")
     createdAt: AWSDateTime
