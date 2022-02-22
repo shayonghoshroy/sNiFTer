@@ -69,7 +69,7 @@
         },
         "watchlistNotifications": {
           "deploymentBucketName": "amplify-snifter-shayondev-153259-deployment",
-          "s3Key": "amplify-builds/watchlistNotifications-41687631664d6f6f7030-build.zip"
+          "s3Key": "amplify-builds/watchlistNotifications-2f533158632b4264754f-build.zip"
         }
       },
       "hosting": {
