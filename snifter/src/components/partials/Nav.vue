@@ -17,14 +17,18 @@
     <template #right class="mb-2">
       <div>
         <div v-if="user.username">
-          <div class="buttons">
-            <router-link to="/profile" class="button is-purple"
-              >{{ user.username }}'s Profile</router-link
-            >
-            <v-button class="button is-purple" @click="reloadPage"
-              >Logout</v-button
-            >
-          </div>
+          <authenticator>
+            <template v-slot="{ user, signOut }">
+              <div class="buttons">
+                <router-link to="/user" class="button is-purple"
+                  >{{ user.username }}'s Profile</router-link
+                >
+                <button class="button is-purple" @click="signOut">
+                  Logout
+                </button>
+              </div>
+            </template>
+          </authenticator>
         </div>
         <div v-else>
           <div class="buttons">
@@ -34,7 +38,7 @@
               </router-link>
             </div>
             <div class="navbar-item">
-              <router-link to="/signin" class="button is-purple">
+              <router-link to="/user" class="button is-purple">
                 <div class="is-purple">Sign In</div>
               </router-link>
             </div>
@@ -45,12 +49,23 @@
   </va-navbar>
 </template>
 
+<script setup>
+import { Authenticator } from "@aws-amplify/ui-vue";
+import "@aws-amplify/ui-vue/styles.css";
+import Amplify from "aws-amplify";
+import awsconfig from "../../aws-exports";
+
+Amplify.configure(awsconfig);
+</script>
+
 <script>
 import { Auth } from "aws-amplify";
 
 export default {
   name: "Nav",
-  components: {},
+  components: {
+    Authenticator,
+  },
   data() {
     return {
       user: [],
@@ -61,7 +76,6 @@ export default {
     try {
       const user = await Auth.currentAuthenticatedUser();
       this.user = user;
-      console.log(this.user.username);
     } catch (e) {
       console.log(e);
     }

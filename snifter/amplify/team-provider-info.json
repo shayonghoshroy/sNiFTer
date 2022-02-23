@@ -126,16 +126,24 @@
       "function": {
         "scrapeTweets": {
           "deploymentBucketName": "amplify-snifter-stephendev-193633-deployment",
-          "s3Key": "amplify-builds/scrapeTweets-30455a7a647536617369-build.zip"
+          "s3Key": "amplify-builds/scrapeTweets-4b702b55623577596353-build.zip"
         },
         "nftScraper": {
           "deploymentBucketName": "amplify-snifter-stephendev-193633-deployment",
-          "s3Key": "amplify-builds/nftScraper-34534b597030766c4d77-build.zip"
+          "s3Key": "amplify-builds/nftScraper-70396d2b59516d542b4a-build.zip"
         },
         "createUserModelOnSignup": {},
         "openSearch": {
           "deploymentBucketName": "amplify-snifter-stephendev-193633-deployment",
           "s3Key": "amplify-builds/openSearch-58657444425650586f78-build.zip"
+        },
+        "transactionScraper": {
+          "deploymentBucketName": "amplify-snifter-stephendev-193633-deployment",
+          "s3Key": "amplify-builds/transactionScraper-45754452336c7a78744c-build.zip"
+        },
+        "gatewayQueueProxy": {
+          "deploymentBucketName": "amplify-snifter-stephendev-193633-deployment",
+          "s3Key": "amplify-builds/gatewayQueueProxy-503437727542446a6a58-build.zip"
         }
       },
       "hosting": {

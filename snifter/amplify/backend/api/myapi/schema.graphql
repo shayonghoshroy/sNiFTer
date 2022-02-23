@@ -102,6 +102,13 @@ type nftTraits @model @auth(rules: [{allow: public}]){
  createdAt: AWSDateTime
  updatedAt:AWSDateTime
 }
+
+type user @model {
+    username: ID!
+    #favorite_nfts: [nft] @manyToMany(relationName: "UserFavoriteNft")
+    createdAt: AWSDateTime
+    updatedAt:AWSDateTime
+}
  
 type nft @model {
  id: ID!
@@ -124,6 +131,7 @@ type nft @model {
  traits: [nftTraits]
  createdAt: AWSDateTime
  updatedAt:AWSDateTime
+ #favorited_by: [user] @manyToMany(relationName: "UserFavoriteNft")
 }
 
 type Transaction @model @searchable {
@@ -143,7 +151,7 @@ type nftEvent @model @searchable {
     id: ID!
     event_type: String!
     auction_type: String
-    bid_amount: String
+    bid_amount: Float
     collection_slug: String
     contract_address: String
     listing_time: String
@@ -154,7 +162,16 @@ type nftEvent @model @searchable {
     to_account: String
     is_private: Boolean
     transaction: Transaction
-    total_price: Int
+    total_price: Float
+    createdAt: AWSDateTime
+    updatedAt:AWSDateTime
+}
+
+type nftEventCheckpoint @model {
+    id: ID!
+    saved_events: Int
+    total_events: Int
+    status: String
     createdAt: AWSDateTime
     updatedAt:AWSDateTime
 }

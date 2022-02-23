@@ -27,6 +27,12 @@ class Item(object):
         
         super().__init__()
 
+def format_batch(data: list):
+    items = []
+    for item in data:
+        items.append(format_item(item))
+    return items
+
 def format_item(data: dict):
     item = {}
     
@@ -64,6 +70,16 @@ def format_item(data: dict):
     return item
 
 def put_item(data, table_name, batch = False):
+    if batch:
+        assert(isinstance(data, list))
+
+        dynamodb = boto3.resource('dynamodb')
+        table = dynamodb.Table(table_name)
+        items = format_batch(data)
+        with table.batch_writer() as writer:
+            for item in items:
+                writer.put_item(Item=item)
+
     client = boto3.client('dynamodb')
 
     data = dict(data)
@@ -106,10 +122,10 @@ def put_collection(collection: Collection):
             put_item(contract, TABLE_MAP['contract'])
 
 def handler(event, context):
-    # All events should contain event_type field for function switch
+    # Get event type from api gateway resource
     event_type = event.get("resource", None).replace("/", "")
 
-    # Bad Request
+    # Bad Request, an unsopported event_type
     if event_type is None or not event_type in ["nft", "contract", "collection", "nftevent"]:
         return {
             'statusCode': 400,
@@ -127,7 +143,7 @@ def handler(event, context):
 
     # Perform event
     nft_service = NFTService()
-    print(event)
+    # print(event)
     event = json.loads(event["body"])
     result = nft_service.function_switch(event_type, event)
 

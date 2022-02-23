@@ -72,11 +72,16 @@ class NFTService():
         pass
 
     async def get_asset(self, contract_address: str, token_id: int):
+
+        # Result returned from opensea api
         result = await self.opensea_api.get_asset(contract_address, token_id)
         if isinstance(result, APIException):
             return result
 
+        # Convert to a dict to be able to error hand non existant attributes
         result = dict(result)
+
+        # Get asset contract from result if it exists
         asset_contract = result.get("asset_contract", None)
         if asset_contract is not None:
             result["address"] = asset_contract["address"]
