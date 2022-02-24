@@ -1,8 +1,8 @@
 <template>
   <div>
     <article>
-      <h2>sNiFTer News</h2>
-      <p>See what's hot in the world of NFT's</p>
+      <h2 style="color: white">sNiFTer News</h2>
+      <p style="color: white">See what's hot in the world of NFT's</p>
     </article>
     <TweetComponent />
   </div>

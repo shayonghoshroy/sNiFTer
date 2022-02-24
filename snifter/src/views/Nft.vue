@@ -33,8 +33,14 @@
                     v-if="hasFavorited"
                     name="favorite"
                     size="large"
+                    @click="favorite(this.user, nft.id)"
                   ></va-icon>
-                  <va-icon v-else name="favorite_border" size="large"></va-icon>
+                  <va-icon
+                    v-else
+                    name="favorite_border"
+                    size="large"
+                    @click="favorite(this.user, nft.id)"
+                  ></va-icon>
                 </div>
               </div>
               <p>{{ this.totalFavorites }}</p>
@@ -207,7 +213,6 @@
   </div>
 </template>
 
-
 <script>
 import { API } from "aws-amplify";
 import {
@@ -314,27 +319,111 @@ export default {
           name: this.collection.name,
           image_url: this.collection.image_url,
         });
-      }
+      };
+    },
+    entityListData() {
+        var entities = [];
 
-      if (this.currentContract) {
-        entities.push({
-          type: "Contract",
-          name: this.currentContract.name,
-          image_url: this.currentContract.image_url,
+        if (this.collection) {
+          entities.push({
+            type: "Collection",
+            name: this.collection.name,
+            image_url: this.collection.image_url,
+          });
+        }
+
+        if (this.currentContract) {
+          entities.push({
+            type: "Contract",
+            name: this.currentContract.name,
+            image_url: this.currentContract.image_url,
+          });
+        }
+
+        if (this.nft.owner && this.currentContract) {
+          entities.push({
+            type: "Owner",
+            name: this.nft.owner,
+            image_url: this.currentContract.image_url,
+          });
+        }
+
+        console.log(entities);
+
+        return entities;
+    },
+  methods: {
+    async setTotalFavorites(nftID) {
+      try {
+        const count = await API.graphql({
+          query: listUserFavoriteNfts,
+          variables: {
+            filter: { nftID: { eq: nftID } },
+          },
         });
+        this.totalFavorites = Object.keys(
+          count.data.listUserFavoriteNfts.items
+        ).length;
+      } catch (e) {
+        console.error(e);
       }
-
-      if (this.nft.owner && this.currentContract) {
-        entities.push({
-          type: "Owner",
-          name: this.nft.owner,
-          image_url: this.currentContract.image_url,
+    },
+    async setFavoriteStatus(userID, nftID) {
+      try {
+        const has_favorited = await API.graphql({
+          query: listUserFavoriteNfts,
+          variables: {
+            filter: { userID: { eq: userID }, nftID: { eq: nftID } },
+          },
         });
+        if (
+          typeof has_favorited.data.listUserFavoriteNfts.items[0] !==
+          "undefined"
+        ) {
+          this.hasFavorited = true;
+        } else {
+          this.hasFavorited = false;
+        }
+      } catch (e) {
+        console.error(e);
       }
-
-      console.log(entities);
-
-      return entities;
+    },
+    // if user has favorited, remove favorite
+    // else add favorite
+    async favorite(userID, nftID) {
+      this.hasFavorited = !this.hasFavorited;
+      try {
+        const has_favorited = await API.graphql({
+          query: listUserFavoriteNfts,
+          variables: {
+            filter: { userID: { eq: userID }, nftID: { eq: nftID } },
+          },
+        });
+        if (
+          typeof has_favorited.data.listUserFavoriteNfts.items[0] !==
+          "undefined"
+        ) {
+          const userFavoriteNftId = {
+            id: has_favorited.data.listUserFavoriteNfts.items[0].id,
+          };
+          console.log("removing favorite");
+          this.totalFavorites -= 1;
+          await API.graphql({
+            query: deleteUserFavoriteNft,
+            variables: { input: userFavoriteNftId },
+          });
+        } else {
+          console.log("adding favorite");
+          this.totalFavorites += 1;
+          const userFavoriteNft = { userID, nftID };
+          await API.graphql({
+            query: createUserFavoriteNft,
+            variables: { input: userFavoriteNft },
+          });
+        }
+      } catch (e) {
+        console.error(e);
+      }
     },
     transactionStats() {
       var last_bid = 0;
@@ -384,21 +473,8 @@ export default {
           }
           if (saleAmount > highest_sale) highest_sale = saleAmount;
         }
-      });
-      return {
-        last_bid: last_bid,
-        highest_bid: highest_bid,
-        total_bids: total_bids,
-        bid_volume: bid_volume,
-        average_bid: average_bid / total_bids,
-        last_sale: last_sale,
-        highest_sale: highest_sale,
-        average_sale: average_sale / totalSales,
-        sales_volume: sales_volume,
-      };
+      }
     },
-  },
-  methods: {
     async initSubscriptions() {},
     async getNFT() {
       try {

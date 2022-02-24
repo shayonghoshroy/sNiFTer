@@ -105,7 +105,7 @@ type nftTraits @model @auth(rules: [{allow: public}]){
 
 type user @model {
     username: ID!
-    #favorite_nfts: [nft] @manyToMany(relationName: "UserFavoriteNft")
+    favorite_nfts: [nft] @manyToMany(relationName: "UserFavoriteNft")
     createdAt: AWSDateTime
     updatedAt:AWSDateTime
 }
@@ -131,7 +131,7 @@ type nft @model {
  traits: [nftTraits]
  createdAt: AWSDateTime
  updatedAt:AWSDateTime
- #favorited_by: [user] @manyToMany(relationName: "UserFavoriteNft")
+ favorited_by: [user] @manyToMany(relationName: "UserFavoriteNft")
 }
 
 type Transaction @model @searchable {

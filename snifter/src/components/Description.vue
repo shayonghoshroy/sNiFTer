@@ -1,6 +1,6 @@
 <template>
   <article>
-    <h2>A little about us</h2>
+    <h2 style="color: white">A little about us</h2>
     <div class="div">
       <p>
         sNiFTer is an information platform, with the goal to decrease the
@@ -48,7 +48,7 @@ export default {
 p {
   font-size: 18px;
   line-height: 2;
-  color: #9d9d9d;
+  color: #ffffff;
 }
 h2 {
   font-size: clamp(24px, 3vw, 3vw);
@@ -60,26 +60,6 @@ ul {
   list-style-type: none;
   display: flex;
   justify-content: space-around;
-}
-img {
-  height: 30px;
-  filter: grayscale();
-  transition: filter 0.2s ease-in-out;
-}
-button {
-  height: 30px;
-  border: none;
-  font-size: 18px;
-  font-weight: 900;
-  background-color: white;
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
-}
-button:hover {
-  background-color: #59ff9c;
-}
-img:hover {
-  filter: none;
 }
 span {
   background-color: #141414;
@@ -95,11 +75,5 @@ span {
   padding-right: 50px;
   padding-bottom: 50px;
   padding-left: 50px;
-}
-@media (max-width: 700px) {
-  img,
-  button {
-    height: 20px;
-  }
 }
 </style>

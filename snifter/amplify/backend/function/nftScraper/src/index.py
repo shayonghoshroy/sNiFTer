@@ -143,6 +143,7 @@ def handler(event, context):
 
     # Perform event
     nft_service = NFTService()
+    print(event)
     event = json.loads(event["body"])
     result = nft_service.function_switch(event_type, event)
 

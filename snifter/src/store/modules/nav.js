@@ -1,29 +1,27 @@
-//import axios from "axios";
+import Vue from "vue";
+import Vuex from "vuex";
 
-const state = {
-  navs: [
-    {
-      id: 1,
-      name: "default",
+Vue.use(Vuex);
+
+export default new Vuex.Store({
+  state: {
+    user: null,
+    signedIn: false,
+  },
+  mutations: {
+    setUser(state, user) {
+      state.user = user;
     },
-    {
-      id: 2,
-      name: "loggedIn",
+    setSignedIn(state, signedIn) {
+      state.signedIn = signedIn;
     },
-  ],
-};
-
-const getters = {
-  navs: (state) => state.navs,
-};
-
-const actions = {};
-
-const mutations = {};
-
-export default {
-  state,
-  getters,
-  actions,
-  mutations,
-};
+  },
+  actions: {
+    setUser: (context, user) => {
+      context.commit("setUser", user);
+    },
+    setSignedIn: (context, signedIn) => {
+      context.commit("setSignedIn", signedIn);
+    },
+  },
+});
