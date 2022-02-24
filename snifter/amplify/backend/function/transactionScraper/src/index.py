@@ -7,12 +7,12 @@ from APIException import APIException
 from nft_event_service import maybe_put_batch_items
 
 def handler(event, context):
-  from pprint import pprint
-  pprint(event['Records'][0])
+  event = event['Records'][0]
   
   # Body from SQS should be JSON string
   # Supporting one record (sqs message) for now for simplicity
-  transaction_event = json.loads(event['Records'][0]['body'])
+  transaction_event = json.loads(event['body'])
+  message_id = event["messageId"]
   
   # Create TransactionEvent object
   try:
@@ -32,7 +32,6 @@ def handler(event, context):
     }
     
   data = get_event(transaction_event)
-  print(len(data))
   
   # Error returned from OpenSea API
   if isinstance(data, APIException):
@@ -44,11 +43,11 @@ def handler(event, context):
           'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
       },
-      'body': json.dumps({'reason': data.reason})
+      'body': json.dumps({'reason': data.reason_phrase})
     }
     
   loop = asyncio.get_event_loop()
-  loop.run_until_complete(maybe_put_batch_items(data))
+  loop.run_until_complete(maybe_put_batch_items(data, message_id))
   
   
   return {
@@ -58,5 +57,5 @@ def handler(event, context):
           'Access-Control-Allow-Origin': '*',
           'Access-Control-Allow-Methods': 'OPTIONS,POST,GET'
       },
-      'body': json.dumps(event)
+      'body': json.dumps({"message_id": message_id})
   }

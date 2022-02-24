@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import List, Optional
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 import uuid
 
 class NFTAssetContract(BaseModel):
@@ -59,6 +59,7 @@ class NFT(BaseModel):
     traits: Optional[List[NFTTraits]]
     
     def __init__(self, **data):
+        # ID is 'address-token_id'
         data['id'] = f"{data['address']}-{data['token_id']}"
 
         owner = data.get('owner', None)

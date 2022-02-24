@@ -2,6 +2,10 @@ from typing import Optional
 from pydantic import BaseModel
 import hashlib
 
+from pprint import pprint
+
+from decimal import Decimal
+
 class Transaction(BaseModel):
     id: str
     block_hash: str
@@ -17,12 +21,17 @@ class Transaction(BaseModel):
 
         data['block_number'] = int(data['block_number'])
         data['transaction_index'] = int(data['transaction_index'])
-
-        from_account = data['from_account']['address']
-        to_account = data['to_account']['address']
-
-        data['from_account'] = from_account
-        data['to_account'] = to_account
+        
+        from_account = data["from_account"]
+        if not isinstance(from_account, str):
+            from_account = data["from_account"]["address"]
+            
+        to_account = data["to_account"]
+        if not isinstance(to_account, str):
+            to_account = data["to_account"]["address"]
+        
+        data["from_account"] = from_account
+        data["to_account"] = to_account
 
         super().__init__(**data)
 
@@ -30,7 +39,7 @@ class NFTEvent(BaseModel):
     id: str
     event_type: str
     auction_type: Optional[str]
-    bid_amount: Optional[int]
+    bid_amount: Optional[Decimal]
     collection_slug: Optional[str]
     contract_address: Optional[str]
     listing_time: Optional[str]
@@ -41,7 +50,7 @@ class NFTEvent(BaseModel):
     to_account: Optional[str]
     is_private: Optional[bool]
     transaction: Optional[Transaction]
-    total_price: Optional[int]
+    total_price: Optional[Decimal]
 
     def __init__(self, new_item=False, **data: dict) -> None:
         if new_item:
@@ -50,19 +59,19 @@ class NFTEvent(BaseModel):
             # Convert total price from gweith to eth
             total_price = data.get('total_price', None)
             if total_price is not None:
-                data['total_price'] = float(total_price) / 10e17
+                data['total_price'] = Decimal(str(round(float(total_price) / 10e17, 6)))
             else:
-                data['total_price'] = 0.0
+                data['total_price'] = Decimal(str(round(0.0, 2)))
 
             bid_amount = data.get('bid_amount', None)
             if bid_amount is not None:
-                data['bid_amount'] = float(bid_amount) / 10e17
+                data['bid_amount'] = Decimal(str(round(float(bid_amount) / 10e17, 6)))
             else:
-                data['bid_amount'] = 0.0
+                data['bid_amount'] = Decimal(str(round(0.0, 2)))
     
             transaction = data.get('transaction', None)
             if transaction is not None:
-                data['transaction'] = dict(Transaction(**transaction))
+                data['transaction'] = dict(Transaction(**dict(transaction)))
             
             from_account = data.get('from_account', None)
             if from_account is not None:
@@ -131,9 +140,25 @@ class NFTEvent(BaseModel):
 
                 # Append the hashes of the transactions
                 else:
-                    decoded_id += f"-{val['hash']}"
+                    decoded_id += f"-{val['block_hash']}"
 
         # Calculate sha256 id (hash)
         encoded_id = hashlib.sha256(decoded_id.encode('utf-8')).hexdigest()
 
         return encoded_id
+    
+    def format_dict(data: dict):
+        # Convert total price from gweith to eth
+        total_price = data.get('total_price', None)
+        if total_price is not None:
+            data['total_price'] = Decimal(str(round(float(total_price) / 10e17, 2)))
+        else:
+            data['total_price'] = Decimal(str(round(0.0, 4)))
+
+        bid_amount = data.get('bid_amount', None)
+        if bid_amount is not None:
+            data['bid_amount'] = Decimal(str(round(float(bid_amount) / 10e17, 2)))
+        else:
+            data['bid_amount'] = Decimal(str(round(0.0, 4)))
+            
+        return data

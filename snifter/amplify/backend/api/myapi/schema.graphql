@@ -172,4 +172,6 @@ type nftEventCheckpoint @model {
     saved_events: Int
     total_events: Int
     status: String
+    createdAt: AWSDateTime
+    updatedAt:AWSDateTime
 }

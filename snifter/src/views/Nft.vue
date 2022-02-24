@@ -1,56 +1,68 @@
 <template>
   <div class="nft-container-wrapper">
-    <div class="nft-container" :class="nft?.background_color ? 'nft-background-color' : 'nft-default-background'">
+    <div
+      class="nft-container"
+      :class="
+        nft?.background_color
+          ? 'nft-background-color'
+          : 'nft-default-background'
+      "
+    >
       <div v-if="nft" :src="nft" class="nft-card">
+        <!-- Top row of nft card -->
         <div class="top-row">
+          <!-- Leftmost section of nft card -->
           <div class="nft-image-wrapper">
             <div class="nft-header">
               <h1 v-if="nft.name">
                 {{ nft.name }}
               </h1>
               <h1 v-else-if="currentContract">
-                {{ currentContract.name + ' #' + nft.token_id }}
+                {{ currentContract.name + " #" + nft.token_id }}
               </h1>
             </div>
             <va-image
-                class="rounded-card nft-image"
-                :src="nft.image_url"
-                style="height: 500px; width: 500px"
+              class="rounded-card nft-image"
+              :src="nft.image_url"
+              style="height: 500px; width: 500px"
             />
             <div class="nft-interactions">
               <div class="nft-stub">
                 <div class="nft-icon">
                   <va-icon
-                  v-if="hasFavorited"
-                  name="favorite"
-                  size="large"
-                  @click="favorite(this.user, nft.id)"
+                    v-if="hasFavorited"
+                    name="favorite"
+                    size="large"
                   ></va-icon>
-                  <va-icon
-                  v-else
-                  name="favorite_border"
-                  size="large"
-                  @click="favorite(this.user, nft.id)"></va-icon>
+                  <va-icon v-else name="favorite_border" size="large"></va-icon>
                 </div>
               </div>
               <p>{{ this.totalFavorites }}</p>
             </div>
           </div>
 
+          <!-- Accordian section -->
           <div class="nft-traits">
-            <va-accordion v-model="showNftAccordion" class="nft-traits-accordion">
+            <va-accordion
+              v-model="showNftAccordion"
+              class="nft-traits-accordion"
+            >
               <va-collapse
                 v-for="(collapse, index) in nftCollapses"
                 :key="index"
                 :header="collapse.title"
               >
-                <div v-if="collapse.title === 'Ownership'" class="nft-ownership">
-                  <EntityCardList 
+                <div
+                  v-if="collapse.title === 'Ownership'"
+                  class="nft-ownership"
+                >
+                  <EntityCardList
                     v-if="entityListData"
-                    :entities="entityListData" />
+                    :entities="entityListData"
+                  />
                 </div>
-                <div v-else-if="collapse.title === 'Traits'" style="width: 100%;">
-                  <TraitTable 
+                <div v-else-if="collapse.title === 'Traits'">
+                  <TraitTable
                     v-if="nft.traits && currentContract?.total_supply"
                     :traits="nft.traits"
                     :totalSupply="currentContract.total_supply"
@@ -59,72 +71,57 @@
               </va-collapse>
             </va-accordion>
           </div>
-
-          <!-- <div class="nft-ownership">
-            <va-list class="nft-ownership-list">
-              <va-list-item class="info-item" v-if="collection">
-                <va-list-item-section>
-                  {{ collection.name }}
-                </va-list-item-section>
-                <va-list-item-section>
-                  {{ collection.symbol }}
-                </va-list-item-section>
-                <va-list-item-section>
-                  <img :src="collection.image_url" alt="Collection Logo" style="height: 50px; width: 50px">
-                </va-list-item-section>
-              </va-list-item>
-              <va-list-item v-if="currentContract">
-                <p>
-                  {{ currentContract.name }}
-                </p>
-              </va-list-item>
-              <va-list-item>
-                <p v-if="nft.name">{{ nft.name }}</p>
-                <p v-else>No Name</p>
-              </va-list-item>
-              <va-list-item class="info-item">
-                <va-list-item-section>
-                  Owned By:
-                </va-list-item-section>
-                <va-list-item-section>
-                  {{ nft.owner || 'UNKNOWN OWNER' }}
-                </va-list-item-section>
-              </va-list-item>
-            </va-list>
-          </div> -->
         </div>
 
+        <div v-if="loadingStatus === 'complete'">
           <div class="transaction-section">
+            <h1>Transactions</h1>
             <div class="recent-sales-info">
-              <div class="recent-info">
+              <div class="bid-info">
                 <va-list>
                   <va-list-item>
                     <va-list-item-section>
-                      <p>Current Bid: </p>
+                      <p>Bid Volume:</p>
                     </va-list-item-section>
                     <va-list-item-section>
-                      <p>3 eth</p>
-                    </va-list-item-section>
-                  </va-list-item>
-                  <va-list-item>
-                    <va-list-item-section>
-                      <p>Last Sale: </p>
-                    </va-list-item-section>
-                    <va-list-item-section>
-                      <p>2.5 eth</p>
+                      <p>{{ transactionStats["bid_volume"] }} eth</p>
                     </va-list-item-section>
                   </va-list-item>
                   <va-list-item>
                     <va-list-item-section>
-                      <p>Average Sale: </p>
+                      <p>Last Bid:</p>
                     </va-list-item-section>
                     <va-list-item-section>
-                      <p>2.75 eth</p>
+                      <p>{{ transactionStats["last_bid"] }} eth</p>
+                    </va-list-item-section>
+                  </va-list-item>
+                  <va-list-item>
+                    <va-list-item-section>
+                      <p>Highest Bid:</p>
+                    </va-list-item-section>
+                    <va-list-item-section>
+                      <p>{{ transactionStats["highest_bid"] }} eth</p>
+                    </va-list-item-section>
+                  </va-list-item>
+                  <va-list-item>
+                    <va-list-item-section>
+                      <p>Average Bid:</p>
+                    </va-list-item-section>
+                    <va-list-item-section>
+                      <p>{{ transactionStats["average_bid"] }} eth</p>
+                    </va-list-item-section>
+                  </va-list-item>
+                  <va-list-item>
+                    <va-list-item-section>
+                      <p>Total Bids:</p>
+                    </va-list-item-section>
+                    <va-list-item-section>
+                      <p>{{ transactionStats["total_bids"] }}</p>
                     </va-list-item-section>
                   </va-list-item>
                 </va-list>
               </div>
-              <div class="total-info">
+              <div class="sale-info">
                 <va-list>
                   <va-list-item>
                     <va-list-item-section>
@@ -136,52 +133,102 @@
                   </va-list-item>
                   <va-list-item>
                     <va-list-item-section>
-                      <p>Total Sales:</p>
+                      <p>Sales Volume:</p>
                     </va-list-item-section>
                     <va-list-item-section>
-                      <p>27.5 eth</p>
+                      <p>{{ transactionStats["sales_volume"] }} eth</p>
+                    </va-list-item-section>
+                  </va-list-item>
+                  <va-list-item>
+                    <va-list-item-section>
+                      <p>Last Sale:</p>
+                    </va-list-item-section>
+                    <va-list-item-section>
+                      <p>{{ transactionStats["last_sale"] }}</p>
+                    </va-list-item-section>
+                  </va-list-item>
+                  <va-list-item>
+                    <va-list-item-section>
+                      <p>Average Sale:</p>
+                    </va-list-item-section>
+                    <va-list-item-section>
+                      <p>{{ transactionStats["average_sale"] }}</p>
+                    </va-list-item-section>
+                  </va-list-item>
+                  <va-list-item>
+                    <va-list-item-section>
+                      <p>Highest Sale:</p>
+                    </va-list-item-section>
+                    <va-list-item-section>
+                      <p>{{ transactionStats["highest_sale"] }}</p>
                     </va-list-item-section>
                   </va-list-item>
                 </va-list>
               </div>
             </div>
-            <div v-if="nftEvents.length > 0">
-              <va-accordion v-model="showTransactions">
-                <va-collapse
-                header="Transactions">
-                  <TransactionTable 
-                    :nftEvents="nftEvents"
-                  />
-                </va-collapse>
-              </va-accordion>
-            </div>
+            <va-accordion v-model="showTransactions">
+              <va-collapse header="Transactions">
+                <div v-if="nftEvents && nftEvents.length > 0">
+                  <TransactionTable :nftEvents="nftEvents" />
+                </div>
+              </va-collapse>
+            </va-accordion>
           </div>
+        </div>
 
-          <div class="contract-section">
-            <contract-stats
-              :contracts="nftContract">
-            </contract-stats>
-          </div>
+        <div v-else-if="loadingStatus === 'fetching'">
+          <va-card style="width: 80%;">
+            <va-card-content>
+              <p>Loading Transactions...</p>
+              <va-progress-circle indeterminate />
+            </va-card-content>
+          </va-card>
+        </div>
 
-          <div class="collection-section">
-            <CollectionInfo :collection="collection" />
-          </div>
+        <div v-else-if="loadingStatus === 'writing'">
+          <va-card>
+            <va-card-content>
+              <va-progress-circle v-model="progress" />
+            </va-card-content>
+          </va-card>
+        </div>
+
+        <div v-if="nftContract" class="contract-section">
+          <h1>Contract</h1>
+          <contract-stats :contracts="nftContract"> </contract-stats>
+        </div>
+
+        <div v-if="collection" class="collection-section">
+          <h1>Collection</h1>
+          <CollectionInfo :collection="collection" />
+        </div>
       </div>
     </div>
   </div>
-  
 </template>
-<script>
 
+
+<script>
 import { API } from "aws-amplify";
-import { listCollections, listNftAssetContracts, listNfts, listNftEvents, listUserFavoriteNfts } from "../graphql/queries";
-import { fetchCollection, nftEventQueue } from '../services/nftScraperService';
-import { createUserFavoriteNft, deleteUserFavoriteNft } from '../graphql/mutations';
+import {
+  listCollections,
+  listNftAssetContracts,
+  listNfts,
+  listNftEvents,
+  //listNftEventCheckpoints,
+  //listUserFavoriteNfts,
+} from "../graphql/queries";
+import { fetchCollection, nftEventQueue } from "../services/nftScraperService";
+// import {
+//   createUserFavoriteNft,
+//   deleteUserFavoriteNft,
+// } from "../graphql/mutations";
+import { onCreateNftEvent, onUpdateNftEventCheckpoint } from "../graphql/subscriptions";
 import ContractStats from "../components/ContractInfo";
 import CollectionInfo from "../components/nft/CollectionInfo";
 import TraitTable from "../components/nft/TraitTable";
 import EntityCardList from "../components/nft/EntityCardList";
-import TransactionTable from "../components/nft/TransactionTable.vue"
+import TransactionTable from "../components/nft/TransactionTable.vue";
 
 export default {
   name: "Nft",
@@ -190,92 +237,169 @@ export default {
     CollectionInfo,
     TraitTable,
     EntityCardList,
-    TransactionTable
+    TransactionTable,
   },
   async created() {
     console.log(this.$route.query);
     this.nftData = this.$route.query;
+    await this.subscribeToEvents();
 
     await this.getNFT();
+
     console.log(this.nft);
     await this.getNFTs(this.nftData.address);
 
-    if(this.collection === null || this.collection === undefined) {
+    if (this.collection === null || this.collection === undefined) {
       await this.collectionRequest(this.currentContract.slug);
     }
-
-    var nextToken = await this.getNFTEvents(this.nft.address, this.nft.token_id);
-    while (nextToken)
-      nextToken = await this.getNFTEvents(this.nft.address, this.nft.token_id, nextToken);
 
     console.log(this.nftContract);
     console.log(this.collection);
     console.log(this.nftEvents, "NFTEVENTS");
 
-    if (this.nftEvents.length === 0) {
-      var resp = await this.fetchNFTEvents(this.nft.address, this.nft.token_id);
-      if (resp.ok)
-        await this.getNFTEvents(this.nft.address, this.nft.token_id);
-    }
+    // Make sure to fetch the sales
+    await this.fetchNFTEvents(this.nft.address, this.nft.token, "successful");
 
-    this.setFavoriteStatus(this.user, this.nftData.id);
-    this.setTotalFavorites(this.nftData.id);
+    var resp = await this.fetchNFTEvents(this.nft.address, this.nft.token_id);
+
+    if (resp)
+      await setTimeout(() => {
+        this.getAllNftEvents();
+      }, 15000);
+
+    await this.subscribeToCheckpoint(resp["messageId"]);
+    console.log(this.nftEvents);
+
+    //this.setFavoriteStatus(this.user, this.nftData.id);
+    //this.setTotalFavorites(this.nftData.id);
   },
   data() {
     return {
-        nftData: null,
-        nft: null,
-        showContract: false,
-        showCollection: false,
-        showTransactions: false,
-        nftCollapses: [
-          { title: 'Ownership' },
-          { title: 'Traits' },
-        ],
-        nftContract: [],
-        currentContract: null,
-        collection: null,
-        nftEvents: [],
-        showNftAccordion: [false, false],
-        hasFavorited: false,
-        totalFavorites: null,
-        user: "shayon"
-    }
+      nftData: null,
+      nft: null,
+      showContract: false,
+      showCollection: false,
+      showTransactions: false,
+      transactionStatus: "fetching",
+      nftCollapses: [{ title: "Ownership" }, { title: "Traits" }],
+      nftContract: [],
+      currentContract: null,
+      collection: null,
+      nftEvents: [],
+      showNftAccordion: [false, false],
+      hasFavorited: false,
+      totalFavorites: null,
+      user: "shayon",
+      lastCheckpoint: {},
+    };
   },
   computed: {
+    progress() {
+      return (
+        this.lastCheckpoint.total_events / this.lastCheckpoint.saved_events
+      );
+    },
+    loadingStatus() {
+      return this.transactionStatus;
+    },
     traitColumnFields() {
-      return ['type', 'value', 'count', 'rarity']
+      return ["type", "value", "count", "rarity"];
     },
     entityListData() {
       var entities = [];
 
-      if(this.collection) {
+      if (this.collection) {
         entities.push({
-          'type': 'Collection', 'name': this.collection.name, 'image_url': this.collection.image_url
+          type: "Collection",
+          name: this.collection.name,
+          image_url: this.collection.image_url,
         });
       }
 
-      if(this.currentContract) {
+      if (this.currentContract) {
         entities.push({
-          'type': 'Contract', 'name': this.currentContract.name, 'image_url': this.currentContract.image_url
+          type: "Contract",
+          name: this.currentContract.name,
+          image_url: this.currentContract.image_url,
         });
       }
 
-      if(this.nft.owner && this.currentContract) {
+      if (this.nft.owner && this.currentContract) {
         entities.push({
-          'type': 'Owner', 'name': this.nft.owner, 'image_url': this.currentContract.image_url
+          type: "Owner",
+          name: this.nft.owner,
+          image_url: this.currentContract.image_url,
         });
       }
 
       console.log(entities);
 
       return entities;
-    }
+    },
+    transactionStats() {
+      var last_bid = 0;
+      var newestCreatedDate = null;
+      var highest_bid = 0;
+      var average_bid = 0;
+      var total_bids = 0;
+      var bid_volume = 0;
+
+      var totalSales = 0;
+      var newestSaleDate = null;
+      var highest_sale = 0;
+      var average_sale = 0;
+      var last_sale = 0;
+      var sales_volume = 0;
+
+      this.nftEvents.forEach((event) => {
+        var currentTime = Date.parse(event.created_date);
+        if (
+          event["event_type"] === "offer_entered" ||
+          event["event_type"] === "bid_entered"
+        ) {
+          var bid_amount = event["bid_amount"];
+          if (bid_amount) {
+            total_bids += 1;
+            average_bid += bid_amount;
+            bid_volume += bid_amount;
+          }
+          if (currentTime > newestCreatedDate && bid_amount) {
+            last_bid = bid_amount;
+            newestCreatedDate = currentTime;
+          }
+          if (bid_amount > highest_bid) highest_bid = bid_amount;
+        }
+
+        if (event["event_type"] === "successful") {
+          var saleAmount = event["total_price"];
+          if (saleAmount) {
+            average_sale += saleAmount;
+            totalSales += 1;
+            sales_volume += saleAmount;
+          }
+
+          if (currentTime > newestSaleDate && saleAmount) {
+            last_sale = saleAmount;
+            newestSaleDate = currentTime;
+          }
+          if (saleAmount > highest_sale) highest_sale = saleAmount;
+        }
+      });
+      return {
+        last_bid: last_bid,
+        highest_bid: highest_bid,
+        total_bids: total_bids,
+        bid_volume: bid_volume,
+        average_bid: average_bid / total_bids,
+        last_sale: last_sale,
+        highest_sale: highest_sale,
+        average_sale: average_sale / totalSales,
+        sales_volume: sales_volume,
+      };
+    },
   },
   methods: {
-    async initSubscriptions() {
-      
-    },
+    async initSubscriptions() {},
     async getNFT() {
       try {
         var token_id = this.nftData.token_id;
@@ -285,163 +409,280 @@ export default {
           query: listNfts,
           variables: {
             filter: {
-              address: {eq: address},
-              token_id: {eq: token_id}
-            }
-          }
+              address: { eq: address },
+              token_id: { eq: token_id },
+            },
+          },
         });
 
         this.nft = nfts.data.listNfts.items.at(0);
-      }
-      catch(error) {
+      } catch (error) {
         console.log(error);
         return null;
       }
     },
     async getNFTs(address) {
-        console.log("fetching");
-        try {
-            const contracts = await API.graphql({
-                query: listNftAssetContracts,
-                variables: {
-                filter: {address: {eq: address}}
-                },
-            });
-            this.nftContract = contracts.data.listNftAssetContracts.items;
+      console.log("fetching");
+      try {
+        const contracts = await API.graphql({
+          query: listNftAssetContracts,
+          variables: {
+            filter: { address: { eq: address } },
+          },
+        });
+        this.nftContract = contracts.data.listNftAssetContracts.items;
 
-            // Convert Proxy object returned by query into JS object to access slug
-            var currentContract = JSON.parse(JSON.stringify(this.nftContract)).at(0);
-            this.currentContract = currentContract;
-            console.log(currentContract);
+        // Convert Proxy object returned by query into JS object to access slug
+        var currentContract = JSON.parse(JSON.stringify(this.nftContract)).at(
+          0
+        );
+        this.currentContract = currentContract;
+        console.log(currentContract);
 
-            // Query collections for matching slug
-            const collection = await API.graphql({
-                query: listCollections,
-                variables: {
-                filter: {slug: {eq: currentContract.slug}}
-                },
-            });
-            
-            // There should only be one collection for each contract
-            this.collection = JSON.parse(JSON.stringify(collection.data.listCollections.items)).at(0);
-        } catch (e) {
-            console.error(e);
-        }
+        // Query collections for matching slug
+        const collection = await API.graphql({
+          query: listCollections,
+          variables: {
+            filter: { slug: { eq: currentContract.slug } },
+          },
+        });
+
+        // There should only be one collection for each contract
+        this.collection = JSON.parse(
+          JSON.stringify(collection.data.listCollections.items)
+        ).at(0);
+      } catch (e) {
+        console.error(e);
+      }
     },
     async getCollection(collectionSlug) {
-        // Query collections for matching slug
-        try {
-          const collection = await API.graphql({
-              query: listCollections,
-              variables: {
-              filter: {slug: {eq: collectionSlug}}
-              },
-          });
-          
-          // There should only be one collection for each contract
-          this.collection = JSON.parse(JSON.stringify(collection.data.listCollections.items)).at(0);
-        }
-        catch(error) {
-          console.log(error);
-        }
+      // Query collections for matching slug
+      try {
+        const collection = await API.graphql({
+          query: listCollections,
+          variables: {
+            filter: { slug: { eq: collectionSlug } },
+          },
+        });
+
+        // There should only be one collection for each contract
+        this.collection = JSON.parse(
+          JSON.stringify(collection.data.listCollections.items)
+        ).at(0);
+      } catch (error) {
+        console.log(error);
+      }
     },
     async collectionRequest(collectionSlug) {
       console.log("Fetching...");
       var response = await fetchCollection(collectionSlug);
-      if(response.ok) {
+      if (response.ok) {
         await this.getCollection();
       }
     },
     async getNFTEvents(contractAddress, tokenId, nextToken = null) {
-      const nftEvents = await API.graphql({
-              query: listNftEvents,
-              variables: {
-                nextToken: nextToken,
-                filter: {
-                  contract_address: {eq: contractAddress},
-                  token_id: {eq: tokenId}
-                }
-              },
-          });
+      var variables = {
+        filter: {
+          contract_address: { eq: contractAddress },
+          token_id: { eq: tokenId },
+        },
+      };
+      if (nextToken) variables["nextToken"] = nextToken;
 
-      this.nftEvents = this.nftEvents.concat(nftEvents.data.listNftEvents.items);
+      const nftEvents = await API.graphql({
+        query: listNftEvents,
+        variables: variables,
+      });
+
+      console.log(nftEvents.data.listNftEvents.items);
+
+      var events = [];
+      var items = nftEvents.data.listNftEvents.items;
+      items.forEach((event) => {
+        events = events.concat(JSON.parse(JSON.stringify(event)));
+      });
+
+      console.log(events);
+
+      this.nftEvents = this.nftEvents.concat(events);
       return nftEvents.data.listNftEvents.nextToken;
     },
-    async fetchNFTEvents(contractAddress, tokenId) {
+    async getAllNftEvents() {
+      console.log("reading database");
+      var nextToken = await this.getNFTEvents(
+        this.nftData.address,
+        this.nftData.token_id
+      );
+      while (nextToken) {
+        console.log("nextoken");
+        nextToken = await this.getNFTEvents(
+          this.nftData.address,
+          this.nftData.token_id,
+          nextToken
+        );
+      }
+
+      if (this.nftEvents.length > 0 && !nextToken) {
+        this.transactionStatus = "complete";
+        console.log("EVENTS", this.nftEvents);
+        console.log(this.transactionStatus);
+        return true;
+      }
+    },
+    async fetchNFTEvents(contractAddress, tokenId, eventType = null) {
       var body = {
-        'asset-contract-address': contractAddress,
-        'token-id': tokenId
+        "asset-contract-address": contractAddress,
+        "token-id": tokenId,
+        limit: 100,
       };
 
-      return await nftEventQueue(body);
-    },
-    async setTotalFavorites(nftID) {
-      try {
-        const count = await API.graphql({
-          query: listUserFavoriteNfts,
-          variables: {
-            filter: {nftID: {eq: nftID}}
-          }
-        });
-        this.totalFavorites = Object.keys(count.data.listUserFavoriteNfts.items).length
-      } catch (e) {
-        console.error(e);
-      }
-    },
-    async setFavoriteStatus(userID, nftID) {
-      try {
-        const has_favorited = await API.graphql({
-          query: listUserFavoriteNfts,
-          variables: {
-            filter: {userID: {eq: userID}, nftID: {eq: nftID}}
-          }
-        });
+      if (eventType) body["event-type"] = eventType;
+      var test = await nftEventQueue(body);
+      // var messageId = test["messageId"];
 
-        if (typeof has_favorited.data.listUserFavoriteNfts.items[0] !== "undefined") {
-          this.hasFavorited = true;
-        } else {
-          this.hasFavorited = false;
-        }
-      } catch (e) {
-        console.error(e);
-      }
+      console.log(test);
+      return test;
     },
+    async subscribeToCheckpoint(checkpointId) {
+      const checkpointQuery = await API.graphql({
+        query: onUpdateNftEventCheckpoint,
+        variables: {
+          id: checkpointId,
+        },
+      }).subscribe({
+        next: (checkpoint) => {
+          console.log("checkpoint", checkpoint);
+        }
+      });
+
+      setTimeout(() => {
+        checkpointQuery.unsubscribe();
+      }, 60000);
+      // if (count === 50) {
+      //   this.transactionStatus = "failure";
+      //   return false;
+      // }
+      // const checkpointQuery = await API.graphql({
+      //   query: listNftEventCheckpoints,
+      //   variables: {
+      //     filter: { id: { eq: checkpointId } },
+      //   },
+      // });
+
+      // var checkpoint = checkpointQuery.data.listNftEventCheckpoints.items.at(0);
+      // console.log(checkpoint);
+      // if (checkpoint) {
+      //   this.transactionStatus = checkpoint.status;
+      //   this.lastCheckpoint = checkpoint;
+      // }
+      // if (checkpoint && checkpoint?.status === "success") {
+      //   this.transactionStatus = "success";
+      //   var loaded = await this.getAllNftEvents();
+      //   if (loaded) this.transactionStatus = "complete";
+      //   return true;
+      // } else if (checkpoint && checkpoint?.status === "failure") {
+      //   return false;
+      // } else {
+      //   await setTimeout(() => {
+      //     this.subscribeToCheckpoint(checkpointId, (count += 1));
+      //   }, 2000);
+      // }
+    },
+    subscribeToEvents() {
+      var eventSubscriber = API.graphql({
+        query: onCreateNftEvent
+      }).subscribe({
+        next: (data) => {
+          debugger;
+          console.log("Event", data);
+        },
+        error: (e) => {
+          console.log("Event Error", e);
+        },
+      });
+
+      setTimeout(() => {
+        eventSubscriber.unsubscribe();
+      }, 60000);
+    },
+    // async setTotalFavorites(nftID) {
+    //   try {
+    //     const count = await API.graphql({
+    //       query: listUserFavoriteNfts,
+    //       variables: {
+    //         filter: { nftID: { eq: nftID } },
+    //       },
+    //     });
+    //     this.totalFavorites = Object.keys(
+    //       count.data.listUserFavoriteNfts.items
+    //     ).length;
+    //   } catch (e) {
+    //     console.error(e);
+    //   }
+    // },
+    // async setFavoriteStatus(userID, nftID) {
+    //   try {
+    //     // const has_favorited = await API.graphql({
+    //     //   query: listUserFavoriteNfts,
+    //     //   variables: {
+    //     //     filter: { userID: { eq: userID }, nftID: { eq: nftID } },
+    //     //   },
+    //     // });
+    //     var has_favorited = null;
+
+    //     if (
+    //       typeof has_favorited.data.listUserFavoriteNfts.items[0] !==
+    //       "undefined"
+    //     ) {
+    //       this.hasFavorited = true;
+    //     } else {
+    //       this.hasFavorited = false;
+    //     }
+    //   } catch (e) {
+    //     console.error(e);
+    //   }
+    // },
     // if user has favorited, remove favorite
     // else add favorite
-    async favorite(userID, nftID) {
-      this.hasFavorited = !this.hasFavorited;
-      try {
-        const has_favorited = await API.graphql({
-          query: listUserFavoriteNfts,
-          variables: {
-            filter: {userID: {eq: userID}, nftID: {eq: nftID}}
-          }
-        });
+    // async favorite(userID, nftID) {
+    //   this.hasFavorited = !this.hasFavorited;
+    //   try {
+    //     const has_favorited = await API.graphql({
+    //       query: listUserFavoriteNfts,
+    //       variables: {
+    //         filter: { userID: { eq: userID }, nftID: { eq: nftID } },
+    //       },
+    //     });
 
-        if (typeof has_favorited.data.listUserFavoriteNfts.items[0] !== "undefined") {
-          const userFavoriteNftId = {id: has_favorited.data.listUserFavoriteNfts.items[0].id};
-          console.log('removing favorite');
-          this.totalFavorites -= 1;
-   
-          await API.graphql({
-            query: deleteUserFavoriteNft,
-            variables: {input: userFavoriteNftId},
-          });
-        } else {
-          console.log('adding favorite');
-          this.totalFavorites += 1;
-     
-          const userFavoriteNft = {userID, nftID};
-          await API.graphql({
-            query: createUserFavoriteNft,
-            variables: {input: userFavoriteNft},
-          });
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    },
-  }
+    //     if (
+    //       typeof has_favorited.data.listUserFavoriteNfts.items[0] !==
+    //       "undefined"
+    //     ) {
+    //       const userFavoriteNftId = {
+    //         id: has_favorited.data.listUserFavoriteNfts.items[0].id,
+    //       };
+    //       console.log("removing favorite");
+    //       this.totalFavorites -= 1;
+
+    //       await API.graphql({
+    //         query: deleteUserFavoriteNft,
+    //         variables: { input: userFavoriteNftId },
+    //       });
+    //     } else {
+    //       console.log("adding favorite");
+    //       this.totalFavorites += 1;
+
+    //       const userFavoriteNft = { userID, nftID };
+    //       await API.graphql({
+    //         query: createUserFavoriteNft,
+    //         variables: { input: userFavoriteNft },
+    //       });
+    //     }
+    //   } catch (e) {
+    //     console.error(e);
+    //   }
+    // },
+  },
 };
 </script>
 
@@ -609,4 +850,7 @@ h1 {
   color: red;
 }
 
+.transaction-section {
+  padding: 2em;
+}
 </style>

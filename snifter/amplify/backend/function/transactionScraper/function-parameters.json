@@ -19,6 +19,12 @@
         "read",
         "update",
         "delete"
+      ],
+      "nftEventCheckpoint:@model(appsync)": [
+        "create",
+        "read",
+        "update",
+        "delete"
       ]
     }
   },

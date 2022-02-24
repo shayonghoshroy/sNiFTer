@@ -142,6 +142,32 @@
                   }
                 ]
               ]
+            },
+            "API_MYAPI_NFTEVENTCHECKPOINTTABLE_NAME": {
+              "Fn::ImportValue": {
+                "Fn::Sub": "${apimyapiGraphQLAPIIdOutput}:GetAtt:nftEventCheckpointTable:Name"
+              }
+            },
+            "API_MYAPI_NFTEVENTCHECKPOINTTABLE_ARN": {
+              "Fn::Join": [
+                "",
+                [
+                  "arn:aws:dynamodb:",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ":",
+                  {
+                    "Ref": "AWS::AccountId"
+                  },
+                  ":table/",
+                  {
+                    "Fn::ImportValue": {
+                      "Fn::Sub": "${apimyapiGraphQLAPIIdOutput}:GetAtt:nftEventCheckpointTable:Name"
+                    }
+                  }
+                ]
+              ]
             }
           }
         },
@@ -437,6 +463,68 @@
                       {
                         "Fn::ImportValue": {
                           "Fn::Sub": "${apimyapiGraphQLAPIIdOutput}:GetAtt:nftEventTable:Name"
+                        }
+                      },
+                      "/index/*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "dynamodb:Put*",
+                "dynamodb:Create*",
+                "dynamodb:BatchWriteItem",
+                "dynamodb:Get*",
+                "dynamodb:BatchGetItem",
+                "dynamodb:List*",
+                "dynamodb:Describe*",
+                "dynamodb:Scan",
+                "dynamodb:Query",
+                "dynamodb:Update*",
+                "dynamodb:RestoreTable*",
+                "dynamodb:Delete*"
+              ],
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":table/",
+                      {
+                        "Fn::ImportValue": {
+                          "Fn::Sub": "${apimyapiGraphQLAPIIdOutput}:GetAtt:nftEventCheckpointTable:Name"
+                        }
+                      }
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:dynamodb:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":table/",
+                      {
+                        "Fn::ImportValue": {
+                          "Fn::Sub": "${apimyapiGraphQLAPIIdOutput}:GetAtt:nftEventCheckpointTable:Name"
                         }
                       },
                       "/index/*"

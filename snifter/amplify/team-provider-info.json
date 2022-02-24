@@ -129,7 +129,7 @@
         },
         "nftScraper": {
           "deploymentBucketName": "amplify-snifter-stephendev-193633-deployment",
-          "s3Key": "amplify-builds/nftScraper-7441334a45416a387854-build.zip"
+          "s3Key": "amplify-builds/nftScraper-70396d2b59516d542b4a-build.zip"
         },
         "openSearch": {
           "deploymentBucketName": "amplify-snifter-stephendev-193633-deployment",
@@ -137,7 +137,11 @@
         },
         "transactionScraper": {
           "deploymentBucketName": "amplify-snifter-stephendev-193633-deployment",
-          "s3Key": "amplify-builds/transactionScraper-6875496233726c703968-build.zip"
+          "s3Key": "amplify-builds/transactionScraper-45754452336c7a78744c-build.zip"
+        },
+        "gatewayQueueProxy": {
+          "deploymentBucketName": "amplify-snifter-stephendev-193633-deployment",
+          "s3Key": "amplify-builds/gatewayQueueProxy-503437727542446a6a58-build.zip"
         }
       },
       "hosting": {

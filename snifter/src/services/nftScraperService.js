@@ -59,14 +59,19 @@ export async function nftEventQueue(body) {
   return await fetch(baseUrl + endpoint, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
+      Origin: "*",
     },
     body: JSON.stringify(body),
   })
     .then((response) => {
       return response;
     })
-    .then((data) => data)
+    .then((resp) => {
+      return resp.json();
+    })
+    .then((data) => {
+      return { ok: true, messageId: data["messageId"] };
+    })
     .catch((error) => {
       console.log(error);
       return { ok: false };

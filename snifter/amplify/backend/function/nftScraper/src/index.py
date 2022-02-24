@@ -122,10 +122,10 @@ def put_collection(collection: Collection):
             put_item(contract, TABLE_MAP['contract'])
 
 def handler(event, context):
-    # All events should contain event_type field for function switch
+    # Get event type from api gateway resource
     event_type = event.get("resource", None).replace("/", "")
 
-    # Bad Request
+    # Bad Request, an unsopported event_type
     if event_type is None or not event_type in ["nft", "contract", "collection", "nftevent"]:
         return {
             'statusCode': 400,
@@ -143,7 +143,6 @@ def handler(event, context):
 
     # Perform event
     nft_service = NFTService()
-    print(event)
     event = json.loads(event["body"])
     result = nft_service.function_switch(event_type, event)
 
