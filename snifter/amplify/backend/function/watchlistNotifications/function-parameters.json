@@ -33,12 +33,6 @@
         "read",
         "update",
         "delete"
-      ],
-      "sendEmails": [
-        "create",
-        "read",
-        "update",
-        "delete"
       ]
     },
     "storage": {
@@ -72,13 +66,25 @@
         "update",
         "delete"
       ],
-      "user:@model(appsync)": [
+      "nft:@model(appsync)": [
         "create",
         "read",
         "update",
         "delete"
       ],
-      "nft:@model(appsync)": [
+      "Transaction:@model(appsync)": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "nftEvent:@model(appsync)": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "user:@model(appsync)": [
         "create",
         "read",
         "update",

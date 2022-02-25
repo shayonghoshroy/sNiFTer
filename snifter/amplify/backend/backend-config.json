@@ -227,13 +227,6 @@
           "attributes": [
             "Name"
           ]
-        },
-        {
-          "category": "function",
-          "resourceName": "sendEmails",
-          "attributes": [
-            "Name"
-          ]
         }
       ]
     }
