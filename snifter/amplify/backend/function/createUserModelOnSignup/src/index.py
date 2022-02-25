@@ -5,8 +5,9 @@ def handler(event, context):
   print('received event:')
   print(event)
 
-  # create a user model
+  # get user attributes
   username = event['userName']
+  email = event['request']['userAttributes']['email']
 
   # initialize boto client
   client = boto3.client('dynamodb')
@@ -20,7 +21,10 @@ def handler(event, context):
         },
         'username': {
             'S': username
-        }
+        },
+        'email': {
+            'S': email  
+        },
     } 
   )
   

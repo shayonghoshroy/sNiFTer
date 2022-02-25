@@ -14,10 +14,8 @@ def handler(event, context):
     CHARSET = "UTF-8" # email setting
 
     # set table names
-    #watchlist_table='UserWatchlistNft-l6kkjo2j3jf55dllykn3b64e2u-dev'
-    #user_table = 'user-l6kkjo2j3jf55dllykn3b64e2u-dev'
-    watchlist_table='UserWatchlistNft-ic7gmhldrbcyjaekjqst7cutma-shayondev'
-    user_table = 'user-ic7gmhldrbcyjaekjqst7cutma-shayondev'    
+    watchlist_table='UserWatchlistNft-l6kkjo2j3jf55dllykn3b64e2u-dev'
+    user_table = 'user-l6kkjo2j3jf55dllykn3b64e2u-dev'
     
     # iterate thru all items in the UserWatchlist table
     for item in scan_table(client, watchlist_table):
