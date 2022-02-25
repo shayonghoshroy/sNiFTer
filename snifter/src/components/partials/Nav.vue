@@ -17,18 +17,11 @@
     <template #right class="mb-2">
       <div>
         <div v-if="user.username">
-          <authenticator>
-            <template v-slot="{ user, signOut }">
-              <div class="buttons">
-                <router-link to="/user" class="button is-purple"
-                  >{{ user.username }}'s Profile</router-link
-                >
-                <button class="button is-purple" @click="signOut">
-                  Logout
-                </button>
-              </div>
-            </template>
-          </authenticator>
+          <div class="buttons">
+            <router-link to="/user" class="button is-purple">{{
+              user.username
+            }}</router-link>
+          </div>
         </div>
         <div v-else>
           <div class="buttons">
@@ -45,7 +38,6 @@
 </template>
 
 <script setup>
-import { Authenticator } from "@aws-amplify/ui-vue";
 import "@aws-amplify/ui-vue/styles.css";
 import Amplify from "aws-amplify";
 import awsconfig from "../../aws-exports";
@@ -58,9 +50,7 @@ import { Auth } from "aws-amplify";
 
 export default {
   name: "Nav",
-  components: {
-    Authenticator,
-  },
+  components: {},
   data() {
     return {
       user: [],
