@@ -31,13 +31,13 @@ export type AmplifyDependentResourcesAttributes = {
             "Region": "string",
             "LambdaExecutionRole": "string"
         },
-        "openSearch": {
+        "transactionScraper": {
             "Name": "string",
             "Arn": "string",
             "Region": "string",
             "LambdaExecutionRole": "string"
         },
-        "transactionScraper": {
+        "openSearch": {
             "Name": "string",
             "Arn": "string",
             "Region": "string",

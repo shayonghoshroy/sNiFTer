@@ -183,7 +183,7 @@
         </div>
 
         <div v-else-if="loadingStatus === 'fetching'">
-          <va-card style="width: 80%;">
+          <va-card style="width: 80%">
             <va-card-content>
               <p>Loading Transactions...</p>
               <va-progress-circle indeterminate />
@@ -228,7 +228,10 @@ import { fetchCollection, nftEventQueue } from "../services/nftScraperService";
 //   createUserFavoriteNft,
 //   deleteUserFavoriteNft,
 // } from "../graphql/mutations";
-import { onCreateNftEvent, onUpdateNftEventCheckpoint } from "../graphql/subscriptions";
+import {
+  onCreateNftEvent,
+  onUpdateNftEventCheckpoint,
+} from "../graphql/subscriptions";
 import ContractStats from "../components/ContractInfo";
 import CollectionInfo from "../components/nft/CollectionInfo";
 import TraitTable from "../components/nft/TraitTable";
@@ -312,46 +315,88 @@ export default {
     },
     entityListData() {
       var entities = [];
-
       if (this.collection) {
         entities.push({
           type: "Collection",
           name: this.collection.name,
           image_url: this.collection.image_url,
         });
+      }
+      if (this.currentContract) {
+        entities.push({
+          type: "Contract",
+          name: this.currentContract.name,
+          image_url: this.currentContract.image_url,
+        });
+      }
+      if (this.nft.owner && this.currentContract) {
+        entities.push({
+          type: "Owner",
+          name: this.nft.owner,
+          image_url: this.currentContract.image_url,
+        });
+      }
+      console.log(entities);
+      return entities;
+    },
+    transactionStats() {
+      var last_bid = 0;
+      var newestCreatedDate = null;
+      var highest_bid = 0;
+      var average_bid = 0;
+      var total_bids = 0;
+      var bid_volume = 0;
+      var totalSales = 0;
+      var newestSaleDate = null;
+      var highest_sale = 0;
+      var average_sale = 0;
+      var last_sale = 0;
+      var sales_volume = 0;
+      this.nftEvents.forEach((event) => {
+        var currentTime = Date.parse(event.created_date);
+        if (
+          event["event_type"] === "offer_entered" ||
+          event["event_type"] === "bid_entered"
+        ) {
+          var bid_amount = event["bid_amount"];
+          if (bid_amount) {
+            total_bids += 1;
+            average_bid += bid_amount;
+            bid_volume += bid_amount;
+          }
+          if (currentTime > newestCreatedDate && bid_amount) {
+            last_bid = bid_amount;
+            newestCreatedDate = currentTime;
+          }
+          if (bid_amount > highest_bid) highest_bid = bid_amount;
+        }
+        if (event["event_type"] === "successful") {
+          var saleAmount = event["total_price"];
+          if (saleAmount) {
+            average_sale += saleAmount;
+            totalSales += 1;
+            sales_volume += saleAmount;
+          }
+          if (currentTime > newestSaleDate && saleAmount) {
+            last_sale = saleAmount;
+            newestSaleDate = currentTime;
+          }
+          if (saleAmount > highest_sale) highest_sale = saleAmount;
+        }
+      });
+      return {
+        last_bid: last_bid,
+        highest_bid: highest_bid,
+        total_bids: total_bids,
+        bid_volume: bid_volume,
+        average_bid: average_bid / total_bids,
+        last_sale: last_sale,
+        highest_sale: highest_sale,
+        average_sale: average_sale / totalSales,
+        sales_volume: sales_volume,
       };
     },
-    entityListData() {
-        var entities = [];
-
-        if (this.collection) {
-          entities.push({
-            type: "Collection",
-            name: this.collection.name,
-            image_url: this.collection.image_url,
-          });
-        }
-
-        if (this.currentContract) {
-          entities.push({
-            type: "Contract",
-            name: this.currentContract.name,
-            image_url: this.currentContract.image_url,
-          });
-        }
-
-        if (this.nft.owner && this.currentContract) {
-          entities.push({
-            type: "Owner",
-            name: this.nft.owner,
-            image_url: this.currentContract.image_url,
-          });
-        }
-
-        console.log(entities);
-
-        return entities;
-    },
+  },
   methods: {
     async setTotalFavorites(nftID) {
       try {
@@ -423,56 +468,6 @@ export default {
         }
       } catch (e) {
         console.error(e);
-      }
-    },
-    transactionStats() {
-      var last_bid = 0;
-      var newestCreatedDate = null;
-      var highest_bid = 0;
-      var average_bid = 0;
-      var total_bids = 0;
-      var bid_volume = 0;
-
-      var totalSales = 0;
-      var newestSaleDate = null;
-      var highest_sale = 0;
-      var average_sale = 0;
-      var last_sale = 0;
-      var sales_volume = 0;
-
-      this.nftEvents.forEach((event) => {
-        var currentTime = Date.parse(event.created_date);
-        if (
-          event["event_type"] === "offer_entered" ||
-          event["event_type"] === "bid_entered"
-        ) {
-          var bid_amount = event["bid_amount"];
-          if (bid_amount) {
-            total_bids += 1;
-            average_bid += bid_amount;
-            bid_volume += bid_amount;
-          }
-          if (currentTime > newestCreatedDate && bid_amount) {
-            last_bid = bid_amount;
-            newestCreatedDate = currentTime;
-          }
-          if (bid_amount > highest_bid) highest_bid = bid_amount;
-        }
-
-        if (event["event_type"] === "successful") {
-          var saleAmount = event["total_price"];
-          if (saleAmount) {
-            average_sale += saleAmount;
-            totalSales += 1;
-            sales_volume += saleAmount;
-          }
-
-          if (currentTime > newestSaleDate && saleAmount) {
-            last_sale = saleAmount;
-            newestSaleDate = currentTime;
-          }
-          if (saleAmount > highest_sale) highest_sale = saleAmount;
-        }
       }
     },
     async initSubscriptions() {},
@@ -628,7 +623,7 @@ export default {
       }).subscribe({
         next: (checkpoint) => {
           console.log("checkpoint", checkpoint);
-        }
+        },
       });
 
       setTimeout(() => {
@@ -664,9 +659,9 @@ export default {
       //   }, 2000);
       // }
     },
-    subscribeToEvents() {
+    async subscribeToEvents() {
       var eventSubscriber = API.graphql({
-        query: onCreateNftEvent
+        query: onCreateNftEvent,
       }).subscribe({
         next: (data) => {
           debugger;
@@ -681,83 +676,6 @@ export default {
         eventSubscriber.unsubscribe();
       }, 60000);
     },
-    // async setTotalFavorites(nftID) {
-    //   try {
-    //     const count = await API.graphql({
-    //       query: listUserFavoriteNfts,
-    //       variables: {
-    //         filter: { nftID: { eq: nftID } },
-    //       },
-    //     });
-    //     this.totalFavorites = Object.keys(
-    //       count.data.listUserFavoriteNfts.items
-    //     ).length;
-    //   } catch (e) {
-    //     console.error(e);
-    //   }
-    // },
-    // async setFavoriteStatus(userID, nftID) {
-    //   try {
-    //     // const has_favorited = await API.graphql({
-    //     //   query: listUserFavoriteNfts,
-    //     //   variables: {
-    //     //     filter: { userID: { eq: userID }, nftID: { eq: nftID } },
-    //     //   },
-    //     // });
-    //     var has_favorited = null;
-
-    //     if (
-    //       typeof has_favorited.data.listUserFavoriteNfts.items[0] !==
-    //       "undefined"
-    //     ) {
-    //       this.hasFavorited = true;
-    //     } else {
-    //       this.hasFavorited = false;
-    //     }
-    //   } catch (e) {
-    //     console.error(e);
-    //   }
-    // },
-    // if user has favorited, remove favorite
-    // else add favorite
-    // async favorite(userID, nftID) {
-    //   this.hasFavorited = !this.hasFavorited;
-    //   try {
-    //     const has_favorited = await API.graphql({
-    //       query: listUserFavoriteNfts,
-    //       variables: {
-    //         filter: { userID: { eq: userID }, nftID: { eq: nftID } },
-    //       },
-    //     });
-
-    //     if (
-    //       typeof has_favorited.data.listUserFavoriteNfts.items[0] !==
-    //       "undefined"
-    //     ) {
-    //       const userFavoriteNftId = {
-    //         id: has_favorited.data.listUserFavoriteNfts.items[0].id,
-    //       };
-    //       console.log("removing favorite");
-    //       this.totalFavorites -= 1;
-
-    //       await API.graphql({
-    //         query: deleteUserFavoriteNft,
-    //         variables: { input: userFavoriteNftId },
-    //       });
-    //     } else {
-    //       console.log("adding favorite");
-    //       this.totalFavorites += 1;
-
-    //       const userFavoriteNft = { userID, nftID };
-    //       await API.graphql({
-    //         query: createUserFavoriteNft,
-    //         variables: { input: userFavoriteNft },
-    //       });
-    //     }
-    //   } catch (e) {
-    //     console.error(e);
-    //   }
-    // },
   },
 };
 </script>
