@@ -565,6 +565,363 @@ export const deleteNftTraits = /* GraphQL */ `
     }
   }
 `;
+export const createNft = /* GraphQL */ `
+  mutation CreateNft(
+    $input: CreateNftInput!
+    $condition: ModelNftConditionInput
+  ) {
+    createNft(input: $input, condition: $condition) {
+      id
+      address
+      token_id
+      num_sales
+      background_color
+      image_url
+      image_preview_url
+      image_thumbnail_url
+      image_original_url
+      animation_url
+      animation_original_url
+      name
+      description
+      external_link
+      perma_link
+      primary_asset_contract {
+        id
+        slug
+        address
+        name
+        symbol
+        payout_address
+        asset_contract_type
+        created_date
+        description
+        image_url
+        total_supply
+        nft_version
+        opensea_version
+        schema_name
+        external_link
+        createdAt
+        updatedAt
+      }
+      owner
+      traits {
+        id
+        trait_type
+        value
+        display_type
+        max_value
+        trait_count
+        order
+        createdAt
+        updatedAt
+      }
+      favorited_by {
+        nextToken
+      }
+      watched_by {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateNft = /* GraphQL */ `
+  mutation UpdateNft(
+    $input: UpdateNftInput!
+    $condition: ModelNftConditionInput
+  ) {
+    updateNft(input: $input, condition: $condition) {
+      id
+      address
+      token_id
+      num_sales
+      background_color
+      image_url
+      image_preview_url
+      image_thumbnail_url
+      image_original_url
+      animation_url
+      animation_original_url
+      name
+      description
+      external_link
+      perma_link
+      primary_asset_contract {
+        id
+        slug
+        address
+        name
+        symbol
+        payout_address
+        asset_contract_type
+        created_date
+        description
+        image_url
+        total_supply
+        nft_version
+        opensea_version
+        schema_name
+        external_link
+        createdAt
+        updatedAt
+      }
+      owner
+      traits {
+        id
+        trait_type
+        value
+        display_type
+        max_value
+        trait_count
+        order
+        createdAt
+        updatedAt
+      }
+      favorited_by {
+        nextToken
+      }
+      watched_by {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteNft = /* GraphQL */ `
+  mutation DeleteNft(
+    $input: DeleteNftInput!
+    $condition: ModelNftConditionInput
+  ) {
+    deleteNft(input: $input, condition: $condition) {
+      id
+      address
+      token_id
+      num_sales
+      background_color
+      image_url
+      image_preview_url
+      image_thumbnail_url
+      image_original_url
+      animation_url
+      animation_original_url
+      name
+      description
+      external_link
+      perma_link
+      primary_asset_contract {
+        id
+        slug
+        address
+        name
+        symbol
+        payout_address
+        asset_contract_type
+        created_date
+        description
+        image_url
+        total_supply
+        nft_version
+        opensea_version
+        schema_name
+        external_link
+        createdAt
+        updatedAt
+      }
+      owner
+      traits {
+        id
+        trait_type
+        value
+        display_type
+        max_value
+        trait_count
+        order
+        createdAt
+        updatedAt
+      }
+      favorited_by {
+        nextToken
+      }
+      watched_by {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createTransaction = /* GraphQL */ `
+  mutation CreateTransaction(
+    $input: CreateTransactionInput!
+    $condition: ModelTransactionConditionInput
+  ) {
+    createTransaction(input: $input, condition: $condition) {
+      id
+      block_hash
+      transaction_hash
+      block_number
+      from_account
+      to_account
+      transaction_index
+      timestamp
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateTransaction = /* GraphQL */ `
+  mutation UpdateTransaction(
+    $input: UpdateTransactionInput!
+    $condition: ModelTransactionConditionInput
+  ) {
+    updateTransaction(input: $input, condition: $condition) {
+      id
+      block_hash
+      transaction_hash
+      block_number
+      from_account
+      to_account
+      transaction_index
+      timestamp
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteTransaction = /* GraphQL */ `
+  mutation DeleteTransaction(
+    $input: DeleteTransactionInput!
+    $condition: ModelTransactionConditionInput
+  ) {
+    deleteTransaction(input: $input, condition: $condition) {
+      id
+      block_hash
+      transaction_hash
+      block_number
+      from_account
+      to_account
+      transaction_index
+      timestamp
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createNftEvent = /* GraphQL */ `
+  mutation CreateNftEvent(
+    $input: CreateNftEventInput!
+    $condition: ModelNftEventConditionInput
+  ) {
+    createNftEvent(input: $input, condition: $condition) {
+      id
+      event_type
+      auction_type
+      bid_amount
+      collection_slug
+      contract_address
+      listing_time
+      address
+      token_id
+      created_date
+      from_account
+      to_account
+      is_private
+      transaction {
+        id
+        block_hash
+        transaction_hash
+        block_number
+        from_account
+        to_account
+        transaction_index
+        timestamp
+        createdAt
+        updatedAt
+      }
+      total_price
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateNftEvent = /* GraphQL */ `
+  mutation UpdateNftEvent(
+    $input: UpdateNftEventInput!
+    $condition: ModelNftEventConditionInput
+  ) {
+    updateNftEvent(input: $input, condition: $condition) {
+      id
+      event_type
+      auction_type
+      bid_amount
+      collection_slug
+      contract_address
+      listing_time
+      address
+      token_id
+      created_date
+      from_account
+      to_account
+      is_private
+      transaction {
+        id
+        block_hash
+        transaction_hash
+        block_number
+        from_account
+        to_account
+        transaction_index
+        timestamp
+        createdAt
+        updatedAt
+      }
+      total_price
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteNftEvent = /* GraphQL */ `
+  mutation DeleteNftEvent(
+    $input: DeleteNftEventInput!
+    $condition: ModelNftEventConditionInput
+  ) {
+    deleteNftEvent(input: $input, condition: $condition) {
+      id
+      event_type
+      auction_type
+      bid_amount
+      collection_slug
+      contract_address
+      listing_time
+      address
+      token_id
+      created_date
+      from_account
+      to_account
+      is_private
+      transaction {
+        id
+        block_hash
+        transaction_hash
+        block_number
+        from_account
+        to_account
+        transaction_index
+        timestamp
+        createdAt
+        updatedAt
+      }
+      total_price
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const createUser = /* GraphQL */ `
   mutation CreateUser(
     $input: CreateUserInput!
@@ -625,159 +982,6 @@ export const deleteUser = /* GraphQL */ `
     }
   }
 `;
-export const createNft = /* GraphQL */ `
-  mutation CreateNft(
-    $input: CreateNftInput!
-    $condition: ModelNftConditionInput
-  ) {
-    createNft(input: $input, condition: $condition) {
-      id
-      address
-      token_id
-      num_sales
-      background_color
-      image_url
-      image_preview_url
-      image_thumbnail_url
-      image_original_url
-      animation_url
-      animation_original_url
-      name
-      description
-      external_link
-      perma_link
-      primary_asset_contract {
-        id
-        slug
-        address
-        name
-        symbol
-        payout_address
-        asset_contract_type
-        created_date
-        description
-        image_url
-        total_supply
-        nft_version
-        opensea_version
-        schema_name
-        external_link
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-      favorited_by {
-        nextToken
-      }
-      watched_by {
-        nextToken
-      }
-    }
-  }
-`;
-export const updateNft = /* GraphQL */ `
-  mutation UpdateNft(
-    $input: UpdateNftInput!
-    $condition: ModelNftConditionInput
-  ) {
-    updateNft(input: $input, condition: $condition) {
-      id
-      address
-      token_id
-      num_sales
-      background_color
-      image_url
-      image_preview_url
-      image_thumbnail_url
-      image_original_url
-      animation_url
-      animation_original_url
-      name
-      description
-      external_link
-      perma_link
-      primary_asset_contract {
-        id
-        slug
-        address
-        name
-        symbol
-        payout_address
-        asset_contract_type
-        created_date
-        description
-        image_url
-        total_supply
-        nft_version
-        opensea_version
-        schema_name
-        external_link
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-      favorited_by {
-        nextToken
-      }
-      watched_by {
-        nextToken
-      }
-    }
-  }
-`;
-export const deleteNft = /* GraphQL */ `
-  mutation DeleteNft(
-    $input: DeleteNftInput!
-    $condition: ModelNftConditionInput
-  ) {
-    deleteNft(input: $input, condition: $condition) {
-      id
-      address
-      token_id
-      num_sales
-      background_color
-      image_url
-      image_preview_url
-      image_thumbnail_url
-      image_original_url
-      animation_url
-      animation_original_url
-      name
-      description
-      external_link
-      perma_link
-      primary_asset_contract {
-        id
-        slug
-        address
-        name
-        symbol
-        payout_address
-        asset_contract_type
-        created_date
-        description
-        image_url
-        total_supply
-        nft_version
-        opensea_version
-        schema_name
-        external_link
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-      favorited_by {
-        nextToken
-      }
-      watched_by {
-        nextToken
-      }
-    }
-  }
-`;
 export const createUserFavoriteNft = /* GraphQL */ `
   mutation CreateUserFavoriteNft(
     $input: CreateUserFavoriteNftInput!
@@ -785,15 +989,8 @@ export const createUserFavoriteNft = /* GraphQL */ `
   ) {
     createUserFavoriteNft(input: $input, condition: $condition) {
       id
-      userID
       nftID
-      user {
-        username
-        email
-        createdAt
-        updatedAt
-        id
-      }
+      userID
       nft {
         id
         address
@@ -810,8 +1007,16 @@ export const createUserFavoriteNft = /* GraphQL */ `
         description
         external_link
         perma_link
+        owner
         createdAt
         updatedAt
+      }
+      user {
+        username
+        email
+        createdAt
+        updatedAt
+        id
       }
       createdAt
       updatedAt
@@ -825,15 +1030,8 @@ export const updateUserFavoriteNft = /* GraphQL */ `
   ) {
     updateUserFavoriteNft(input: $input, condition: $condition) {
       id
-      userID
       nftID
-      user {
-        username
-        email
-        createdAt
-        updatedAt
-        id
-      }
+      userID
       nft {
         id
         address
@@ -850,8 +1048,16 @@ export const updateUserFavoriteNft = /* GraphQL */ `
         description
         external_link
         perma_link
+        owner
         createdAt
         updatedAt
+      }
+      user {
+        username
+        email
+        createdAt
+        updatedAt
+        id
       }
       createdAt
       updatedAt
@@ -865,15 +1071,8 @@ export const deleteUserFavoriteNft = /* GraphQL */ `
   ) {
     deleteUserFavoriteNft(input: $input, condition: $condition) {
       id
-      userID
       nftID
-      user {
-        username
-        email
-        createdAt
-        updatedAt
-        id
-      }
+      userID
       nft {
         id
         address
@@ -890,8 +1089,16 @@ export const deleteUserFavoriteNft = /* GraphQL */ `
         description
         external_link
         perma_link
+        owner
         createdAt
         updatedAt
+      }
+      user {
+        username
+        email
+        createdAt
+        updatedAt
+        id
       }
       createdAt
       updatedAt
@@ -905,15 +1112,8 @@ export const createUserWatchlistNft = /* GraphQL */ `
   ) {
     createUserWatchlistNft(input: $input, condition: $condition) {
       id
-      userID
       nftID
-      user {
-        username
-        email
-        createdAt
-        updatedAt
-        id
-      }
+      userID
       nft {
         id
         address
@@ -930,8 +1130,16 @@ export const createUserWatchlistNft = /* GraphQL */ `
         description
         external_link
         perma_link
+        owner
         createdAt
         updatedAt
+      }
+      user {
+        username
+        email
+        createdAt
+        updatedAt
+        id
       }
       createdAt
       updatedAt
@@ -945,15 +1153,8 @@ export const updateUserWatchlistNft = /* GraphQL */ `
   ) {
     updateUserWatchlistNft(input: $input, condition: $condition) {
       id
-      userID
       nftID
-      user {
-        username
-        email
-        createdAt
-        updatedAt
-        id
-      }
+      userID
       nft {
         id
         address
@@ -970,8 +1171,16 @@ export const updateUserWatchlistNft = /* GraphQL */ `
         description
         external_link
         perma_link
+        owner
         createdAt
         updatedAt
+      }
+      user {
+        username
+        email
+        createdAt
+        updatedAt
+        id
       }
       createdAt
       updatedAt
@@ -985,15 +1194,8 @@ export const deleteUserWatchlistNft = /* GraphQL */ `
   ) {
     deleteUserWatchlistNft(input: $input, condition: $condition) {
       id
-      userID
       nftID
-      user {
-        username
-        email
-        createdAt
-        updatedAt
-        id
-      }
+      userID
       nft {
         id
         address
@@ -1010,8 +1212,16 @@ export const deleteUserWatchlistNft = /* GraphQL */ `
         description
         external_link
         perma_link
+        owner
         createdAt
         updatedAt
+      }
+      user {
+        username
+        email
+        createdAt
+        updatedAt
+        id
       }
       createdAt
       updatedAt
