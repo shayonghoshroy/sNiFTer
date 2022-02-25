@@ -1,3 +1,6 @@
+'''
+Iterate thru all user-nft watchlist relationships, check for new transactions, and email each user accordingly
+'''
 import json
 import boto3
 
@@ -5,36 +8,41 @@ def handler(event, context):
     print('received event:')
     print(event)
 
-    # initialize boto client, set table names
+    # initialize boto3 clients
     client = boto3.client('dynamodb')
-    watchlist_table='UserWatchlistNft-ic7gmhldrbcyjaekjqst7cutma-shayondev'
-    user_table = 'user-ic7gmhldrbcyjaekjqst7cutma-shayondev'
-    
-    # email client
-    ses_client = boto3.client("ses", region_name="us-east-2")
-    CHARSET = "UTF-8"
+    ses_client = boto3.client("ses", region_name="us-east-2") # email
+    CHARSET = "UTF-8" # email setting
 
+    # set table names
+    #watchlist_table='UserWatchlistNft-l6kkjo2j3jf55dllykn3b64e2u-dev'
+    #user_table = 'user-l6kkjo2j3jf55dllykn3b64e2u-dev'
+    watchlist_table='UserWatchlistNft-ic7gmhldrbcyjaekjqst7cutma-shayondev'
+    user_table = 'user-ic7gmhldrbcyjaekjqst7cutma-shayondev'    
+    
+    # iterate thru all items in the UserWatchlist table
     for item in scan_table(client, watchlist_table):
-        ID = item["id"]['S']
-        userID = item["userID"]['S']
-        nftID = item["nftID"]['S']
-        email = get_email(client, userID, user_table)
-        # if transaction object exists, check for update
-        # else create new transaction attribute
-        transaction = get_transaction(nftID)
-        if "transaction" in item:
+        ID = item['id']['S']
+        userID = item['userID']['S']
+        nftID = item['nftID']['S']
+        email = get_email(client, userID, user_table) # get the user's email
+
+        # if a transaction attribute for the user model already exists, check for new update
+        transaction = get_transaction(nftID) # get latest transaction
+        if 'transaction' in item:
             print('yes transaction')
             print(item['transaction']['S'], transaction)
+            # if the latest transaction is different that the previous one, set it and email user
             if item['transaction']['S'] != transaction:
                 set_transaction(client, watchlist_table, ID, userID, nftID, transaction)
                 send_email(ses_client, CHARSET, userID, nftID, transaction, email)
-                
+
+        # else create new transaction attribute        
         else:
             print('no transaction')
+            # set transaction attribute to latest update, email user
             set_transaction(client, watchlist_table, ID, userID, nftID, transaction)
             send_email(ses_client, CHARSET, userID, nftID, transaction, email)
             
-        #send_email(ses_client, CHARSET, userID, nftID, email)
         print(userID, nftID, email, transaction)
         
     return {
@@ -49,11 +57,11 @@ def handler(event, context):
 
 # yield all items from the watchlist table one at a time
 def scan_table(client, watchlist_table):
-    paginator = client.get_paginator("scan")
+    paginator = client.get_paginator('scan')
     for page in paginator.paginate(TableName=watchlist_table):
-        yield from page["Items"]
+        yield from page['Items']
         
-# given a user id, return their email
+# given a user id, return their email address that's stored in the user table
 def get_email(client, userID, user_table):
     response = client.get_item(
         TableName=user_table,
@@ -68,7 +76,7 @@ def send_email(ses_client, CHARSET, userID, nftID, transaction, email):
     HTML_EMAIL_CONTENT = """
         <html>
             <head></head>
-            <h1 style='text-align:left'>"""+userID+""", a new transaction just occured for an NFT on your watchlist.</h1>
+            <h1 style='text-align:left'>"""+userID+""", a new transaction just occurred for an NFT on your watchlist.</h1>
             <p style='text-align:left'>NFT ID: """+nftID+"""</p>
             <p style='text-align:left'>Transaction: """+transaction+"""</p>
             </body>
@@ -96,7 +104,7 @@ def send_email(ses_client, CHARSET, userID, nftID, transaction, email):
         Source="sghoshroy21@gmail.com",
     )
 
-# update table item to include a transaction
+# update a user-watchlist table item to include a transaction attribute and set it to be the latest transaction
 def set_transaction(client, watchlist_table, ID, userID, nftID, transaction):
     data = client.put_item(
     TableName=watchlist_table,
@@ -116,9 +124,6 @@ def set_transaction(client, watchlist_table, ID, userID, nftID, transaction):
     } 
   )
   
-# get latest nft transaction
+# TODO: get the latest nft transaction
 def get_transaction(nftID):
-    return "my mom"
-    
-    
-    
+    return "your mom"
