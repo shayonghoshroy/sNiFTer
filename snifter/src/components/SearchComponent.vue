@@ -1,5 +1,5 @@
 <template>
-  <div class="searchComponent">
+  <div class="search-component">
     <div class="search-wrapper">
       <va-button-dropdown
         :icon="searchTypes.at(searchIndex)[1]"
@@ -121,6 +121,7 @@ export default {
 
 .search-item-list {
   padding: 1em;
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
 .search-item:hover {

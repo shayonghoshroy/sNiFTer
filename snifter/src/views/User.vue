@@ -1,13 +1,15 @@
 <template>
   <div class="background-height">
     <div class="height">
-      <div><Profile /></div>
       <div>
         <authenticator>
           <template v-slot="{ signOut }">
+            <div class="margin-bottom">
+              <Profile />
+            </div>
             <div>
               <button class="button is-purple" @click="signOut">
-                <div class="is-white">Sign Out</div>
+                Sign Out
               </button>
             </div>
           </template>
@@ -22,6 +24,7 @@ import { Authenticator } from "@aws-amplify/ui-vue";
 import "@aws-amplify/ui-vue/styles.css";
 import Amplify from "aws-amplify";
 import awsconfig from "../aws-exports";
+import { Auth } from "aws-amplify";
 
 Amplify.configure(awsconfig);
 </script>
@@ -36,7 +39,18 @@ export default {
     Profile,
   },
   data() {
-    return {};
+    return {
+      username: this.username,
+    };
+  },
+  async created() {
+    try {
+      const user = await Auth.currentAuthenticatedUser();
+      this.user = user;
+      this.username = user.username;
+    } catch (e) {
+      console.error(e);
+    }
   },
   methods: {
     reloadPage() {
@@ -48,7 +62,8 @@ export default {
 
 <style lang="css" scoped>
 .is-purple {
-  background-color: #6f36bc;
+  color: #6f36bc;
+  font-weight: 500;
 }
 .is-white {
   color: #ffffff;
@@ -65,5 +80,8 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.margin-bottom {
+  margin-bottom: 1rem;
 }
 </style>

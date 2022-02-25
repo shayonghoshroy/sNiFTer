@@ -23,7 +23,6 @@ export default {
       const user = await Auth.currentAuthenticatedUser();
       this.user = user;
       this.username = user.username;
-      console.log("reached");
       this.email = user.attributes.email;
       this.first_name = user.attributes.given_name;
       this.last_name = user.attributes.family_name;

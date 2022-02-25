@@ -32,11 +32,6 @@
         </div>
         <div v-else>
           <div class="buttons">
-            <div>
-              <router-link to="/register" class="button is-purple">
-                <div class="is-purple">Register</div>
-              </router-link>
-            </div>
             <div class="navbar-item">
               <router-link to="/user" class="button is-purple">
                 <div class="is-purple">Sign In</div>
@@ -102,6 +97,7 @@ nav {
 }
 .is-purple {
   color: #6f36bc;
+  font-weight: 500;
 }
 .is-white {
   color: #ffffff;

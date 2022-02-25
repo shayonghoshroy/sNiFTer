@@ -48,4 +48,9 @@ export default {
   },
 };
 </script>
-<style lang="css" scoped></style>
+<style lang="css" scoped>
+.collection-information {
+  background: #fff;
+  margin-bottom: 15px;
+}
+</style>

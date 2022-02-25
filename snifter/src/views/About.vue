@@ -24,7 +24,7 @@ h1 {
   text-align: center;
 }
 .description {
-  width: 60vw;
+  width: 92vw;
   height: 90vh;
 }
 </style>
