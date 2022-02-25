@@ -1,5 +1,5 @@
 <template>
-  <div class="search">
+  <div class="search description">
     <article>
       <h2>Take your pick</h2>
       <p>You've already got your eye on these</p>
@@ -53,6 +53,7 @@ export default {
 h1 {
   margin-top: 1em;
   text-align: center;
+  color: white;
 }
 
 .search {
@@ -61,16 +62,18 @@ h1 {
 }
 
 .description {
-  width: 60vw;
+  width: 100vw;
+  height: 90vh;
 }
 p {
   font-size: clamp(16px, 1.2vw, 1.2vw);
   line-height: 2;
-  color: #9d9d9d;
+  color: #ffffff;
 }
 h2 {
   font-size: clamp(24px, 3vw, 3vw);
   font-weight: 300;
   margin: 0;
+  color: white;
 }
 </style>

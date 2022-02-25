@@ -4,7 +4,7 @@ from datetime import datetime
 
 from typing import List, Optional
 
-from .nft import NFT
+from .nft import NFT, NFTTraits
 
 class PaymentToken(BaseModel):
     id: str
@@ -77,7 +77,7 @@ class Collection(BaseModel):
     editors: List[str] = []
     slug: str
     name: str
-    traits: dict
+    traits: Optional[List[NFTTraits]]
     stats: CollectionStats
     description: str
     image_url: str = None
@@ -104,6 +104,14 @@ class Collection(BaseModel):
         # Set collections slugs for model relationship in graphql
         asset_contracts = data['primary_asset_contracts']
         data['primary_asset_contracts'] = [(lambda contract: contract.update({'slug': data['slug']}) or contract)(contract) for contract in asset_contracts]
+
+        traits = data.get('traits', None)
+        if traits is not None:
+            formatted_traits = []
+            for trait_type, trait in traits.items():
+                for value, count in trait.items():
+                    formatted_traits.append(NFTTraits(**{'trait_type':trait_type, 'value': value, 'trait_count': count}))
+            data['traits'] = formatted_traits
 
         super().__init__(**data)
    

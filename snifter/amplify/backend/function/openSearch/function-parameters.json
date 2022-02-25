@@ -15,27 +15,7 @@
         "Subscription"
       ]
     },
-    "function": {
-      "scrapeTweets": [
-        "create",
-        "read",
-        "update",
-        "delete"
-      ],
-      "nftScraper": [
-        "create",
-        "read",
-        "update",
-        "delete"
-      ]
-    },
     "storage": {
-      "tweet:@model(appsync)": [
-        "create",
-        "read",
-        "update",
-        "delete"
-      ],
       "collectionStats:@model(appsync)": [
         "create",
         "read",
@@ -55,12 +35,6 @@
         "delete"
       ],
       "nftTraits:@model(appsync)": [
-        "create",
-        "read",
-        "update",
-        "delete"
-      ],
-      "user:@model(appsync)": [
         "create",
         "read",
         "update",

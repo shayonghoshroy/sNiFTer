@@ -1,14 +1,18 @@
 <template>
-  <authenticator initial-state="signUp">
-    <template v-slot="{ user, signOut }">
-      <h1>Hello {{ user.username }}!</h1>
-      <div class="padding">
-        <button class="button is-purple" @click="signOut">
-          <div class="is-white">Sign Out</div>
-        </button>
-      </div>
-    </template>
-  </authenticator>
+  <div class="background-height">
+    <div class="height">
+      <authenticator initial-state="signUp">
+        <template v-slot="{ user, signOut }">
+          <h1>Hello {{ user.username }}!</h1>
+          <div class="padding">
+            <button class="button is-purple" @click="signOut">
+              <div class="is-white">Sign Out</div>
+            </button>
+          </div>
+        </template>
+      </authenticator>
+    </div>
+  </div>
 </template>
 
 <script setup>
@@ -30,5 +34,13 @@ Amplify.configure(awsconfig);
 }
 .padding {
   padding-top: 1rem;
+}
+.height {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.background-height {
+  height: 90vh;
 }
 </style>
