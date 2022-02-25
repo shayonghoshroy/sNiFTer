@@ -43,7 +43,7 @@ type collectionStats @model @auth(rules: [{allow: public}]) {
 }
 
 # Collection related models
-type collection @model @auth(rules: [{allow: public}]){
+type collection @model @searchable @auth(rules: [{allow: public}]){
  id: ID!
  slug: ID!
  name: String!
@@ -102,15 +102,6 @@ type nftTraits @model @auth(rules: [{allow: public}]){
  createdAt: AWSDateTime
  updatedAt:AWSDateTime
 }
-
-type user @model {
-    username: ID!
-    email: String
-    favorite_nfts: [nft] @manyToMany(relationName: "UserFavoriteNft")
-    watchlist_nfts: [nft] @manyToMany(relationName: "UserWatchlistNft")
-    createdAt: AWSDateTime
-    updatedAt:AWSDateTime
-}
  
 type nft @model {
  id: ID!
@@ -129,8 +120,52 @@ type nft @model {
  external_link: String
  perma_link: String
  primary_asset_contract: nftAssetContract @belongsTo(fields: ["address"])
+ owner: String
+ traits: [nftTraits]
+ favorited_by: [user] @manyToMany(relationName: "UserFavoriteNft")	
+ watched_by: [user] @manyToMany(relationName: "UserWatchlistNft")
  createdAt: AWSDateTime
  updatedAt:AWSDateTime
- favorited_by: [user] @manyToMany(relationName: "UserFavoriteNft")
- watched_by: [user] @manyToMany(relationName: "UserWatchlistNft")
+}
+
+type Transaction @model @searchable {
+    id: ID!
+    block_hash: ID!
+    transaction_hash: ID!
+    block_number: Int!
+    from_account: String!
+    to_account: String!
+    transaction_index: String!
+    timestamp: String!
+    createdAt: AWSDateTime
+    updatedAt:AWSDateTime
+}
+
+type nftEvent @model @searchable {
+    id: ID!
+    event_type: String!
+    auction_type: String
+    bid_amount: String
+    collection_slug: String
+    contract_address: String
+    listing_time: String
+    address: String
+    token_id: Int
+    created_date: String
+    from_account: String
+    to_account: String
+    is_private: Boolean
+    transaction: Transaction
+    total_price: Int
+    createdAt: AWSDateTime
+    updatedAt:AWSDateTime
+}
+
+type user @model {
+    username: ID!
+    email: String
+    favorite_nfts: [nft] @manyToMany(relationName: "UserFavoriteNft")
+    watchlist_nfts: [nft] @manyToMany(relationName: "UserWatchlistNft")
+    createdAt: AWSDateTime
+    updatedAt:AWSDateTime
 }
