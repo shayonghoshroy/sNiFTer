@@ -129,6 +129,8 @@ type nft @model {
  primary_asset_contract: nftAssetContract @belongsTo(fields: ["address"])
  owner: String
  traits: [nftTraits]
+ favorited_by: [user] @manyToMany(relationName: "UserFavoriteNft")	
+ watched_by: [user] @manyToMany(relationName: "UserWatchlistNft")
  createdAt: AWSDateTime
  updatedAt:AWSDateTime
  favorited_by: [user] @manyToMany(relationName: "UserFavoriteNft")
@@ -172,6 +174,15 @@ type nftEventCheckpoint @model {
     saved_events: Int
     total_events: Int
     status: String
+    createdAt: AWSDateTime
+    updatedAt:AWSDateTime
+}
+
+type user @model {
+    username: ID!
+    email: String
+    favorite_nfts: [nft] @manyToMany(relationName: "UserFavoriteNft")
+    watchlist_nfts: [nft] @manyToMany(relationName: "UserWatchlistNft")
     createdAt: AWSDateTime
     updatedAt:AWSDateTime
 }
