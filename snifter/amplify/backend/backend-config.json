@@ -157,7 +157,7 @@
       "service": "Lambda",
       "dependsOn": []
     },
-    "openSearch": {
+    "createUserModelOnSignup": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda",
@@ -176,6 +176,20 @@
             "GraphQLAPIIdOutput",
             "GraphQLAPIEndpointOutput",
             "GraphQLAPIKeyOutput"
+          ]
+        },
+        {
+          "category": "function",
+          "resourceName": "scrapeTweets",
+          "attributes": [
+            "Name"
+          ]
+        },
+        {
+          "category": "function",
+          "resourceName": "nftScraper",
+          "attributes": [
+            "Name"
           ]
         }
       ]

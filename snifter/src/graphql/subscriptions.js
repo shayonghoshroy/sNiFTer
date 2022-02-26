@@ -569,11 +569,11 @@ export const onCreateNft = /* GraphQL */ `
         createdAt
         updatedAt
       }
-      favorited_by {	
-        nextToken	
-      }	
-      watched_by {	
-        nextToken	
+      favorited_by {
+        nextToken
+      }
+      watched_by {
+        nextToken
       }
       createdAt
       updatedAt
@@ -629,11 +629,11 @@ export const onUpdateNft = /* GraphQL */ `
         createdAt
         updatedAt
       }
-      favorited_by {	
-        nextToken	
-      }	
-      watched_by {	
-        nextToken	
+      favorited_by {
+        nextToken
+      }
+      watched_by {
+        nextToken
       }
       createdAt
       updatedAt
@@ -689,11 +689,11 @@ export const onDeleteNft = /* GraphQL */ `
         createdAt
         updatedAt
       }
-      favorited_by {	
-        nextToken	
-      }	
-      watched_by {	
-        nextToken	
+      favorited_by {
+        nextToken
+      }
+      watched_by {
+        nextToken
       }
       createdAt
       updatedAt
@@ -889,6 +889,7 @@ export const onDeleteNftEventCheckpoint = /* GraphQL */ `
 export const onCreateUser = /* GraphQL */ `
   subscription OnCreateUser {
     onCreateUser {
+      id
       username
       email
       favorite_nfts {
@@ -899,13 +900,13 @@ export const onCreateUser = /* GraphQL */ `
       }
       createdAt
       updatedAt
-      id
     }
   }
 `;
 export const onUpdateUser = /* GraphQL */ `
   subscription OnUpdateUser {
     onUpdateUser {
+      id
       username
       email
       favorite_nfts {
@@ -916,13 +917,13 @@ export const onUpdateUser = /* GraphQL */ `
       }
       createdAt
       updatedAt
-      id
     }
   }
 `;
 export const onDeleteUser = /* GraphQL */ `
   subscription OnDeleteUser {
     onDeleteUser {
+      id
       username
       email
       favorite_nfts {
@@ -933,7 +934,6 @@ export const onDeleteUser = /* GraphQL */ `
       }
       createdAt
       updatedAt
-      id
     }
   }
 `;
@@ -964,11 +964,11 @@ export const onCreateUserFavoriteNft = /* GraphQL */ `
         updatedAt
       }
       user {
+        id
         username
         email
         createdAt
         updatedAt
-        id
       }
       createdAt
       updatedAt
@@ -1002,11 +1002,11 @@ export const onUpdateUserFavoriteNft = /* GraphQL */ `
         updatedAt
       }
       user {
+        id
         username
         email
         createdAt
         updatedAt
-        id
       }
       createdAt
       updatedAt
@@ -1040,11 +1040,11 @@ export const onDeleteUserFavoriteNft = /* GraphQL */ `
         updatedAt
       }
       user {
+        id
         username
         email
         createdAt
         updatedAt
-        id
       }
       createdAt
       updatedAt
@@ -1078,11 +1078,11 @@ export const onCreateUserWatchlistNft = /* GraphQL */ `
         updatedAt
       }
       user {
+        id
         username
         email
         createdAt
         updatedAt
-        id
       }
       createdAt
       updatedAt
@@ -1116,11 +1116,11 @@ export const onUpdateUserWatchlistNft = /* GraphQL */ `
         updatedAt
       }
       user {
+        id
         username
         email
         createdAt
         updatedAt
-        id
       }
       createdAt
       updatedAt
@@ -1154,11 +1154,11 @@ export const onDeleteUserWatchlistNft = /* GraphQL */ `
         updatedAt
       }
       user {
+        id
         username
         email
         createdAt
         updatedAt
-        id
       }
       createdAt
       updatedAt

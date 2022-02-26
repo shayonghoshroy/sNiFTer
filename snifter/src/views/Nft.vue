@@ -221,13 +221,13 @@ import {
   listNfts,
   listNftEvents,
   //listNftEventCheckpoints,
-  //listUserFavoriteNfts,
+  listUserFavoriteNfts,
 } from "../graphql/queries";
 import { fetchCollection, nftEventQueue } from "../services/nftScraperService";
-// import {
-//   createUserFavoriteNft,
-//   deleteUserFavoriteNft,
-// } from "../graphql/mutations";
+import {
+  createUserFavoriteNft,
+  deleteUserFavoriteNft,
+} from "../graphql/mutations";
 import {
   onCreateNftEvent,
   onUpdateNftEventCheckpoint,
