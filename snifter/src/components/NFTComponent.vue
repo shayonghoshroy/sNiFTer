@@ -57,6 +57,7 @@
 require("@/assets/logo3.png");
 
 import { API } from "aws-amplify";
+import { Auth } from "aws-amplify";
 import { listNfts, listUserFavoriteNfts } from "../graphql/queries";
 import {
   createUserFavoriteNft,
@@ -65,6 +66,7 @@ import {
 export default {
   name: "NFTComponent",
   async created() {
+    this.getUser();
     this.getNFTs();
   },
   data() {
@@ -76,10 +78,14 @@ export default {
       image_preview_url: "",
       token_id: "",
       nfts: [],
-      user: "shayon",
+      user: "",
     };
   },
   methods: {
+    async getUser (){
+      const user = await Auth.currentAuthenticatedUser();
+      this.user = user.username;
+    },
     async getNFTs() {
       try {
         const nfts = await API.graphql({
@@ -89,7 +95,7 @@ export default {
           },
         });
         this.nfts = nfts.data.listNfts.items;
-        console.log(this.nfts);
+        //console.log(this.nfts);
       } catch (e) {
         console.error(e);
       }
@@ -116,7 +122,7 @@ export default {
             this.nfts[i].hasFavorited = false;
           }
         } catch (e) {
-          console.error(e);
+          //console.error(e);
         }
 
         // add total number of favorites

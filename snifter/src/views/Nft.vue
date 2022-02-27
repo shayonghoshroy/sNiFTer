@@ -28,6 +28,20 @@
             />
             <div class="nft-interactions">
               <div class="nft-stub">
+                <div class="watchlist-icon">
+                  <va-icon
+                    v-if="isWatching"
+                    name="visibility"
+                    size="large"
+                    @click="watch(this.user, nft.id)"
+                  ></va-icon>
+                  <va-icon
+                    v-else
+                    name="visibility_off"
+                    size="large"
+                    @click="watch(this.user, nft.id)"
+                  ></va-icon>
+                </div>
                 <div class="nft-icon">
                   <va-icon
                     v-if="hasFavorited"
@@ -215,6 +229,7 @@
 
 <script>
 import { API } from "aws-amplify";
+import { Auth } from "aws-amplify";
 import {
   listCollections,
   listNftAssetContracts,
@@ -222,11 +237,14 @@ import {
   listNftEvents,
   //listNftEventCheckpoints,
   listUserFavoriteNfts,
+  listUserWatchlistNfts,
 } from "../graphql/queries";
 import { fetchCollection, nftEventQueue } from "../services/nftScraperService";
 import {
   createUserFavoriteNft,
   deleteUserFavoriteNft,
+  createUserWatchlistNft,
+  deleteUserWatchlistNft,
 } from "../graphql/mutations";
 import {
   onCreateNftEvent,
@@ -248,6 +266,8 @@ export default {
     TransactionTable,
   },
   async created() {
+    this.getUser();
+
     console.log(this.$route.query);
     this.nftData = this.$route.query;
     await this.subscribeToEvents();
@@ -256,6 +276,11 @@ export default {
 
     console.log(this.nft);
     await this.getNFTs(this.nftData.address);
+
+    this.setFavoriteStatus(this.user, this.nftData.id);
+    this.setTotalFavorites(this.nftData.id);
+
+    this.setWatchStatus(this.user, this.nftData.id);
 
     if (this.collection === null || this.collection === undefined) {
       await this.collectionRequest(this.currentContract.slug);
@@ -278,8 +303,8 @@ export default {
     await this.subscribeToCheckpoint(resp["messageId"]);
     console.log(this.nftEvents);
 
-    //this.setFavoriteStatus(this.user, this.nftData.id);
-    //this.setTotalFavorites(this.nftData.id);
+    
+
   },
   data() {
     return {
@@ -296,8 +321,9 @@ export default {
       nftEvents: [],
       showNftAccordion: [false, false],
       hasFavorited: false,
+      isWatching: false,
       totalFavorites: null,
-      user: "shayon",
+      user: "",
       lastCheckpoint: {},
     };
   },
@@ -398,6 +424,67 @@ export default {
     },
   },
   methods: {
+    async getUser (){
+      const user = await Auth.currentAuthenticatedUser();
+      this.user = user.username;
+    },
+    async setWatchStatus(userID, nftID) {
+      try {
+        const is_watching = await API.graphql({
+          query: listUserWatchlistNfts,
+          variables: {
+            filter: { userID: { eq: userID }, nftID: { eq: nftID } },
+          },
+        });
+        if (
+          typeof is_watching.data.listUserWatchlistNfts.items[0] !==
+          "undefined"
+        ) {
+          this.isWatching = true;
+          console.log("is watching");
+        } else {
+          this.isWatching = false;
+          console.log("not watching");
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    // if user is watching, remove watch
+    // else add watch
+    async watch(userID, nftID) {
+      this.isWatching = !this.isWatching;
+      try {
+        const is_watching = await API.graphql({
+          query: listUserWatchlistNfts,
+          variables: {
+            filter: { userID: { eq: userID }, nftID: { eq: nftID } },
+          },
+        });
+        if (
+          typeof is_watching.data.listUserWatchlistNfts.items[0] !==
+          "undefined"
+        ) {
+          const userWatchlistNftId = {
+            id: is_watching.data.listUserWatchlistNfts.items[0].id,
+          };
+          console.log("removing watch");
+          await API.graphql({
+            query: deleteUserWatchlistNft,
+            variables: { input: userWatchlistNftId },
+          });
+        } else {
+          console.log("adding watch");
+          const userWatchlistNft = { userID, nftID };
+          await API.graphql({
+            query: createUserWatchlistNft,
+            variables: { input: userWatchlistNft },
+          });
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    },
     async setTotalFavorites(nftID) {
       try {
         const count = await API.graphql({
@@ -426,8 +513,10 @@ export default {
           "undefined"
         ) {
           this.hasFavorited = true;
+          console.log("has favorited");
         } else {
           this.hasFavorited = false;
+          console.log("not favorited");
         }
       } catch (e) {
         console.error(e);
@@ -832,6 +921,16 @@ h1 {
     align-items: center;
     justify-content: center;
   }
+}
+
+.watchlist-icon {
+  display: inline-block;
+  margin-left: 1em;
+}
+
+.watchlist-icon:hover {
+  cursor: pointer;
+  color: red;
 }
 
 .nft-icon {
