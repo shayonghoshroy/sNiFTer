@@ -19,15 +19,31 @@
         },
         "nftScraper": {
           "deploymentBucketName": "amplify-snifter-dev-34702-deployment",
-          "s3Key": "amplify-builds/nftScraper-34534b597030766c4d77-build.zip"
+          "s3Key": "amplify-builds/nftScraper-376347383955584e4b44-build.zip"
         },
         "createUserModelOnSignup": {
           "deploymentBucketName": "amplify-snifter-dev-34702-deployment",
-          "s3Key": "amplify-builds/createUserModelOnSignup-31466430697239374c55-build.zip"
+          "s3Key": "amplify-builds/createUserModelOnSignup-58776867556439454b51-build.zip"
         },
         "watchlistNotifications": {
           "deploymentBucketName": "amplify-snifter-dev-34702-deployment",
-          "s3Key": "amplify-builds/watchlistNotifications-34336342646170346f47-build.zip"
+          "s3Key": "amplify-builds/watchlistNotifications-4630516a64545132306c-build.zip"
+        },
+        "transactionScraper": {
+          "deploymentBucketName": "amplify-snifter-dev-34702-deployment",
+          "s3Key": "amplify-builds/transactionScraper-774a4b475148624c4864-build.zip"
+        },
+        "openSearch": {
+          "deploymentBucketName": "amplify-snifter-dev-34702-deployment",
+          "s3Key": "amplify-builds/openSearch-426d6b68456d48594a38-build.zip"
+        },
+        "gatewayQueueProxy": {
+          "deploymentBucketName": "amplify-snifter-dev-34702-deployment",
+          "s3Key": "amplify-builds/gatewayQueueProxy-503437727542446a6a58-build.zip"
+        },
+        "sendEmails": {
+          "deploymentBucketName": "amplify-snifter-dev-34702-deployment",
+          "s3Key": "amplify-builds/sendEmails-734f2b53384d49634558-build.zip"
         }
       },
       "hosting": {
