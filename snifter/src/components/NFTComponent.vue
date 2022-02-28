@@ -6,12 +6,20 @@
           <div class="flex md6 lg4">
             <va-card class="nft-card" style="height: 300px; width: 250px">
               <router-link :to="{ name: 'Nft', query: nft }">
-                <va-image
-                  v-if="nft.image_url"
-                  class="rounded-card"
-                  :src="nft.image_url"
-                  style="height: 200px"
-                />
+                <div v-if="nft.image_url !== undefined && nft.image_url !== ''">
+                  <va-image
+                    class="rounded-card"
+                    :src="nft.image_url"
+                    style="height: 200px"
+                  />
+                </div>
+                <div v-else>
+                  <va-image
+                    class="rounded-card"
+                    src="../assets/logo3.png"
+                    style="height: 200px"
+                  />
+                </div>
                 <va-card-title v-if="nft.name">{{ nft.name }}</va-card-title>
                 <va-card-title v-else>{{ nft.token_id }}</va-card-title>
               </router-link>
@@ -46,7 +54,10 @@
 </template>
 
 <script>
+require("@/assets/logo3.png");
+
 import { API } from "aws-amplify";
+import { Auth } from "aws-amplify";
 import { listNfts, listUserFavoriteNfts } from "../graphql/queries";
 import {
   createUserFavoriteNft,
@@ -55,6 +66,7 @@ import {
 export default {
   name: "NFTComponent",
   async created() {
+    this.getUser();
     this.getNFTs();
   },
   data() {
@@ -66,10 +78,14 @@ export default {
       image_preview_url: "",
       token_id: "",
       nfts: [],
-      user: "shayon",
+      user: "",
     };
   },
   methods: {
+    async getUser (){
+      const user = await Auth.currentAuthenticatedUser();
+      this.user = user.username;
+    },
     async getNFTs() {
       try {
         const nfts = await API.graphql({
@@ -105,7 +121,7 @@ export default {
             this.nfts[i].hasFavorited = false;
           }
         } catch (e) {
-          console.error(e);
+          //console.error(e);
         }
 
         // add total number of favorites
