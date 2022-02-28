@@ -7,10 +7,12 @@ export const onCreateTweet = /* GraphQL */ `
       id
       text
       username
-      reply_count
       retweet_count
-      like_count
-      interaction_count
+      following_count
+      followers_count
+      favorite_count
+      total_tweets
+      URL
       createdAt
       updatedAt
       date
@@ -23,10 +25,12 @@ export const onUpdateTweet = /* GraphQL */ `
       id
       text
       username
-      reply_count
       retweet_count
-      like_count
-      interaction_count
+      following_count
+      followers_count
+      favorite_count
+      total_tweets
+      URL
       createdAt
       updatedAt
       date
@@ -39,13 +43,72 @@ export const onDeleteTweet = /* GraphQL */ `
       id
       text
       username
-      reply_count
       retweet_count
-      like_count
-      interaction_count
+      following_count
+      followers_count
+      favorite_count
+      total_tweets
+      URL
       createdAt
       updatedAt
       date
+    }
+  }
+`;
+export const onCreateTwitterUser = /* GraphQL */ `
+  subscription OnCreateTwitterUser {
+    onCreateTwitterUser {
+      id
+      name
+      screen_name
+      location
+      description
+      URL
+      followers
+      friends_count
+      listed_count
+      acct_created_at
+      verified
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateTwitterUser = /* GraphQL */ `
+  subscription OnUpdateTwitterUser {
+    onUpdateTwitterUser {
+      id
+      name
+      screen_name
+      location
+      description
+      URL
+      followers
+      friends_count
+      listed_count
+      acct_created_at
+      verified
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteTwitterUser = /* GraphQL */ `
+  subscription OnDeleteTwitterUser {
+    onDeleteTwitterUser {
+      id
+      name
+      screen_name
+      location
+      description
+      URL
+      followers
+      friends_count
+      listed_count
+      acct_created_at
+      verified
+      createdAt
+      updatedAt
     }
   }
 `;

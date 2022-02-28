@@ -166,10 +166,12 @@ export const getTweet = /* GraphQL */ `
       id
       text
       username
-      reply_count
       retweet_count
-      like_count
-      interaction_count
+      following_count
+      followers_count
+      favorite_count
+      total_tweets
+      URL
       createdAt
       updatedAt
       date
@@ -187,13 +189,60 @@ export const listTweets = /* GraphQL */ `
         id
         text
         username
-        reply_count
         retweet_count
-        like_count
-        interaction_count
+        following_count
+        followers_count
+        favorite_count
+        total_tweets
+        URL
         createdAt
         updatedAt
         date
+      }
+      nextToken
+    }
+  }
+`;
+export const getTwitterUser = /* GraphQL */ `
+  query GetTwitterUser($id: ID!) {
+    getTwitterUser(id: $id) {
+      id
+      name
+      screen_name
+      location
+      description
+      URL
+      followers
+      friends_count
+      listed_count
+      acct_created_at
+      verified
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listTwitterUsers = /* GraphQL */ `
+  query ListTwitterUsers(
+    $filter: ModelTwitterUserFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listTwitterUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        name
+        screen_name
+        location
+        description
+        URL
+        followers
+        friends_count
+        listed_count
+        acct_created_at
+        verified
+        createdAt
+        updatedAt
       }
       nextToken
     }
@@ -602,23 +651,6 @@ export const listNfts = /* GraphQL */ `
         external_link
         perma_link
         owner
-        traits {
-          id
-          trait_type
-          value
-          display_type
-          max_value
-          trait_count
-          order
-          createdAt
-          updatedAt
-        }
-        favorited_by {
-          nextToken
-        }
-        watched_by {
-          nextToken
-        }
         createdAt
         updatedAt
       }
@@ -791,6 +823,12 @@ export const listUsers = /* GraphQL */ `
         id
         username
         email
+        favorite_nfts {
+          nextToken
+        }
+        watchlist_nfts {
+          nextToken
+        }
         createdAt
         updatedAt
       }
