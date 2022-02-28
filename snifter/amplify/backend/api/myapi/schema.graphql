@@ -1,0 +1,181 @@
+# This "input" configures a global authorization rule to enable public access to
+# all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
+input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONLY!
+
+type tweet @model {
+ id: ID!
+ text: String
+ username: String
+ reply_count: Int
+ retweet_count: Int
+ like_count: Int
+ interaction_count: Int
+ createdAt: AWSDateTime
+ updatedAt:AWSDateTime
+ date: String
+}
+
+type collectionStats @model @auth(rules: [{allow: public}]) {
+ id: ID!
+ one_day_volume: Float
+ one_day_change: Float
+ one_day_sales: Int
+ one_day_average_price: Float
+ seven_day_volume: Float
+ seven_day_change: Float
+ seven_day_sales: Int
+ seven_day_average_price: Float
+ thirty_day_volume: Float
+ thirty_day_change: Float
+ thirty_day_sales: Int
+ thirty_day_average_price: Float
+ total_volume: Float
+ total_sales: Int
+ total_supply: Int
+ count: Int
+ num_owners: Int
+ average_price: Float
+ num_reports: Int
+ market_cap: Float
+ floor_price: Int
+ createdAt: AWSDateTime
+ updatedAt:AWSDateTime
+}
+
+# Collection related models
+type collection @model @searchable @auth(rules: [{allow: public}]){
+ id: ID!
+ slug: ID!
+ name: String!
+ traits: [nftTraits]
+ stats: collectionStats
+ description: String
+ image_url: String
+ external_url: String
+ # payment_tokens: String
+ primary_asset_contracts: [nftAssetContract] @hasMany(indexName: "contractsByCollection", fields: ["slug"])
+ banner_image_url: String
+ char_url: String
+ created_date: Int
+ discord_url: String
+ featured: Boolean
+ featured_image_url: String
+ payout_address: String
+ telegram_url: String
+ twitter_username: String
+ instagram_username: String
+ wiki_url: String
+ createdAt: AWSDateTime
+ updatedAt: AWSDateTime
+}
+ 
+type nftAssetContract @model @auth(rules: [{allow: public}]){
+ id: ID!
+ slug: ID! @index(name: "contractsByCollection", sortKeyFields: ["address"])
+ address: ID!
+ nfts: [nft] @hasMany(indexName: "nftsByContract", fields: ["address"])
+ name: String!
+ symbol: String!
+ payout_address: String
+ asset_contract_type: String
+ created_date: String
+ description: String
+ image_url: String
+ total_supply: String
+ nft_version: String
+ opensea_version: String
+ schema_name: String
+ external_link: String
+ collection: collection @belongsTo(fields: ["slug"])
+ createdAt: AWSDateTime
+ updatedAt: AWSDateTime
+}
+ 
+type nftTraits @model @auth(rules: [{allow: public}]){
+ id: ID!
+ trait_type: String
+ value: String
+ display_type: String
+ max_value: String
+ trait_count: Int
+ order: String
+ createdAt: AWSDateTime
+ updatedAt:AWSDateTime
+}
+
+type nft @model {
+ id: ID!
+ address: ID! @index(name: "nftsByContract", sortKeyFields: ["token_id"])
+ token_id: Int!
+ num_sales: Int!
+ background_color: String
+ image_url: String
+ image_preview_url: String
+ image_thumbnail_url: String
+ image_original_url: String
+ animation_url: String
+ animation_original_url: String
+ name: String
+ description: String
+ external_link: String
+ perma_link: String
+ primary_asset_contract: nftAssetContract @belongsTo(fields: ["address"])
+ owner: String
+ traits: [nftTraits]
+ favorited_by: [user] @manyToMany(relationName: "UserFavoriteNft")	
+ watched_by: [user] @manyToMany(relationName: "UserWatchlistNft")
+ createdAt: AWSDateTime
+ updatedAt:AWSDateTime
+}
+
+type Transaction @model @searchable {
+    id: ID!
+    block_hash: ID!
+    transaction_hash: ID!
+    block_number: Int!
+    from_account: String!
+    to_account: String!
+    transaction_index: String!
+    timestamp: String!
+    createdAt: AWSDateTime
+    updatedAt:AWSDateTime
+}
+
+type nftEvent @model @searchable {
+    id: ID!
+    event_type: String!
+    auction_type: String
+    bid_amount: Float
+    collection_slug: String
+    contract_address: String
+    listing_time: String
+    address: String
+    token_id: Int
+    created_date: String
+    from_account: String
+    to_account: String
+    is_private: Boolean
+    transaction: Transaction
+    total_price: Float
+    createdAt: AWSDateTime
+    updatedAt:AWSDateTime
+}
+
+type nftEventCheckpoint @model {
+    id: ID!
+    saved_events: Int
+    total_events: Int
+    status: String
+    createdAt: AWSDateTime
+    updatedAt:AWSDateTime
+}
+
+type user @model {
+    id: ID!
+    username: ID!
+    email: String
+    favorite_nfts: [nft] @manyToMany(relationName: "UserFavoriteNft")
+    watchlist_nfts: [nft] @manyToMany(relationName: "UserWatchlistNft")
+    createdAt: AWSDateTime
+    updatedAt:AWSDateTime
+}

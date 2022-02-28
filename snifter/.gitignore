@@ -8,10 +8,10 @@ node_modules
 
 # local env files
 .env.local
-.env..local
+.env.*.local
 
 # Log files
-npm-debug.log
+npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
@@ -20,14 +20,14 @@ pnpm-debug.log*
 .idea
 .vscode
 *.suo
-.ntvs
+*.ntvs*
 *.njsproj
 *.sln
-.sw?
+*.sw?
 
 #amplify-do-not-edit-begin
-amplify/#current-cloud-backend
-amplify/.config/local-
+amplify/\#current-cloud-backend
+amplify/.config/local-*
 amplify/logs
 amplify/mock-data
 amplify/backend/amplify-meta.json
