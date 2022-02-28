@@ -1,0 +1,11 @@
+{
+  "dev": {
+    "configLevel": "amplifyAdmin"
+  },
+  "matthewdev": {
+    "configLevel": "amplifyAdmin"
+  },
+  "stephendev": {
+    "configLevel": "amplifyAdmin"
+  }
+}
