@@ -10,10 +10,12 @@ export const createTweet = /* GraphQL */ `
       id
       text
       username
-      reply_count
       retweet_count
-      like_count
-      interaction_count
+      following_count
+      followers_count
+      favorite_count
+      total_tweets
+      URL
       createdAt
       updatedAt
       date
@@ -29,10 +31,12 @@ export const updateTweet = /* GraphQL */ `
       id
       text
       username
-      reply_count
       retweet_count
-      like_count
-      interaction_count
+      following_count
+      followers_count
+      favorite_count
+      total_tweets
+      URL
       createdAt
       updatedAt
       date
@@ -48,13 +52,81 @@ export const deleteTweet = /* GraphQL */ `
       id
       text
       username
-      reply_count
       retweet_count
-      like_count
-      interaction_count
+      following_count
+      followers_count
+      favorite_count
+      total_tweets
+      URL
       createdAt
       updatedAt
       date
+    }
+  }
+`;
+export const createTwitterUser = /* GraphQL */ `
+  mutation CreateTwitterUser(
+    $input: CreateTwitterUserInput!
+    $condition: ModelTwitterUserConditionInput
+  ) {
+    createTwitterUser(input: $input, condition: $condition) {
+      id
+      name
+      screen_name
+      location
+      description
+      URL
+      followers
+      friends_count
+      listed_count
+      acct_created_at
+      verified
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateTwitterUser = /* GraphQL */ `
+  mutation UpdateTwitterUser(
+    $input: UpdateTwitterUserInput!
+    $condition: ModelTwitterUserConditionInput
+  ) {
+    updateTwitterUser(input: $input, condition: $condition) {
+      id
+      name
+      screen_name
+      location
+      description
+      URL
+      followers
+      friends_count
+      listed_count
+      acct_created_at
+      verified
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteTwitterUser = /* GraphQL */ `
+  mutation DeleteTwitterUser(
+    $input: DeleteTwitterUserInput!
+    $condition: ModelTwitterUserConditionInput
+  ) {
+    deleteTwitterUser(input: $input, condition: $condition) {
+      id
+      name
+      screen_name
+      location
+      description
+      URL
+      followers
+      friends_count
+      listed_count
+      acct_created_at
+      verified
+      createdAt
+      updatedAt
     }
   }
 `;
