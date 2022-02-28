@@ -15,6 +15,29 @@ type tweet @model {
  date: String
 }
 
+type article @model {
+ id: ID!
+ title: String!
+ blurb: String!
+ questions: [String]
+ answers: [String]
+ category: String
+ related_links: [String]
+ createdAt: AWSDateTime
+ updatedAt: AWSDateTime
+}
+
+type quiz @model {
+  id: ID!
+  title: String!
+  questions: [String]!
+  answers: [[String]]!
+  correct_answer: [String]!
+  createdAt: AWSDateTime
+  updatedAt: AWSDateTime
+}
+
+
 type collectionStats @model @auth(rules: [{allow: public}]) {
  id: ID!
  one_day_volume: Float
