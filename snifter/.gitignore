@@ -2,6 +2,7 @@
 .Rhistory
 node_modules
 /dist
+package-lock.json
 
 # AWS account information
 #snifter/amplify/team-provider-info.json
