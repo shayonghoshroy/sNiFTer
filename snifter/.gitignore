@@ -1,8 +1,10 @@
 .DS_Store
+.Rhistory
 node_modules
 /dist
 
 # AWS account information
+#snifter/amplify/team-provider-info.json
 
 # local env files
 .env.local
@@ -30,6 +32,7 @@ amplify/logs
 amplify/mock-data
 amplify/backend/amplify-meta.json
 amplify/backend/.temp
+amplify/backend/awscloudformation
 build/
 dist/
 node_modules/
@@ -39,6 +42,7 @@ amplifyconfiguration.json
 amplifyconfiguration.dart
 amplify-build-config.json
 amplify-gradle-config.json
+team-provider-info.json
 amplifytools.xcconfig
 .secret-*
 **.sample
