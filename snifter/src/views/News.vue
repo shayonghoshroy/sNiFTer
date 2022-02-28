@@ -1,23 +1,24 @@
 <template>
   <div class="search">
     <article>
-      <h2>sNiFTer News</h2>
-      <p>See what's hot in the world of NFT's</p>
+      <h2 class="is-white">News</h2>
+      <p class="is-white">See what's hot in the world of NFT's</p>
     </article>
-    <TweetSearchComponent ref="tweetSearchComponent" @twitterSearch="searchResults($event)"/>
+    <TweetSearchComponent
+      ref="tweetSearchComponent"
+      @twitterSearch="searchResults($event)"
+    />
     <div v-if="searched">
       <div v-if="searchStatus === 'Fetching'" class="pending-search-result">
         <va-inner-loading :loading="true" color="primary">
           <va-card>
-            <va-card-content>
-              Fetching Tweets...
-            </va-card-content>
+            <va-card-content> Fetching Tweets... </va-card-content>
           </va-card>
         </va-inner-loading>
       </div>
       <div class="empty-search-results" v-else-if="searchStatus === 'Failure'">
         <va-alert class="search-alert mb-4" color="danger" icon="info">
-            No search results...
+          No search results...
         </va-alert>
       </div>
       <div v-else>
@@ -32,7 +33,7 @@
 
 <script>
 import TweetComponent from "../components/TweetComponent";
-import TweetSearchComponent from '../components/TweetSearchComponent';
+import TweetSearchComponent from "../components/TweetSearchComponent";
 export default {
   name: "News",
   components: { TweetComponent, TweetSearchComponent },
@@ -43,9 +44,9 @@ export default {
     return {
       data: [],
       searched: false,
-      searchType: '',
-      searchStatus: 'None'
-    }
+      searchType: "",
+      searchStatus: "None",
+    };
   },
   methods: {
     searchResults(event) {
@@ -53,8 +54,8 @@ export default {
       this.searchType = event.searchType;
       this.data = event.data;
       this.searched = true;
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>
@@ -119,5 +120,8 @@ blockquote.twitter-tweet a {
 blockquote.twitter-tweet a:hover,
 blockquote.twitter-tweet a:focus {
   text-decoration: underline;
+}
+.is-white {
+  color: #ffffff;
 }
 </style>

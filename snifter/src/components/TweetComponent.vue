@@ -1,10 +1,11 @@
-<template>  
+<template>
   <div id="tweetcomponent" v-if="tweets.length > 0">
     <div>
       <div class="post" v-for="tweet in tweets" :key="tweet.id">
         <blockquote class="twitter-tweet">
-          <p lang="en" dir="ltr">{{ tweet.text }}</p>&mdash; {{  tweet.username }} (@{{ tweet.username }}) 
-          <a :href= "tweet.URL">{{ tweet.date }}</a>
+          <p lang="en" dir="ltr">{{ tweet.text }}</p>
+          &mdash; {{ tweet.username }} (@{{ tweet.username }})
+          <a :href="tweet.URL">{{ tweet.date }}</a>
         </blockquote>
       </div>
     </div>
@@ -12,16 +13,15 @@
 </template>
 
 <script>
-var TwitterWidgetsLoader = require('twitter-widgets');
+var TwitterWidgetsLoader = require("twitter-widgets");
 import { API } from "aws-amplify";
 import { listTweets } from "../graphql/queries";
 export default {
   name: "TweetComponent",
   async created() {
-    if (this.tweets.length === 0)
-      this.getTweets();
+    if (this.tweets.length === 0) this.getTweets();
   },
-  mounted()  {
+  mounted() {
     TwitterWidgetsLoader.load();
   },
   data() {
@@ -41,7 +41,6 @@ export default {
           },
         });
         this.tweets = tweets.data.listTweets.items;
-	console.log(this.tweets)
       } catch (e) {
         console.error(e);
       }
@@ -83,6 +82,7 @@ blockquote.twitter-tweet a:focus {
 .post {
   background: #fff;
   padding: 1.5em;
+  background-color: transparent;
 }
 .post h2 {
   font-size: 1.3em;
