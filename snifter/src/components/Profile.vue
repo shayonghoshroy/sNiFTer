@@ -1,6 +1,13 @@
 <template>
+  <h2 class="mt-5 mb-2 is-white">Welcome home</h2>
   <div class="is-white">
-    {{ "Username: " + username + " | Email: " + email + " | Phone: undefined" }}
+    <va-divider horizontal />
+    <div>
+      <span class="flex lg1"> Username: {{ username }} |</span>
+      <span class="flex lg1"> Email: {{ email }} |</span>
+      <span class="flex lg1"> Phone: undefined</span>
+    </div>
+    <va-divider horizontal />
     <Watchlist />
   </div>
 </template>
@@ -36,8 +43,13 @@ export default {
 };
 </script>
 
-<style lang="css">
+<style lang="css" scoped>
 .is-white {
   color: white;
+}
+h2 {
+  font-size: clamp(16px, 2vw, 2vw);
+  font-weight: 300;
+  margin: 0;
 }
 </style>

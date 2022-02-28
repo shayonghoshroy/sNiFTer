@@ -1,5 +1,5 @@
 <template>
-  <h2 class="mt-5 h2">Watchlist</h2>
+  <h2 class="mt-5">Watchlist</h2>
   <div v-if="Watchlist.length != 0">
     <div class="mt-1">You have pretty good taste</div>
     <div id="nftcomponent">
@@ -95,7 +95,7 @@ export default {
 
 <style lang="css">
 h2 {
-  font-size: clamp(16px, 2vw, 2vw);
+  font-size: clamp(14px, 2vw, 2vw);
   font-weight: 300;
   margin: 0;
 }
