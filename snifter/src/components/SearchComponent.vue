@@ -22,7 +22,15 @@
         </va-list>
       </va-button-dropdown>
       <div>
-        <va-form class="search-input-form" v-if="searchIndex === 1">
+        <va-form class="search-input-form" v-if="searchIndex === 0">
+          <va-input
+            class="mb-4"
+            v-model="collectionSlug"
+            label="Collection Slug"
+            placeholder="Required"
+          />
+        </va-form>
+        <va-form class="search-input-form" v-else-if="searchIndex === 1">
           <va-input
             class="mb-4"
             v-model="address"
@@ -32,6 +40,7 @@
           <va-input
             class="mb-4"
             v-model="tokenid"
+            :rules="[(v) => !isNaN(v)] || `Token ID must be a number`"
             label="Token ID"
             placeholder="Optional"
           />
@@ -47,26 +56,28 @@
         </va-form>
       </div>
 
-      <va-button @click="getNFTs()">Search</va-button>
+      <va-button :disabled="disableSearch" @click="startSearch()"
+        >Search</va-button
+      >
     </div>
   </div>
 </template>
 
 <script>
 import { API } from "aws-amplify";
-import { listNfts } from "../graphql/queries";
+import { listNfts, listCollections } from "../graphql/queries";
+import { fetchCollection, fetchNFTs } from "../services/nftScraperService";
 
 export default {
   name: "SearchComponent",
   components: {},
-  async created() {
-    //this.getNFTs();
-  },
   data() {
     return {
       tokenid: "",
       address: "",
+      collectionSlug: "",
       nfts: [],
+      collections: [],
       searchTypes: [
         ["Collection", "collections"],
         ["Token", "generating_tokens"],
@@ -74,11 +85,105 @@ export default {
         ["Creator", "palette"],
       ],
       searchIndex: 0,
+      requestCount: 0,
+      disableSearch: false,
     };
   },
+  computed: {
+    searchType() {
+      return this.searchTypes[this.searchIndex][this.searchIndex];
+    },
+  },
   methods: {
+    startSearch: async function () {
+      this.disableSearch = true;
+      var response = null;
+      var event = {
+        searchStatus: "Failure",
+        data: [],
+        searchType: "",
+      };
+
+      // Collection search
+      try {
+        if (this.searchIndex === 0) {
+          event["searchType"] = "collection";
+
+          await this.getCollection();
+          debugger;
+
+          // Fetch collecton from API
+          if (this.collections.length === 0) {
+            event["searchStatus"] = "Fetching";
+            this.$emit("getNFTs", event);
+
+            response = await fetchCollection(this.collectionSlug);
+
+            // Successful search
+            if (response.ok) {
+              debugger;
+              await this.getCollection();
+
+              event["data"] = this.collections;
+              if (this.collections.length > 0) {
+                event["searchStatus"] = "Success";
+              }
+            } else {
+              event["searchStatus"] = "Failure";
+            }
+
+            this.$emit("getNFTs", event);
+          }
+
+          // Already in database
+          else {
+            event["searchStatus"] = "Success";
+            event["data"] = this.collections;
+            console.log(this.collections);
+            this.$emit("getNFTs", event);
+          }
+        }
+
+        // NFT or Contract Search
+        else if (this.searchIndex === 1) {
+          event["searchType"] = "nft";
+          await this.getNFTs();
+
+          if (this.nfts.length === 0) {
+            event["searchStatus"] = "Fetching";
+            this.$emit("getNFTs", event);
+
+            response = await fetchNFTs(this.address, this.tokenid);
+            debugger;
+            if (response.ok) {
+              await this.getNFTs();
+
+              event["data"] = this.nfts;
+              if (this.nfts.length > 0) {
+                event["searchStatus"] = "Success";
+              }
+            } else {
+              event["searchStatus"] = "Failure";
+            }
+
+            this.$emit("getNFTs", event);
+          } else {
+            event["searchStatus"] = "Success";
+            event["data"] = this.nfts;
+            this.$emit("getNFTs", event);
+          }
+        }
+      } catch (e) {
+        event["searchStatus"] = "Failure";
+        this.$emit(event);
+      }
+
+      this.disableSearch = false;
+    },
     getNFTs: async function () {
       try {
+        console.log("Starting Query");
+        this.address = this.address.toLowerCase();
         if (this.tokenid == "") {
           const nfts = await API.graphql({
             query: listNfts,
@@ -103,6 +208,22 @@ export default {
           this.nfts = nfts.data.listNfts.items;
           this.$emit("getNFTs", this.nfts);
         }
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    getCollection: async function () {
+      try {
+        console.log("Starting Query");
+        this.collectionSlug = this.collectionSlug.toLowerCase();
+        debugger;
+        const collection = await API.graphql({
+          query: listCollections,
+          variables: {
+            filter: { slug: { eq: this.collectionSlug } },
+          },
+        });
+        this.collections = collection.data.listCollections.items;
       } catch (e) {
         console.error(e);
       }

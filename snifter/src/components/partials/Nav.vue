@@ -31,6 +31,9 @@
               </router-link>
             </div>
           </div>
+          <div @click="connectToMetaMask()">
+            <va-icon name="account_balance_wallet" size="large" />
+          </div>
         </div>
       </div>
     </template>
@@ -56,6 +59,21 @@ export default {
       user: [],
     };
   },
+  methods: {
+    connectToMetaMask() {
+      console.log("connecting...");
+      if (window.ethereum !== undefined) {
+        console.log("ethereum defined");
+        const accounts = window.ethereum.request({
+          method: "eth_requestAccounts",
+        });
+        console.log(accounts);
+      }
+    },
+    reloadPage() {
+      window.location.reload();
+    },
+  },
   // Function to check if user is logged in
   async created() {
     try {
@@ -64,11 +82,6 @@ export default {
     } catch (e) {
       console.log(e);
     }
-  },
-  methods: {
-    reloadPage() {
-      window.location.reload();
-    },
   },
 };
 </script>
@@ -95,6 +108,10 @@ nav {
 .nav-routes {
   display: flex;
   justify-content: center;
+  align-items: center;
+}
+.buttons {
+  display: flex;
   align-items: center;
 }
 .nav-center {
