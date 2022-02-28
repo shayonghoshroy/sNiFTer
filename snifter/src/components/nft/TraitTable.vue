@@ -25,12 +25,15 @@ export default {
   },
   computed: {
     traitItems() {
+      var supply = this.totalSupply;
+      if (supply === "0")
+        supply = 10000;
       return this.traits.map((trait) => {
         return {
           type: trait.trait_type,
           value: trait.value,
           count: trait.trait_count,
-          rarity: trait.trait_count / this.totalSupply,
+          rarity: trait.trait_count / supply,
         };
       });
     },

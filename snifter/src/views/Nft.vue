@@ -14,7 +14,7 @@
           <!-- Leftmost section of nft card -->
           <div class="nft-image-wrapper">
             <div class="nft-header">
-              <h1 v-if="nft.name">
+              <h1 v-if="nft.name" style="color: white;">
                 {{ nft.name }}
               </h1>
               <h1 v-else-if="currentContract">
@@ -31,13 +31,14 @@
                 <div class="watchlist-icon">
                   <va-icon
                     v-if="isWatching"
-                    name="visibility"
+                    name="visibility_off"
                     size="large"
+                    color="white"
                     @click="watch(this.user, nft.id)"
                   ></va-icon>
                   <va-icon
                     v-else
-                    name="visibility_off"
+                    name="visibility"
                     size="large"
                     @click="watch(this.user, nft.id)"
                   ></va-icon>
