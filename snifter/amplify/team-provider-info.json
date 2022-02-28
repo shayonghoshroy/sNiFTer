@@ -126,24 +126,35 @@
       "function": {
         "scrapeTweets": {
           "deploymentBucketName": "amplify-snifter-stephendev-193633-deployment",
-          "s3Key": "amplify-builds/scrapeTweets-4b702b55623577596353-build.zip"
+          "s3Key": "amplify-builds/scrapeTweets-30455a7a647536617369-build.zip"
         },
         "nftScraper": {
           "deploymentBucketName": "amplify-snifter-stephendev-193633-deployment",
-          "s3Key": "amplify-builds/nftScraper-70396d2b59516d542b4a-build.zip"
+          "s3Key": "amplify-builds/nftScraper-376347383955584e4b44-build.zip"
         },
-        "createUserModelOnSignup": {},
+        "createUserModelOnSignup": {
+          "deploymentBucketName": "amplify-snifter-stephendev-193633-deployment",
+          "s3Key": "amplify-builds/createUserModelOnSignup-2b31344750386f496a42-build.zip"
+        },
         "openSearch": {
           "deploymentBucketName": "amplify-snifter-stephendev-193633-deployment",
           "s3Key": "amplify-builds/openSearch-58657444425650586f78-build.zip"
         },
         "transactionScraper": {
           "deploymentBucketName": "amplify-snifter-stephendev-193633-deployment",
-          "s3Key": "amplify-builds/transactionScraper-45754452336c7a78744c-build.zip"
+          "s3Key": "amplify-builds/transactionScraper-774a4b475148624c4864-build.zip"
         },
         "gatewayQueueProxy": {
           "deploymentBucketName": "amplify-snifter-stephendev-193633-deployment",
           "s3Key": "amplify-builds/gatewayQueueProxy-503437727542446a6a58-build.zip"
+        },
+        "sendEmails": {
+          "deploymentBucketName": "amplify-snifter-stephendev-193633-deployment",
+          "s3Key": "amplify-builds/sendEmails-67326554454d2b376a51-build.zip"
+        },
+        "watchlistNotifications": {
+          "deploymentBucketName": "amplify-snifter-stephendev-193633-deployment",
+          "s3Key": "amplify-builds/watchlistNotifications-46316d5036736471594d-build.zip"
         }
       },
       "hosting": {

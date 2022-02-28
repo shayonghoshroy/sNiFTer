@@ -1,15 +1,18 @@
 <template>
   <div class="is-white">
-    {{ "Username: " + username + " | Email: " + email + " | Phone: " + phone }}
+    {{ "Username: " + username + " | Email: " + email + " | Phone: undefined" }}
+    <Watchlist />
   </div>
 </template>
 
 <script>
 //Import auth
 import { Auth } from "aws-amplify";
+import Watchlist from "./Watchlist";
 
 export default {
   name: "Profile",
+  components: { Watchlist },
   data() {
     return {
       username: "",

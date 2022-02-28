@@ -520,45 +520,6 @@ export const onDeleteNftTraits = /* GraphQL */ `
     }
   }
 `;
-export const onCreateUser = /* GraphQL */ `
-  subscription OnCreateUser {
-    onCreateUser {
-      username
-      favorite_nfts {
-        nextToken
-      }
-      createdAt
-      updatedAt
-      id
-    }
-  }
-`;
-export const onUpdateUser = /* GraphQL */ `
-  subscription OnUpdateUser {
-    onUpdateUser {
-      username
-      favorite_nfts {
-        nextToken
-      }
-      createdAt
-      updatedAt
-      id
-    }
-  }
-`;
-export const onDeleteUser = /* GraphQL */ `
-  subscription OnDeleteUser {
-    onDeleteUser {
-      username
-      favorite_nfts {
-        nextToken
-      }
-      createdAt
-      updatedAt
-      id
-    }
-  }
-`;
 export const onCreateNft = /* GraphQL */ `
   subscription OnCreateNft {
     onCreateNft {
@@ -596,11 +557,26 @@ export const onCreateNft = /* GraphQL */ `
         createdAt
         updatedAt
       }
-      createdAt
-      updatedAt
+      owner
+      traits {
+        id
+        trait_type
+        value
+        display_type
+        max_value
+        trait_count
+        order
+        createdAt
+        updatedAt
+      }
       favorited_by {
         nextToken
       }
+      watched_by {
+        nextToken
+      }
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -641,11 +617,26 @@ export const onUpdateNft = /* GraphQL */ `
         createdAt
         updatedAt
       }
-      createdAt
-      updatedAt
+      owner
+      traits {
+        id
+        trait_type
+        value
+        display_type
+        max_value
+        trait_count
+        order
+        createdAt
+        updatedAt
+      }
       favorited_by {
         nextToken
       }
+      watched_by {
+        nextToken
+      }
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -686,11 +677,263 @@ export const onDeleteNft = /* GraphQL */ `
         createdAt
         updatedAt
       }
-      createdAt
-      updatedAt
+      owner
+      traits {
+        id
+        trait_type
+        value
+        display_type
+        max_value
+        trait_count
+        order
+        createdAt
+        updatedAt
+      }
       favorited_by {
         nextToken
       }
+      watched_by {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onCreateTransaction = /* GraphQL */ `
+  subscription OnCreateTransaction {
+    onCreateTransaction {
+      id
+      block_hash
+      transaction_hash
+      block_number
+      from_account
+      to_account
+      transaction_index
+      timestamp
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateTransaction = /* GraphQL */ `
+  subscription OnUpdateTransaction {
+    onUpdateTransaction {
+      id
+      block_hash
+      transaction_hash
+      block_number
+      from_account
+      to_account
+      transaction_index
+      timestamp
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteTransaction = /* GraphQL */ `
+  subscription OnDeleteTransaction {
+    onDeleteTransaction {
+      id
+      block_hash
+      transaction_hash
+      block_number
+      from_account
+      to_account
+      transaction_index
+      timestamp
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onCreateNftEvent = /* GraphQL */ `
+  subscription OnCreateNftEvent {
+    onCreateNftEvent {
+      id
+      event_type
+      auction_type
+      bid_amount
+      collection_slug
+      contract_address
+      listing_time
+      address
+      token_id
+      created_date
+      from_account
+      to_account
+      is_private
+      transaction {
+        id
+        block_hash
+        transaction_hash
+        block_number
+        from_account
+        to_account
+        transaction_index
+        timestamp
+        createdAt
+        updatedAt
+      }
+      total_price
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateNftEvent = /* GraphQL */ `
+  subscription OnUpdateNftEvent {
+    onUpdateNftEvent {
+      id
+      event_type
+      auction_type
+      bid_amount
+      collection_slug
+      contract_address
+      listing_time
+      address
+      token_id
+      created_date
+      from_account
+      to_account
+      is_private
+      transaction {
+        id
+        block_hash
+        transaction_hash
+        block_number
+        from_account
+        to_account
+        transaction_index
+        timestamp
+        createdAt
+        updatedAt
+      }
+      total_price
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteNftEvent = /* GraphQL */ `
+  subscription OnDeleteNftEvent {
+    onDeleteNftEvent {
+      id
+      event_type
+      auction_type
+      bid_amount
+      collection_slug
+      contract_address
+      listing_time
+      address
+      token_id
+      created_date
+      from_account
+      to_account
+      is_private
+      transaction {
+        id
+        block_hash
+        transaction_hash
+        block_number
+        from_account
+        to_account
+        transaction_index
+        timestamp
+        createdAt
+        updatedAt
+      }
+      total_price
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onCreateNftEventCheckpoint = /* GraphQL */ `
+  subscription OnCreateNftEventCheckpoint {
+    onCreateNftEventCheckpoint {
+      id
+      saved_events
+      total_events
+      status
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateNftEventCheckpoint = /* GraphQL */ `
+  subscription OnUpdateNftEventCheckpoint {
+    onUpdateNftEventCheckpoint {
+      id
+      saved_events
+      total_events
+      status
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteNftEventCheckpoint = /* GraphQL */ `
+  subscription OnDeleteNftEventCheckpoint {
+    onDeleteNftEventCheckpoint {
+      id
+      saved_events
+      total_events
+      status
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onCreateUser = /* GraphQL */ `
+  subscription OnCreateUser {
+    onCreateUser {
+      id
+      username
+      email
+      favorite_nfts {
+        nextToken
+      }
+      watchlist_nfts {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateUser = /* GraphQL */ `
+  subscription OnUpdateUser {
+    onUpdateUser {
+      id
+      username
+      email
+      favorite_nfts {
+        nextToken
+      }
+      watchlist_nfts {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteUser = /* GraphQL */ `
+  subscription OnDeleteUser {
+    onDeleteUser {
+      id
+      username
+      email
+      favorite_nfts {
+        nextToken
+      }
+      watchlist_nfts {
+        nextToken
+      }
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -698,14 +941,8 @@ export const onCreateUserFavoriteNft = /* GraphQL */ `
   subscription OnCreateUserFavoriteNft {
     onCreateUserFavoriteNft {
       id
-      userID
       nftID
-      user {
-        username
-        createdAt
-        updatedAt
-        id
-      }
+      userID
       nft {
         id
         address
@@ -722,6 +959,14 @@ export const onCreateUserFavoriteNft = /* GraphQL */ `
         description
         external_link
         perma_link
+        owner
+        createdAt
+        updatedAt
+      }
+      user {
+        id
+        username
+        email
         createdAt
         updatedAt
       }
@@ -734,14 +979,8 @@ export const onUpdateUserFavoriteNft = /* GraphQL */ `
   subscription OnUpdateUserFavoriteNft {
     onUpdateUserFavoriteNft {
       id
-      userID
       nftID
-      user {
-        username
-        createdAt
-        updatedAt
-        id
-      }
+      userID
       nft {
         id
         address
@@ -758,6 +997,14 @@ export const onUpdateUserFavoriteNft = /* GraphQL */ `
         description
         external_link
         perma_link
+        owner
+        createdAt
+        updatedAt
+      }
+      user {
+        id
+        username
+        email
         createdAt
         updatedAt
       }
@@ -770,14 +1017,8 @@ export const onDeleteUserFavoriteNft = /* GraphQL */ `
   subscription OnDeleteUserFavoriteNft {
     onDeleteUserFavoriteNft {
       id
-      userID
       nftID
-      user {
-        username
-        createdAt
-        updatedAt
-        id
-      }
+      userID
       nft {
         id
         address
@@ -794,6 +1035,128 @@ export const onDeleteUserFavoriteNft = /* GraphQL */ `
         description
         external_link
         perma_link
+        owner
+        createdAt
+        updatedAt
+      }
+      user {
+        id
+        username
+        email
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onCreateUserWatchlistNft = /* GraphQL */ `
+  subscription OnCreateUserWatchlistNft {
+    onCreateUserWatchlistNft {
+      id
+      nftID
+      userID
+      nft {
+        id
+        address
+        token_id
+        num_sales
+        background_color
+        image_url
+        image_preview_url
+        image_thumbnail_url
+        image_original_url
+        animation_url
+        animation_original_url
+        name
+        description
+        external_link
+        perma_link
+        owner
+        createdAt
+        updatedAt
+      }
+      user {
+        id
+        username
+        email
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateUserWatchlistNft = /* GraphQL */ `
+  subscription OnUpdateUserWatchlistNft {
+    onUpdateUserWatchlistNft {
+      id
+      nftID
+      userID
+      nft {
+        id
+        address
+        token_id
+        num_sales
+        background_color
+        image_url
+        image_preview_url
+        image_thumbnail_url
+        image_original_url
+        animation_url
+        animation_original_url
+        name
+        description
+        external_link
+        perma_link
+        owner
+        createdAt
+        updatedAt
+      }
+      user {
+        id
+        username
+        email
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteUserWatchlistNft = /* GraphQL */ `
+  subscription OnDeleteUserWatchlistNft {
+    onDeleteUserWatchlistNft {
+      id
+      nftID
+      userID
+      nft {
+        id
+        address
+        token_id
+        num_sales
+        background_color
+        image_url
+        image_preview_url
+        image_thumbnail_url
+        image_original_url
+        animation_url
+        animation_original_url
+        name
+        description
+        external_link
+        perma_link
+        owner
+        createdAt
+        updatedAt
+      }
+      user {
+        id
+        username
+        email
         createdAt
         updatedAt
       }

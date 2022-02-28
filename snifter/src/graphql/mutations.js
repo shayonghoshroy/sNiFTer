@@ -565,54 +565,6 @@ export const deleteNftTraits = /* GraphQL */ `
     }
   }
 `;
-export const createUser = /* GraphQL */ `
-  mutation CreateUser(
-    $input: CreateUserInput!
-    $condition: ModelUserConditionInput
-  ) {
-    createUser(input: $input, condition: $condition) {
-      username
-      favorite_nfts {
-        nextToken
-      }
-      createdAt
-      updatedAt
-      id
-    }
-  }
-`;
-export const updateUser = /* GraphQL */ `
-  mutation UpdateUser(
-    $input: UpdateUserInput!
-    $condition: ModelUserConditionInput
-  ) {
-    updateUser(input: $input, condition: $condition) {
-      username
-      favorite_nfts {
-        nextToken
-      }
-      createdAt
-      updatedAt
-      id
-    }
-  }
-`;
-export const deleteUser = /* GraphQL */ `
-  mutation DeleteUser(
-    $input: DeleteUserInput!
-    $condition: ModelUserConditionInput
-  ) {
-    deleteUser(input: $input, condition: $condition) {
-      username
-      favorite_nfts {
-        nextToken
-      }
-      createdAt
-      updatedAt
-      id
-    }
-  }
-`;
 export const createNft = /* GraphQL */ `
   mutation CreateNft(
     $input: CreateNftInput!
@@ -653,11 +605,26 @@ export const createNft = /* GraphQL */ `
         createdAt
         updatedAt
       }
-      createdAt
-      updatedAt
+      owner
+      traits {
+        id
+        trait_type
+        value
+        display_type
+        max_value
+        trait_count
+        order
+        createdAt
+        updatedAt
+      }
       favorited_by {
         nextToken
       }
+      watched_by {
+        nextToken
+      }
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -701,11 +668,26 @@ export const updateNft = /* GraphQL */ `
         createdAt
         updatedAt
       }
-      createdAt
-      updatedAt
+      owner
+      traits {
+        id
+        trait_type
+        value
+        display_type
+        max_value
+        trait_count
+        order
+        createdAt
+        updatedAt
+      }
       favorited_by {
         nextToken
       }
+      watched_by {
+        nextToken
+      }
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -749,11 +731,299 @@ export const deleteNft = /* GraphQL */ `
         createdAt
         updatedAt
       }
-      createdAt
-      updatedAt
+      owner
+      traits {
+        id
+        trait_type
+        value
+        display_type
+        max_value
+        trait_count
+        order
+        createdAt
+        updatedAt
+      }
       favorited_by {
         nextToken
       }
+      watched_by {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createTransaction = /* GraphQL */ `
+  mutation CreateTransaction(
+    $input: CreateTransactionInput!
+    $condition: ModelTransactionConditionInput
+  ) {
+    createTransaction(input: $input, condition: $condition) {
+      id
+      block_hash
+      transaction_hash
+      block_number
+      from_account
+      to_account
+      transaction_index
+      timestamp
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateTransaction = /* GraphQL */ `
+  mutation UpdateTransaction(
+    $input: UpdateTransactionInput!
+    $condition: ModelTransactionConditionInput
+  ) {
+    updateTransaction(input: $input, condition: $condition) {
+      id
+      block_hash
+      transaction_hash
+      block_number
+      from_account
+      to_account
+      transaction_index
+      timestamp
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteTransaction = /* GraphQL */ `
+  mutation DeleteTransaction(
+    $input: DeleteTransactionInput!
+    $condition: ModelTransactionConditionInput
+  ) {
+    deleteTransaction(input: $input, condition: $condition) {
+      id
+      block_hash
+      transaction_hash
+      block_number
+      from_account
+      to_account
+      transaction_index
+      timestamp
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createNftEvent = /* GraphQL */ `
+  mutation CreateNftEvent(
+    $input: CreateNftEventInput!
+    $condition: ModelNftEventConditionInput
+  ) {
+    createNftEvent(input: $input, condition: $condition) {
+      id
+      event_type
+      auction_type
+      bid_amount
+      collection_slug
+      contract_address
+      listing_time
+      address
+      token_id
+      created_date
+      from_account
+      to_account
+      is_private
+      transaction {
+        id
+        block_hash
+        transaction_hash
+        block_number
+        from_account
+        to_account
+        transaction_index
+        timestamp
+        createdAt
+        updatedAt
+      }
+      total_price
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateNftEvent = /* GraphQL */ `
+  mutation UpdateNftEvent(
+    $input: UpdateNftEventInput!
+    $condition: ModelNftEventConditionInput
+  ) {
+    updateNftEvent(input: $input, condition: $condition) {
+      id
+      event_type
+      auction_type
+      bid_amount
+      collection_slug
+      contract_address
+      listing_time
+      address
+      token_id
+      created_date
+      from_account
+      to_account
+      is_private
+      transaction {
+        id
+        block_hash
+        transaction_hash
+        block_number
+        from_account
+        to_account
+        transaction_index
+        timestamp
+        createdAt
+        updatedAt
+      }
+      total_price
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteNftEvent = /* GraphQL */ `
+  mutation DeleteNftEvent(
+    $input: DeleteNftEventInput!
+    $condition: ModelNftEventConditionInput
+  ) {
+    deleteNftEvent(input: $input, condition: $condition) {
+      id
+      event_type
+      auction_type
+      bid_amount
+      collection_slug
+      contract_address
+      listing_time
+      address
+      token_id
+      created_date
+      from_account
+      to_account
+      is_private
+      transaction {
+        id
+        block_hash
+        transaction_hash
+        block_number
+        from_account
+        to_account
+        transaction_index
+        timestamp
+        createdAt
+        updatedAt
+      }
+      total_price
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createNftEventCheckpoint = /* GraphQL */ `
+  mutation CreateNftEventCheckpoint(
+    $input: CreateNftEventCheckpointInput!
+    $condition: ModelNftEventCheckpointConditionInput
+  ) {
+    createNftEventCheckpoint(input: $input, condition: $condition) {
+      id
+      saved_events
+      total_events
+      status
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateNftEventCheckpoint = /* GraphQL */ `
+  mutation UpdateNftEventCheckpoint(
+    $input: UpdateNftEventCheckpointInput!
+    $condition: ModelNftEventCheckpointConditionInput
+  ) {
+    updateNftEventCheckpoint(input: $input, condition: $condition) {
+      id
+      saved_events
+      total_events
+      status
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteNftEventCheckpoint = /* GraphQL */ `
+  mutation DeleteNftEventCheckpoint(
+    $input: DeleteNftEventCheckpointInput!
+    $condition: ModelNftEventCheckpointConditionInput
+  ) {
+    deleteNftEventCheckpoint(input: $input, condition: $condition) {
+      id
+      saved_events
+      total_events
+      status
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createUser = /* GraphQL */ `
+  mutation CreateUser(
+    $input: CreateUserInput!
+    $condition: ModelUserConditionInput
+  ) {
+    createUser(input: $input, condition: $condition) {
+      id
+      username
+      email
+      favorite_nfts {
+        nextToken
+      }
+      watchlist_nfts {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateUser = /* GraphQL */ `
+  mutation UpdateUser(
+    $input: UpdateUserInput!
+    $condition: ModelUserConditionInput
+  ) {
+    updateUser(input: $input, condition: $condition) {
+      id
+      username
+      email
+      favorite_nfts {
+        nextToken
+      }
+      watchlist_nfts {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteUser = /* GraphQL */ `
+  mutation DeleteUser(
+    $input: DeleteUserInput!
+    $condition: ModelUserConditionInput
+  ) {
+    deleteUser(input: $input, condition: $condition) {
+      id
+      username
+      email
+      favorite_nfts {
+        nextToken
+      }
+      watchlist_nfts {
+        nextToken
+      }
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -764,14 +1034,8 @@ export const createUserFavoriteNft = /* GraphQL */ `
   ) {
     createUserFavoriteNft(input: $input, condition: $condition) {
       id
-      userID
       nftID
-      user {
-        username
-        createdAt
-        updatedAt
-        id
-      }
+      userID
       nft {
         id
         address
@@ -788,6 +1052,14 @@ export const createUserFavoriteNft = /* GraphQL */ `
         description
         external_link
         perma_link
+        owner
+        createdAt
+        updatedAt
+      }
+      user {
+        id
+        username
+        email
         createdAt
         updatedAt
       }
@@ -803,14 +1075,8 @@ export const updateUserFavoriteNft = /* GraphQL */ `
   ) {
     updateUserFavoriteNft(input: $input, condition: $condition) {
       id
-      userID
       nftID
-      user {
-        username
-        createdAt
-        updatedAt
-        id
-      }
+      userID
       nft {
         id
         address
@@ -827,6 +1093,14 @@ export const updateUserFavoriteNft = /* GraphQL */ `
         description
         external_link
         perma_link
+        owner
+        createdAt
+        updatedAt
+      }
+      user {
+        id
+        username
+        email
         createdAt
         updatedAt
       }
@@ -842,14 +1116,8 @@ export const deleteUserFavoriteNft = /* GraphQL */ `
   ) {
     deleteUserFavoriteNft(input: $input, condition: $condition) {
       id
-      userID
       nftID
-      user {
-        username
-        createdAt
-        updatedAt
-        id
-      }
+      userID
       nft {
         id
         address
@@ -866,6 +1134,137 @@ export const deleteUserFavoriteNft = /* GraphQL */ `
         description
         external_link
         perma_link
+        owner
+        createdAt
+        updatedAt
+      }
+      user {
+        id
+        username
+        email
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createUserWatchlistNft = /* GraphQL */ `
+  mutation CreateUserWatchlistNft(
+    $input: CreateUserWatchlistNftInput!
+    $condition: ModelUserWatchlistNftConditionInput
+  ) {
+    createUserWatchlistNft(input: $input, condition: $condition) {
+      id
+      nftID
+      userID
+      nft {
+        id
+        address
+        token_id
+        num_sales
+        background_color
+        image_url
+        image_preview_url
+        image_thumbnail_url
+        image_original_url
+        animation_url
+        animation_original_url
+        name
+        description
+        external_link
+        perma_link
+        owner
+        createdAt
+        updatedAt
+      }
+      user {
+        id
+        username
+        email
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateUserWatchlistNft = /* GraphQL */ `
+  mutation UpdateUserWatchlistNft(
+    $input: UpdateUserWatchlistNftInput!
+    $condition: ModelUserWatchlistNftConditionInput
+  ) {
+    updateUserWatchlistNft(input: $input, condition: $condition) {
+      id
+      nftID
+      userID
+      nft {
+        id
+        address
+        token_id
+        num_sales
+        background_color
+        image_url
+        image_preview_url
+        image_thumbnail_url
+        image_original_url
+        animation_url
+        animation_original_url
+        name
+        description
+        external_link
+        perma_link
+        owner
+        createdAt
+        updatedAt
+      }
+      user {
+        id
+        username
+        email
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteUserWatchlistNft = /* GraphQL */ `
+  mutation DeleteUserWatchlistNft(
+    $input: DeleteUserWatchlistNftInput!
+    $condition: ModelUserWatchlistNftConditionInput
+  ) {
+    deleteUserWatchlistNft(input: $input, condition: $condition) {
+      id
+      nftID
+      userID
+      nft {
+        id
+        address
+        token_id
+        num_sales
+        background_color
+        image_url
+        image_preview_url
+        image_thumbnail_url
+        image_original_url
+        animation_url
+        animation_original_url
+        name
+        description
+        external_link
+        perma_link
+        owner
+        createdAt
+        updatedAt
+      }
+      user {
+        id
+        username
+        email
         createdAt
         updatedAt
       }

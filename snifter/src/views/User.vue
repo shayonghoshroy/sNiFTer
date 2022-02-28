@@ -20,13 +20,16 @@
 </template>
 
 <script setup>
-import { Authenticator } from "@aws-amplify/ui-vue";
+import { Authenticator, useAuthenticator } from "@aws-amplify/ui-vue";
 import "@aws-amplify/ui-vue/styles.css";
 import Amplify from "aws-amplify";
 import awsconfig from "../aws-exports";
 import { Auth } from "aws-amplify";
 
 Amplify.configure(awsconfig);
+
+const auth = useAuthenticator();
+auth.signOut();
 </script>
 
 <script>
@@ -54,7 +57,11 @@ export default {
   },
   methods: {
     reloadPage() {
+      Auth.signOut();
       window.location.reload();
+    },
+    goToHome() {
+      this.$router.push("/");
     },
   },
 };

@@ -1,4 +1,3 @@
-from email import message
 import json
 import asyncio
 
@@ -7,11 +6,7 @@ from opensea import get_event
 from APIException import APIException
 from nft_event_service import maybe_put_batch_items
 
-
 def handler(event, context):
-  from pprint import pprint
-  pprint(event['Records'][0])
-  
   event = event['Records'][0]
   
   # Body from SQS should be JSON string

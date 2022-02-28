@@ -50,17 +50,6 @@ export default {
 </script>
 
 <style scoped>
-h1 {
-  margin-top: 1em;
-  text-align: center;
-  color: white;
-}
-
-.search {
-  padding-right: 10em;
-  padding-left: 10em;
-}
-
 .description {
   width: 100vw;
   height: 90vh;

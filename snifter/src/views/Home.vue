@@ -5,10 +5,13 @@
       <p>First round's on us</p>
     </article>
     <div>
-      <div>
+      <div v-if="!username">
         <router-link to="/user" class="button is-purple">
           <div>Sign In or Register</div>
         </router-link>
+      </div>
+      <div v-else>
+        <SearchComponent />
       </div>
       <NFTComponent />
     </div>
@@ -17,12 +20,25 @@
 
 <script>
 import NFTComponent from "../components/NFTComponent";
+import Auth from "@aws-amplify/auth";
+import SearchComponent from "../components/SearchComponent";
 
 export default {
   name: "Home",
-  components: { NFTComponent },
+  components: { NFTComponent, SearchComponent },
   setup() {
-    return {};
+    return {
+      username: Auth.user ? Auth.user.username : "",
+    };
+  },
+  async created() {
+    try {
+      const user = await Auth.currentAuthenticatedUser();
+      this.user = user;
+      this.username = user.username;
+    } catch (e) {
+      console.error(e);
+    }
   },
 };
 </script>

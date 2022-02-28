@@ -53,8 +53,6 @@ class NFTEvent(BaseModel):
     total_price: Optional[Decimal]
 
     def __init__(self, new_item=False, **data: dict) -> None:
-        print("BEFORE RESULTS")
-        pprint(data["total_price"])
         if new_item:
             data.setdefault('is_private', False)
             
@@ -64,7 +62,6 @@ class NFTEvent(BaseModel):
                 data['total_price'] = Decimal(str(round(float(total_price) / 10e17, 6)))
             else:
                 data['total_price'] = Decimal(str(round(0.0, 2)))
-            print(data['total_price'])
 
             bid_amount = data.get('bid_amount', None)
             if bid_amount is not None:
@@ -73,7 +70,6 @@ class NFTEvent(BaseModel):
                 data['bid_amount'] = Decimal(str(round(0.0, 2)))
     
             transaction = data.get('transaction', None)
-            print("TEST TRANSACTION", transaction)
             if transaction is not None:
                 data['transaction'] = dict(Transaction(**dict(transaction)))
             

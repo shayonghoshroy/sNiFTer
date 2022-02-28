@@ -1,6 +1,165 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const searchCollections = /* GraphQL */ `
+  query SearchCollections(
+    $filter: SearchablecollectionFilterInput
+    $sort: [SearchablecollectionSortInput]
+    $limit: Int
+    $nextToken: String
+    $from: Int
+    $aggregates: [SearchablecollectionAggregationInput]
+  ) {
+    searchCollections(
+      filter: $filter
+      sort: $sort
+      limit: $limit
+      nextToken: $nextToken
+      from: $from
+      aggregates: $aggregates
+    ) {
+      items {
+        id
+        slug
+        name
+        description
+        image_url
+        external_url
+        banner_image_url
+        char_url
+        created_date
+        discord_url
+        featured
+        featured_image_url
+        payout_address
+        telegram_url
+        twitter_username
+        instagram_username
+        wiki_url
+        createdAt
+        updatedAt
+      }
+      nextToken
+      total
+      aggregateItems {
+        name
+        result {
+          ... on SearchableAggregateScalarResult {
+            value
+          }
+          ... on SearchableAggregateBucketResult {
+            buckets {
+              key
+              doc_count
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+export const searchTransactions = /* GraphQL */ `
+  query SearchTransactions(
+    $filter: SearchableTransactionFilterInput
+    $sort: [SearchableTransactionSortInput]
+    $limit: Int
+    $nextToken: String
+    $from: Int
+    $aggregates: [SearchableTransactionAggregationInput]
+  ) {
+    searchTransactions(
+      filter: $filter
+      sort: $sort
+      limit: $limit
+      nextToken: $nextToken
+      from: $from
+      aggregates: $aggregates
+    ) {
+      items {
+        id
+        block_hash
+        transaction_hash
+        block_number
+        from_account
+        to_account
+        transaction_index
+        timestamp
+        createdAt
+        updatedAt
+      }
+      nextToken
+      total
+      aggregateItems {
+        name
+        result {
+          ... on SearchableAggregateScalarResult {
+            value
+          }
+          ... on SearchableAggregateBucketResult {
+            buckets {
+              key
+              doc_count
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+export const searchNftEvents = /* GraphQL */ `
+  query SearchNftEvents(
+    $filter: SearchablenftEventFilterInput
+    $sort: [SearchablenftEventSortInput]
+    $limit: Int
+    $nextToken: String
+    $from: Int
+    $aggregates: [SearchablenftEventAggregationInput]
+  ) {
+    searchNftEvents(
+      filter: $filter
+      sort: $sort
+      limit: $limit
+      nextToken: $nextToken
+      from: $from
+      aggregates: $aggregates
+    ) {
+      items {
+        id
+        event_type
+        auction_type
+        bid_amount
+        collection_slug
+        contract_address
+        listing_time
+        address
+        token_id
+        created_date
+        from_account
+        to_account
+        is_private
+        total_price
+        createdAt
+        updatedAt
+      }
+      nextToken
+      total
+      aggregateItems {
+        name
+        result {
+          ... on SearchableAggregateScalarResult {
+            value
+          }
+          ... on SearchableAggregateBucketResult {
+            buckets {
+              key
+              doc_count
+            }
+          }
+        }
+      }
+    }
+  }
+`;
 export const getTweet = /* GraphQL */ `
   query GetTweet($id: ID!) {
     getTweet(id: $id) {
@@ -322,36 +481,6 @@ export const listNftTraits = /* GraphQL */ `
     }
   }
 `;
-export const getUser = /* GraphQL */ `
-  query GetUser($id: ID!) {
-    getUser(id: $id) {
-      username
-      favorite_nfts {
-        nextToken
-      }
-      createdAt
-      updatedAt
-      id
-    }
-  }
-`;
-export const listUsers = /* GraphQL */ `
-  query ListUsers(
-    $filter: ModelUserFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        username
-        createdAt
-        updatedAt
-        id
-      }
-      nextToken
-    }
-  }
-`;
 export const getNft = /* GraphQL */ `
   query GetNft($id: ID!) {
     getNft(id: $id) {
@@ -389,11 +518,26 @@ export const getNft = /* GraphQL */ `
         createdAt
         updatedAt
       }
-      createdAt
-      updatedAt
+      owner
+      traits {
+        id
+        trait_type
+        value
+        display_type
+        max_value
+        trait_count
+        order
+        createdAt
+        updatedAt
+      }
       favorited_by {
         nextToken
       }
+      watched_by {
+        nextToken
+      }
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -420,6 +564,179 @@ export const listNfts = /* GraphQL */ `
         description
         external_link
         perma_link
+        owner
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getTransaction = /* GraphQL */ `
+  query GetTransaction($id: ID!) {
+    getTransaction(id: $id) {
+      id
+      block_hash
+      transaction_hash
+      block_number
+      from_account
+      to_account
+      transaction_index
+      timestamp
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listTransactions = /* GraphQL */ `
+  query ListTransactions(
+    $filter: ModelTransactionFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listTransactions(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        block_hash
+        transaction_hash
+        block_number
+        from_account
+        to_account
+        transaction_index
+        timestamp
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getNftEvent = /* GraphQL */ `
+  query GetNftEvent($id: ID!) {
+    getNftEvent(id: $id) {
+      id
+      event_type
+      auction_type
+      bid_amount
+      collection_slug
+      contract_address
+      listing_time
+      address
+      token_id
+      created_date
+      from_account
+      to_account
+      is_private
+      transaction {
+        id
+        block_hash
+        transaction_hash
+        block_number
+        from_account
+        to_account
+        transaction_index
+        timestamp
+        createdAt
+        updatedAt
+      }
+      total_price
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listNftEvents = /* GraphQL */ `
+  query ListNftEvents(
+    $filter: ModelNftEventFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listNftEvents(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        event_type
+        auction_type
+        bid_amount
+        collection_slug
+        contract_address
+        listing_time
+        address
+        token_id
+        created_date
+        from_account
+        to_account
+        is_private
+        total_price
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getNftEventCheckpoint = /* GraphQL */ `
+  query GetNftEventCheckpoint($id: ID!) {
+    getNftEventCheckpoint(id: $id) {
+      id
+      saved_events
+      total_events
+      status
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listNftEventCheckpoints = /* GraphQL */ `
+  query ListNftEventCheckpoints(
+    $filter: ModelNftEventCheckpointFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listNftEventCheckpoints(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        saved_events
+        total_events
+        status
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getUser = /* GraphQL */ `
+  query GetUser($id: ID!) {
+    getUser(id: $id) {
+      id
+      username
+      email
+      favorite_nfts {
+        nextToken
+      }
+      watchlist_nfts {
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listUsers = /* GraphQL */ `
+  query ListUsers(
+    $filter: ModelUserFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        username
+        email
         createdAt
         updatedAt
       }
@@ -431,14 +748,8 @@ export const getUserFavoriteNft = /* GraphQL */ `
   query GetUserFavoriteNft($id: ID!) {
     getUserFavoriteNft(id: $id) {
       id
-      userID
       nftID
-      user {
-        username
-        createdAt
-        updatedAt
-        id
-      }
+      userID
       nft {
         id
         address
@@ -455,6 +766,14 @@ export const getUserFavoriteNft = /* GraphQL */ `
         description
         external_link
         perma_link
+        owner
+        createdAt
+        updatedAt
+      }
+      user {
+        id
+        username
+        email
         createdAt
         updatedAt
       }
@@ -476,8 +795,68 @@ export const listUserFavoriteNfts = /* GraphQL */ `
     ) {
       items {
         id
-        userID
         nftID
+        userID
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getUserWatchlistNft = /* GraphQL */ `
+  query GetUserWatchlistNft($id: ID!) {
+    getUserWatchlistNft(id: $id) {
+      id
+      nftID
+      userID
+      nft {
+        id
+        address
+        token_id
+        num_sales
+        background_color
+        image_url
+        image_preview_url
+        image_thumbnail_url
+        image_original_url
+        animation_url
+        animation_original_url
+        name
+        description
+        external_link
+        perma_link
+        owner
+        createdAt
+        updatedAt
+      }
+      user {
+        id
+        username
+        email
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listUserWatchlistNfts = /* GraphQL */ `
+  query ListUserWatchlistNfts(
+    $filter: ModelUserWatchlistNftFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listUserWatchlistNfts(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        nftID
+        userID
         createdAt
         updatedAt
       }

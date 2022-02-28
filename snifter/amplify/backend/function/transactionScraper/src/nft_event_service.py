@@ -172,7 +172,6 @@ async def put_batch_nft_events_task(items: list, checkpoint_id, dynamodb = None,
             from pprint import pprint
             print(nft_event.total_price)
             event = get_item(nft_event.id, table=event_table)
-            # event = get_nft_event(item, nft_event_table=event_table)
             if event is None:
                 nft_event = dict(nft_event)
                 transaction = nft_event.pop('transaction', None)
@@ -211,7 +210,6 @@ async def put_batch_nft_events_task(items: list, checkpoint_id, dynamodb = None,
 
                 # Don't break loop for one erroneous nft_event
                 except Exception as e:
-                    print(" FUUUUUUUUUUCK", e)
                     continue
     
     update_checkpoint(checkpoint_id, checkpoint_table, num_saved_events=saved_events)
@@ -243,7 +241,6 @@ async def maybe_put_batch_items(items: list, message_id):
     while saved_checkpoint is None:
         time.sleep(1.0);
         saved_checkpoint = get_item(checkpoint.id, table=checkpoint_table)
-    print("Checkpoint Created")
 
     if not isinstance(items, list):
         items = [items]
