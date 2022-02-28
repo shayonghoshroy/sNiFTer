@@ -18,23 +18,15 @@
       <div>
         <div v-if="user.username">
           <div class="buttons">
-            <router-link to="/profile" class="button is-purple"
-              >{{ user.username }}'s Profile</router-link
-            >
-            <v-button class="button is-purple" @click="reloadPage"
-              >Logout</v-button
-            >
+            <router-link to="/user" class="button is-purple">{{
+              user.username
+            }}</router-link>
           </div>
         </div>
         <div v-else>
           <div class="buttons">
-            <div>
-              <router-link to="/register" class="button is-purple">
-                <div class="is-purple">Register</div>
-              </router-link>
-            </div>
             <div class="navbar-item">
-              <router-link to="/signin" class="button is-purple">
+              <router-link to="/user" class="button is-purple">
                 <div class="is-purple">Sign In</div>
               </router-link>
             </div>
@@ -47,6 +39,14 @@
     </template>
   </va-navbar>
 </template>
+
+<script setup>
+import "@aws-amplify/ui-vue/styles.css";
+import Amplify from "aws-amplify";
+import awsconfig from "../../aws-exports";
+
+Amplify.configure(awsconfig);
+</script>
 
 <script>
 import { Auth } from "aws-amplify";
@@ -79,7 +79,6 @@ export default {
     try {
       const user = await Auth.currentAuthenticatedUser();
       this.user = user;
-      console.log(this.user.username);
     } catch (e) {
       console.log(e);
     }
@@ -101,6 +100,7 @@ nav {
 }
 .is-purple {
   color: #6f36bc;
+  font-weight: 500;
 }
 .is-white {
   color: #ffffff;

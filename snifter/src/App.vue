@@ -1,9 +1,9 @@
 <template>
-  <div id="app" class="background-image">
+  <div id="app" class="">
     <div class="header modal-mask">
       <Nav />
     </div>
-    <div style="margin-top: 100px">
+    <div class="margin-top">
       <router-view />
     </div>
   </div>
@@ -40,12 +40,6 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
-.background-image {
-  background-image: url("https://images.unsplash.com/photo-1557682250-33bd709cbe85?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2029&q=80");
-  background-attachment: fixed;
-  position: absolute;
-  width: 100%;
-}
 #nav {
   padding: 30px;
 }
@@ -64,6 +58,8 @@ export default {
   top: 0; /* top left corner should start at topmost spot */
   width: 100vw; /* take up the full browser width */
   z-index: 200; /* high z index so other content scrolls underneath */
-  height: 100px; /* define height for content */
+}
+.margin-top {
+  margin-top: 100px;
 }
 </style>

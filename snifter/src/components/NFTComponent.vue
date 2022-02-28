@@ -95,7 +95,6 @@ export default {
           },
         });
         this.nfts = nfts.data.listNfts.items;
-        //console.log(this.nfts);
       } catch (e) {
         console.error(e);
       }

@@ -17,12 +17,6 @@ export default {
 </script>
 
 <style scoped>
-div {
-  display: flex;
-  flex-flow: column;
-  justify-content: center;
-  align-items: center;
-}
 h1 {
   margin-top: 1em;
   text-align: center;

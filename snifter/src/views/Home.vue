@@ -5,7 +5,14 @@
       <p>First round's on us</p>
     </article>
     <div>
-      <SearchComponent />
+      <div v-if="!username">
+        <router-link to="/user" class="button is-purple">
+          <div>Sign In or Register</div>
+        </router-link>
+      </div>
+      <div v-else>
+        <SearchComponent />
+      </div>
       <NFTComponent />
     </div>
   </div>
@@ -13,13 +20,25 @@
 
 <script>
 import NFTComponent from "../components/NFTComponent";
-import SearchComponent from "../components/SearchComponent.vue";
+import Auth from "@aws-amplify/auth";
+import SearchComponent from "../components/SearchComponent";
 
 export default {
   name: "Home",
   components: { NFTComponent, SearchComponent },
   setup() {
-    return {};
+    return {
+      username: Auth.user ? Auth.user.username : "",
+    };
+  },
+  async created() {
+    try {
+      const user = await Auth.currentAuthenticatedUser();
+      this.user = user;
+      this.username = user.username;
+    } catch (e) {
+      console.error(e);
+    }
   },
 };
 </script>
@@ -41,22 +60,6 @@ export default {
   text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.7);
   font-size: 30px;
 }
-.button-block {
-  text-align: center;
-  margin-left: auto;
-  margin-right: auto;
-  width: 100%;
-  position: absolute;
-  bottom: -150px;
-  .button {
-  }
-  .welcome {
-    width: 400px;
-    padding: 10px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-}
 .is-xl {
   font-size: 1.3rem;
   height: 100%;
@@ -68,11 +71,9 @@ export default {
 .is-white {
   color: #ffffff;
 }
-.div {
-  padding-top: 50px;
-  padding-right: 50px;
-  padding-bottom: 50px;
-  padding-left: 50px;
+.button {
+  color: #6f36bc;
+  font-weight: 500;
 }
 p {
   font-size: clamp(16px, 1.2vw, 1.2vw);
