@@ -1,27 +1,28 @@
-<template>
-  <div id="tweetcomponent">
+<template>  
+  <div id="tweetcomponent" v-if="tweets.length > 0">
     <div>
       <div class="post" v-for="tweet in tweets" :key="tweet.id">
-        <div class="row center">
-          <div class="flex md6 lg4">
-            <va-card tag="b">
-              <va-card-title>{{ tweet.username }}</va-card-title>
-              <va-card-content>{{ tweet.text }}</va-card-content>
-            </va-card>
-          </div>
-        </div>
+        <blockquote class="twitter-tweet">
+          <p lang="en" dir="ltr">{{ tweet.text }}</p>&mdash; {{  tweet.username }} (@{{ tweet.username }}) 
+          <a :href= "tweet.URL">{{ tweet.date }}</a>
+        </blockquote>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+var TwitterWidgetsLoader = require('twitter-widgets');
 import { API } from "aws-amplify";
 import { listTweets } from "../graphql/queries";
 export default {
   name: "TweetComponent",
   async created() {
-    this.getTweets();
+    if (this.tweets.length === 0)
+      this.getTweets();
+  },
+  mounted()  {
+    TwitterWidgetsLoader.load();
   },
   data() {
     return {
@@ -36,10 +37,11 @@ export default {
         const tweets = await API.graphql({
           query: listTweets,
           variables: {
-            limit: 50,
+            limit: 100,
           },
         });
         this.tweets = tweets.data.listTweets.items;
+	console.log(this.tweets)
       } catch (e) {
         console.error(e);
       }
@@ -48,7 +50,38 @@ export default {
 };
 </script>
 <style scoped>
+blockquote.twitter-tweet {
+  display: inline-block;
+  font-family: "Helvetica Neue", Roboto, "Segoe UI", Calibri, sans-serif;
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 16px;
+  border-color: #eee #ddd #bbb;
+  border-radius: 5px;
+  border-style: solid;
+  border-width: 1px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  margin: 10px 5px;
+  padding: 0 16px 16px 16px;
+  max-width: 468px;
+}
+blockquote.twitter-tweet p {
+  font-size: 16px;
+  font-weight: normal;
+  line-height: 20px;
+}
+blockquote.twitter-tweet a {
+  color: inherit;
+  font-weight: normal;
+  text-decoration: none;
+  outline: 0 none;
+}
+blockquote.twitter-tweet a:hover,
+blockquote.twitter-tweet a:focus {
+  text-decoration: underline;
+}
 .post {
+  background: #fff;
   padding: 1.5em;
 }
 .post h2 {
