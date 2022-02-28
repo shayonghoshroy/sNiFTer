@@ -12,7 +12,6 @@
         <a class="navbar-item router-hover" href="/news">News</a>
         <a class="navbar-item router-hover" href="/browse">Browse</a>
         <a class="navbar-item router-hover" href="/search">Search</a>
-        <a class="navbar-item router-hover" href="/wiki/home">Wiki</a>
       </va-navbar-item>
     </template>
     <template #right class="mb-2">
@@ -22,6 +21,9 @@
             <router-link to="/user" class="button is-purple">{{
               user.username
             }}</router-link>
+            <div @click="connectToMetaMask()">
+              <va-icon name="account_balance_wallet" size="large" />
+            </div>
           </div>
         </div>
         <div v-else>
@@ -30,10 +32,10 @@
               <router-link to="/user" class="button is-purple">
                 <div class="is-purple">Sign In</div>
               </router-link>
+              <div @click="connectToMetaMask()">
+                <va-icon name="account_balance_wallet" size="large" />
+              </div>
             </div>
-          </div>
-          <div @click="connectToMetaMask()">
-            <va-icon name="account_balance_wallet" size="large" />
           </div>
         </div>
       </div>

@@ -1,7 +1,11 @@
 <template>
   <div>
     <div class="row" style="width: 100%">
-      <va-input class="flex mb-2 md6" placeholder="Filter..." v-model="filter">
+      <va-input
+        class="flex mb-2 md6 text-input"
+        placeholder="Filter..."
+        v-model="filter"
+      >
       </va-input>
     </div>
 
@@ -26,8 +30,7 @@ export default {
   computed: {
     traitItems() {
       var supply = this.totalSupply;
-      if (supply === "0")
-        supply = 10000;
+      if (supply === "0") supply = 10000;
       return this.traits.map((trait) => {
         return {
           type: trait.trait_type,
@@ -52,4 +55,10 @@ export default {
 };
 </script>
 
-<style lang="css" scoped></style>
+<style lang="css" scoped>
+.text-input {
+  margin: 0 auto;
+  border: 1px solid gray;
+  border-radius: 5px;
+}
+</style>

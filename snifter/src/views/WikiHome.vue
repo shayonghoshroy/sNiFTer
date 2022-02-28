@@ -1,7 +1,7 @@
 <template>
   <div class="wikihome">
     <article>
-      <h2>Welcome to the sNiFTer Wiki</h2>
+      <h2 style="color: white">Welcome to the sNiFTer Wiki</h2>
     </article>
     <WikiHomeComponent class="sNiFTer Wiki Home" />
   </div>

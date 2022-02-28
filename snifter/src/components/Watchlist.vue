@@ -61,7 +61,7 @@ export default {
         const Watchlist = await API.graphql({
           query: listUserWatchlistNfts,
           variables: {
-            limit: 5,
+            limit: 10,
             filter: {
               userID: { eq: this.username },
             },

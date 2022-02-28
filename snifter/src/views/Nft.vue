@@ -8,13 +8,13 @@
           : 'nft-default-background'
       "
     >
-      <div v-if="nft" :src="nft" class="nft-card">
+      <div v-if="nft" :src="nft" class="nft-card background mb-5">
         <!-- Top row of nft card -->
         <div class="top-row">
           <!-- Leftmost section of nft card -->
           <div class="nft-image-wrapper">
             <div class="nft-header">
-              <h1 v-if="nft.name" style="color: white;">
+              <h1 v-if="nft.name">
                 {{ nft.name }}
               </h1>
               <h1 v-else-if="currentContract">
@@ -56,9 +56,11 @@
                     size="large"
                     @click="favorite(this.user, nft.id)"
                   ></va-icon>
+                  <div id="container">
+                    <p class="right">{{ this.totalFavorites }}</p>
+                  </div>
                 </div>
               </div>
-              <p>{{ this.totalFavorites }}</p>
             </div>
           </div>
 
@@ -303,9 +305,6 @@ export default {
 
     await this.subscribeToCheckpoint(resp["messageId"]);
     console.log(this.nftEvents);
-
-    
-
   },
   data() {
     return {
@@ -425,7 +424,7 @@ export default {
     },
   },
   methods: {
-    async getUser (){
+    async getUser() {
       const user = await Auth.currentAuthenticatedUser();
       this.user = user.username;
     },
@@ -438,8 +437,7 @@ export default {
           },
         });
         if (
-          typeof is_watching.data.listUserWatchlistNfts.items[0] !==
-          "undefined"
+          typeof is_watching.data.listUserWatchlistNfts.items[0] !== "undefined"
         ) {
           this.isWatching = true;
           console.log("is watching");
@@ -463,8 +461,7 @@ export default {
           },
         });
         if (
-          typeof is_watching.data.listUserWatchlistNfts.items[0] !==
-          "undefined"
+          typeof is_watching.data.listUserWatchlistNfts.items[0] !== "undefined"
         ) {
           const userWatchlistNftId = {
             id: is_watching.data.listUserWatchlistNfts.items[0].id,
@@ -823,6 +820,7 @@ export default {
 .nft-header {
   margin-bottom: 1em;
   font-size: 2rem;
+  color: black;
 }
 
 .nft-interactions {
@@ -946,5 +944,25 @@ h1 {
 
 .transaction-section {
   padding: 2em;
+}
+
+.background {
+  background-color: #ffffff;
+}
+
+.right {
+  right: 0;
+}
+
+.top {
+  top: 0;
+}
+
+#container {
+  position: relative;
+}
+
+#container > * {
+  position: absolute;
 }
 </style>

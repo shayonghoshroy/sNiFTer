@@ -291,7 +291,7 @@ export default {
 .is-purple {
   color: #6f36bc;
 }
-.is-white {
-  color: #ffffff;
+.background {
+  background-color: transparent;
 }
 </style>
