@@ -16,4 +16,13 @@ applyPolyfills().then(() => {
 });
 Amplify.configure(awsconfig);
 
-createApp(App).use(router).use(VuesticPlugin).use(SimpleVueGrid).mount("#app");
+createApp(App)
+  .use(router)
+  .use(VuesticPlugin, {
+    colors: {
+      primary: "#6f36bc",
+      custom: "#A35600",
+    },
+  })
+  .use(SimpleVueGrid)
+  .mount("#app");
