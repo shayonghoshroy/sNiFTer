@@ -12,7 +12,7 @@ def scrape_user(api, usernames):
         except Exception as e:
             continue
         data = client.put_item(
-        TableName= 'twitterUser-lwzlz2gonfcnno5mdka25xn2u4-eowredev',
+        TableName= 'twitterUser-u7k5bta6mvfefdvl7fidjvr7ay-stephendev',
         Item={
             'id': {
                 'S': str(user.id)
@@ -76,7 +76,7 @@ def put_tweet(tweet):
     except AttributeError:
             text = tweet.full_text
     data = client.put_item(
-    TableName='tweet-lwzlz2gonfcnno5mdka25xn2u4-eowredev',
+    TableName='tweet-u7k5bta6mvfefdvl7fidjvr7ay-stephendev',
     Item={
         'id': {
             'S': str(tweet.id)
