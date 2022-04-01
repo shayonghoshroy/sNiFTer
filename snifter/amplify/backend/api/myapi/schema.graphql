@@ -194,6 +194,30 @@ type user @model {
     email: String
     favorite_nfts: [nft] @manyToMany(relationName: "UserFavoriteNft")
     watchlist_nfts: [nft] @manyToMany(relationName: "UserWatchlistNft")
+    completed_quizzes: [String]
+    quiz_points: Int
     createdAt: AWSDateTime
     updatedAt:AWSDateTime
+}
+
+type article @model {
+ id: ID!
+ title: String!
+ blurb: String!
+ questions: [String]
+ answers: [String]
+ category: String
+ related_links: [String]
+ createdAt: AWSDateTime
+ updatedAt:AWSDateTime
+ }
+
+type quiz @model {
+  id: ID!
+  title: String!
+  questions: [String]!
+  answers: [[String]]!
+  correct_answer: [String]!
+  createdAt: AWSDateTime
+  updatedAt: AWSDateTime
 }

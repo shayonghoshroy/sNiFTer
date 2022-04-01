@@ -1,10 +1,10 @@
 <template>
   <div class="quizbox" v-if="(this.quiz != null) && (this.articleID != null)">
     <form>
-      <div>
+      <div v-if="this.questionIndex == 0">
         <h2>Try your luck at a quiz!</h2> 
       </div>
-      <div class="divider"> </div>
+      <div v-if="this.questionIndex == 0" class="divider"> </div>
       <div v-if="(this.questionIndex >= this.quiz.questions.length) && (score == count)">
         <h2>Great job! You mastered this concept!</h2>
       </div>
@@ -13,13 +13,14 @@
       </div>
 
       <div v-if="this.questionIndex < this.quiz.questions.length">
-        <h1>{{ this.quiz.questions[this.questionIndex] }} </h1>
+        <h1>{{ this.quiz.questions[this.questionIndex] }} </h1> <br>
         <div>
-          <va-radio style="padding-left: 8px; padding-right: 8px;"
+          <va-radio style="padding-left: 10px; padding-right: 10px; break-after: always;"
             v-for="c in this.quiz.answers[this.questionIndex]"
             :key="c"
             v-model="answer"
             :option="c"
+            :label="c"
           />
         </div>
       </div>
@@ -28,38 +29,24 @@
         <va-button type="button" @click="restart">Restart</va-button> <br>
       </div>
       <div v-if="this.questionIndex < this.quiz.questions.length">
+        <br>
         <va-button type="button" @click="submit">Check</va-button>
       </div>
       
     </form>
     <p>score: {{ Math.round((score/count)*100 )}}%</p>
+    <br>
   </div>
+
 </template>
 <script>
-/*
-const questions = [
-  {
-    question: "What is American football called in England?",
-    choices: ["American football", "football", "Handball"],
-    rightAnswer: "American football",
-  },
-  {
-    question: "What is the largest country in the world?",
-    choices: ["Russia", "Canada", "United States"],
-    rightAnswer: "Russia",
-  },
-  {
-    question: "What is the 100th digit of Pi?",
-    choices: [9, 4, 7],
-    rightAnswer: 9,
-  },
-];
-*/
-import { API } from "aws-amplify";
-import { listQuizzes } from "../graphql/queries";
+import { API, graphqlOperation, Auth } from "aws-amplify";
+import { listQuizzes, listUsers } from "../graphql/queries";
+import { updateUser } from "../graphql/mutations";
 export default {
   name: "App",
   async created() {
+    await this.getUser();
     await this.getQuiz();
   },
   data() {
@@ -69,7 +56,11 @@ export default {
       questionIndex: 0,
       question: null,
       answer: "",
+      quiz_score: 0,
       quiz: null,
+      user: null,
+      username: null,
+      completedQuizzes: [],
     };
   },
   props: {
@@ -79,27 +70,81 @@ export default {
       },
   },
   methods: {
+    async getUser() {
+      const userAuth = await Auth.currentAuthenticatedUser();
+      const currentusername = userAuth.username;
+      console.log(currentusername);
+      if(userAuth != null) {
+        try {
+          const user = await API.graphql({
+            query: listUsers,
+            variables: {
+              filters: {id: {eq: currentusername}},
+              limit: 100,
+            }
+          });
+
+          console.log(user.data.listUsers.items[0]);
+          console.log(user.data.listUsers.items[0].completed_quizzes);
+          if(user.data.listUsers.items[0] != null) {
+            this.user = user.data.listUsers.items[0];
+          }
+          if(user.data.listUsers.items[0].completed_quizzes != null) {
+            this.completedQuizzes = user.data.listUsers.items[0].completed_quizzes;
+          }
+          if(user.data.listUsers.items[0].quiz_points != null) {
+            this.quiz_score = user.data.listUsers.items[0].quiz_points;
+          }
+          
+          console.log(user);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    },
+    async updateUser() {
+      try {
+        this.completedQuizzes.push(this.articleID);
+        /*
+        const user = await API.graphql({
+          mutation: updateUser,
+          input: {
+            id: this.user.id,
+            completed_quizzes: this.completedQuizzes,
+          }
+        });
+        */
+
+        await API.graphql(graphqlOperation(updateUser, {input: {id: this.user.id, completed_quizzes: this.completedQuizzes, quiz_points: this.quiz_score}}));
+
+        console.log(this.completedQuizzes);
+        
+        /*
+        console.log(this.user.data.listUsers.items[0].completed_quizzes);
+        if(this.user.data.listUsers.items[0] != null) {
+          this.user = user.data.listUsers.items[0];
+          console.log(this.user);
+        }
+        if(this.user.data.listUsers.items[0].completed_quizzes != null) {
+          this.completedQuizzes = user.data.listUsers.items[0].completed_quizzes;
+        }
+        */
+        
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    
     async getQuiz() {
       try {
         const quiz = await API.graphql({
           query: listQuizzes,
           variables: {
-          limit: 3,
+          limit: 5,
           filter: {id: {eq: this.articleID}}
           },
         });
         this.quiz = quiz.data.listQuizzes.items[0];
-        /*
-        for(var i = 0; i < this.quiz.questions.length; i++) {
-          console.log(this.quiz.questions[i]);
-          console.log(this.quiz.answers[i]);
-          console.log(this.quiz.correct_answer[i]);
-        }
-        console.log(this.quiz.questions.length);
-        console.log(this.quiz.questions[this.questionIndex]);
-        console.log(this.quiz.answers[this.questionIndex]);
-        console.log(this.quiz.answers[this.questionIndex]);
-        */
       } catch (e) {
         console.error(e);
       }
@@ -114,6 +159,16 @@ export default {
       }
       if (this.questionIndex < this.quiz.questions.length) {
         this.questionIndex++;
+      }
+
+      if((this.questionIndex >= this.quiz.questions.length) && (this.score == this.count)) {
+        console.log(this.user);
+        console.log(this.user != null);
+        console.log(!(this.completedQuizzes.includes(this.articleID)));
+        if((this.user != null) && !(this.completedQuizzes.includes(this.articleID))) {
+          this.quiz_score = this.quiz.questions.length;
+          this.updateUser();
+        }
       }
     },
     restart() {
