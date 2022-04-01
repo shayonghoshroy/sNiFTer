@@ -31,14 +31,13 @@
                 <div class="watchlist-icon">
                   <va-icon
                     v-if="isWatching"
-                    name="visibility_off"
+                    name="bookmark"
                     size="large"
-                    color="white"
                     @click="watch(this.user, nft.id)"
                   ></va-icon>
                   <va-icon
                     v-else
-                    name="visibility"
+                    name="bookmark_border"
                     size="large"
                     @click="watch(this.user, nft.id)"
                   ></va-icon>
