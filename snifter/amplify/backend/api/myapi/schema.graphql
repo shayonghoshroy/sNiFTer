@@ -121,7 +121,7 @@ type nftTraits @model @auth(rules: [{allow: public}]){
  updatedAt:AWSDateTime
 }
 
-type nft @model {
+type nft @model @auth(rules: [{allow: public}]){
  id: ID!
  address: ID! @index(name: "nftsByContract", sortKeyFields: ["token_id"])
  token_id: Int!
@@ -188,7 +188,7 @@ type nftEventCheckpoint @model {
     updatedAt:AWSDateTime
 }
 
-type user @model {
+type user @model @auth(rules: [{allow: public}]){
     id: ID!
     username: ID!
     email: String
