@@ -1,22 +1,14 @@
 <template>
   <div id="wikiHomeComponent">
     <div v-if="this.user != undefined">
-      <div class="levelflex">
-        <div class="levelbox">
-          <div>
-            <h2>Welcome {{this.user.username}}!</h2><br>
-          </div>
-          <div>
-            <h1>Your current Wiki level is {{level}}. Read more articles and complete more quizzes to level up!</h1>
-          </div>
-          <div class="progressflex">
-            <h1>Current progress to the next level:</h1>
-            <va-progress-circle class="mr-4" :modelValue="this.progressValue">
-              {{ this.progressValue + '%' }}
-            </va-progress-circle>
-          </div>
-        </div>
-      </div>
+      <h2 style="color: white">Welcome {{this.user.username}}!</h2><br>
+      <p style="color: white">Your current Wiki level is {{level}}. Read more articles and complete more quizzes to level up!</p>
+      <va-progress-bar :model-value="this.progressValue" size="medium" color="#FFFFFF">
+        <p style="color: white"> Progress to next level: {{ this.progressValue + '%' }} </p>
+      </va-progress-bar>
+    </div>
+    <div v-else>
+      <h2 style="color: white">Welcome to the sNiFTer Wiki</h2>
     </div>
     <div class="flexbox">
       <div class="post" v-for="category in categories" :key="category.id">
@@ -39,11 +31,6 @@
                         <va-icon name="done" color=#9BEC15 class="mr-4"/>
                       </div> 
                     </va-card-content>
-                    <div v-if="completedQuizzes.includes(article.id)" >
-                      <div class = "flex-item-bottom" style="height: 20px; width: 20px">
-                        <va-icon name="done" color=#9BEC15 class="mr-4"/>
-                      </div>
-                    </div> 
                   </div>
                 </va-card>
               </router-link>
@@ -78,6 +65,7 @@ export default {
       quiz_score: 0,
       level: 0,
       user: undefined,
+      username: undefined,
       categories: [ "NFT", "Blockchain" ],
     };
   },
@@ -101,18 +89,20 @@ export default {
     async getUser() {
       try {
         const userAuth = await Auth.currentAuthenticatedUser();
-        const currentusername = userAuth.username;
-        console.log(currentusername);
+        this.username = userAuth.username;
+        // console.log(this.username);
         if(userAuth != null) {
+          
           const user = await API.graphql({
             query: listUsers,
             variables: {
-              filters: {id: {eq: currentusername}},
-              limit: 100,
-            }
+              limit: 300,
+              filter: { id: { eq: this.username } },
+            },
           });
 
-          console.log(user.data.listUsers.items[0].completed_quizzes);
+
+          // console.log(user.data.listUsers.items[0].completed_quizzes);
           this.user = user.data.listUsers.items[0];
           if(user.data.listUsers.items[0].completed_quizzes != null) {
             this.completedQuizzes = user.data.listUsers.items[0].completed_quizzes;
@@ -122,12 +112,13 @@ export default {
           }
           this.evaluateProgress();
 
-          console.log(user);
+          // console.log(user);
         } 
       } catch (e) {
           console.error(e);
       }
     },
+
     async getArticle(searchtitle) {
       if(searchtitle == "") {
         try {
@@ -138,14 +129,14 @@ export default {
             },
           });
           this.articles = articles.data.listArticles.items;
-          console.log(this.articles);
+          // console.log(this.articles);
         } catch (e) {
           console.error(e);
         }
       }
       else {
         try {
-          console.log(searchtitle);
+          // console.log(searchtitle);
           const articles = await API.graphql({
             query: listArticles,
             variables: {
@@ -154,8 +145,8 @@ export default {
             },
           });
           this.articles = articles.data.listArticles.items;
-          console.log(this.articles);
-          console.log("filtered articles");
+          // console.log(this.articles);
+          // console.log("filtered articles");
         } catch (e) {
           console.error(e);
         }
@@ -164,8 +155,8 @@ export default {
     evaluateProgress() {
       this.level = Math.floor(this.quiz_score / 5) + 1;
       this.progressValue = ((this.quiz_score % 5) / 5) * 100;
-      console.log(this.progressValue);
-      console.log((this.quiz_score % 5) / 5);
+      // console.log(this.progressValue);
+      // console.log((this.quiz_score % 5) / 5);
     }
   },
 };
@@ -237,13 +228,12 @@ img {
   border-bottom: 1px solid lightgray;
   border-right: 1px solid lightgrey;
   border-left: 1px solid lightgrey;
-  border-radius: 50px;
   margin-left: 50px;
   margin-right: 50px;
-  align-items: center;
-  flex-direction: row;
-  gap: 20px;
-  width: 1200px;
+  border-radius: 5px;
+  align-items: flex-start;
+  justify-content: space-around;
+  flex-direction: column;
 }
 .flexbox {
   display: flex;
@@ -256,9 +246,11 @@ img {
   display: flex;
   align-content: center;
   align-items: center;
-  flex-direction: column;
-  margin-bottom: 3vw;
+  justify-content: center;
+  flex-direction: row;
+  gap: 20px;
 }
+
  .cardflex {
   display: flex;
   flex-flow: row wrap;

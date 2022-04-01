@@ -34,7 +34,7 @@ export default {
     this.answers = this.articleData.answers;
     this.title = this.articleData.title;
     this.article = this.articleData;
-    console.log(this.article.related_links);
+    // console.log(this.article.related_links);
     //console.log(this.article.id);
     this.$emit('getID', this.article.id)
     //console.log(this.questions);
@@ -54,7 +54,7 @@ export default {
   },
   methods: {
     onReady() {
-      this.$refs.youtube.playVideo()
+      
     },
     async getArticle(articleId) {
       try {

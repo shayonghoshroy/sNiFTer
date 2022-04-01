@@ -71,21 +71,22 @@ export default {
   },
   methods: {
     async getUser() {
-      const userAuth = await Auth.currentAuthenticatedUser();
-      const currentusername = userAuth.username;
-      console.log(currentusername);
-      if(userAuth != null) {
-        try {
+      try {
+        const userAuth = await Auth.currentAuthenticatedUser();
+        const currentusername = userAuth.username;
+        // console.log(currentusername);
+        if(userAuth != null) {
           const user = await API.graphql({
             query: listUsers,
             variables: {
-              filters: {id: {eq: currentusername}},
-              limit: 100,
-            }
+              limit: 300,
+              filter: { id: { eq: currentusername } },
+            },
           });
 
-          console.log(user.data.listUsers.items[0]);
-          console.log(user.data.listUsers.items[0].completed_quizzes);
+
+          // console.log(user.data.listUsers.items[0]);
+          // console.log(user.data.listUsers.items[0].completed_quizzes);
           if(user.data.listUsers.items[0] != null) {
             this.user = user.data.listUsers.items[0];
           }
@@ -96,10 +97,10 @@ export default {
             this.quiz_score = user.data.listUsers.items[0].quiz_points;
           }
           
-          console.log(user);
-        } catch (e) {
-          console.error(e);
+          // console.log(user);
         }
+      } catch (e) {
+          console.error(e);
       }
     },
     async updateUser() {
@@ -117,7 +118,7 @@ export default {
 
         await API.graphql(graphqlOperation(updateUser, {input: {id: this.user.id, completed_quizzes: this.completedQuizzes, quiz_points: this.quiz_score}}));
 
-        console.log(this.completedQuizzes);
+        // console.log(this.completedQuizzes);
         
         /*
         console.log(this.user.data.listUsers.items[0].completed_quizzes);
@@ -140,8 +141,8 @@ export default {
         const quiz = await API.graphql({
           query: listQuizzes,
           variables: {
-          limit: 5,
-          filter: {id: {eq: this.articleID}}
+            limit: 5,
+            filter: {id: {eq: this.articleID}}
           },
         });
         this.quiz = quiz.data.listQuizzes.items[0];
@@ -162,11 +163,15 @@ export default {
       }
 
       if((this.questionIndex >= this.quiz.questions.length) && (this.score == this.count)) {
+        /*
         console.log(this.user);
+        console.log("should fire");
+        console.log("articleID: " + this.articleID);
         console.log(this.user != null);
         console.log(!(this.completedQuizzes.includes(this.articleID)));
+        */
         if((this.user != null) && !(this.completedQuizzes.includes(this.articleID))) {
-          this.quiz_score = this.quiz.questions.length;
+          this.quiz_score += this.quiz.questions.length;
           this.updateUser();
         }
       }
