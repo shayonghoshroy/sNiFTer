@@ -39,136 +39,139 @@
           />
         </va-form>
       </div>
-
-      <va-button :disabled="disableSearch" @click="startSearch()">Search</va-button
-      >
+      <va-button :disabled="disableSearch" @click="startSearch()">
+        Search
+      </va-button>
     </div>
   </div>
 </template>
 
 <script>
 import { API } from "aws-amplify";
-import { listTweets } from "../graphql/queries";
-import { fetchTweets, fetchTwitterUser } from "../services/tweetScraperService"
+import { userTweetsByMostRecent, tweetsByMostRecent } from "../graphql/queries";
+import { fetchTweets, fetchTwitterUser } from "../services/tweetScraperService";
 export default {
-    name: "tweetSearchComponent",
-    components: {},
-    data() {
-        return {
-            keywordTweets: "",
-            keywordUser: "",
-            tweets: [],
-            twitterUsers: [],
-            searchTypes: ["Tweets", "TwitterUser"],
-            searchIndex: 0,
-            requestCount: 0,
-            disableSearch: false,
-        };
+  name: "tweetSearchComponent",
+  components: {},
+  data() {
+    return {
+      keywordTweets: "",
+      keywordUser: "",
+      tweets: [],
+      twitterUsers: [],
+      searchTypes: ["Tweets", "TwitterUser"],
+      searchIndex: 0,
+      requestCount: 0,
+      disableSearch: false,
+    };
+  },
+  computed: {
+    searchType() {
+      return this.searchTypes[this.searchIndex];
     },
-    computed: {
-        searchType() {
-            return this.searchTypes[this.searchIndex];
-        },
-    },
-    methods: {
-        startSearch: async function () {
-            this.disableSearch = false;
-            var response = null;
-            var event = {
-                searchStatus: "Faliure",
-                data: [],
-                searchType: "",
-            };
-            //tweet search
-            try {
-                if (this.searchIndex === 0) {
-                    event["searchType"] = "Tweets";
-                    await this.getTweets();
-                    // Fetch tweets from API
-                    if(this.tweets.length === 0) {
-                        event["searchStatus"] = "Fetching";
-                        this.$emit("twitterSearch", event);
-                        response = await fetchTweets(this.keywordTweets);
-                        console.log(response);
-                        //successful search
-                        if (response.ok) {
-                            console.log("here");
-                            await this.getTweets();
-                            event["data"] = this.tweets;
-                            if (this.tweets.length > 0) {
-                                event["searchStatus"] = "Success";
-                            }
-                        } else {
-                            event["searchStatus"] = "Failure";
-                        }
-                        this.$emit("twitterSearch", event);
-                    } else {
-                        event["searchStatus"] = "Success";
-                        event["data"] = this.tweets;
-                        console.log(this.tweets);
-                        this.$emit("twitterSearch", event);
-                    }
-                } else if (this.searchIndex === 1) {
-                    event["searchType"] = "TwitterUser";
-                    await this.getTwitterUsers();
-                    debugger;
-                    if (this.twitterUsers.length > 0) {
-                        event["searchStatus"] = "Fetching";
-                        this.$emit("twitterSearch", event);
-                        response = await fetchTwitterUser(this.keywordUsers);
-                        if (response.ok) {
-                            await this.getTwitterUsers();
-                            event["data"] = this.twitterUsers;
-                            if (this.twitterUsers.length > 0) {
-                                event["searchStatus"] = "Success";
-                            }
-                        } else {
-                            event["searchStatus"] = "Failure";
-                        }
-                        this.$emit("twitterSearch", event);
-                    }
-                }
-            } catch (e) {
-                event["searchStatus"] = "Failure";
-                console.error(e)
-                this.$emit("twitterSearch", event);
+  },
+  methods: {
+    startSearch: async function () {
+      this.disableSearch = false;
+      var response = null;
+      var event = {
+        searchStatus: "Faliure",
+        data: [],
+        searchType: "",
+      };
+      //tweet search
+      try {
+        if (this.searchIndex === 0) {
+          event["searchType"] = "Tweets";
+          if (this.tweets.length === 0) {
+            event["searchStatus"] = "Fetching";
+            this.$emit("twitterSearch", event);
+            response = await fetchTweets(this.keywordTweets);
+            //successful search
+            if (response.ok) {
+              await this.getTweets();
+              event["data"] = this.tweets;
+              if (this.tweets.length > 0) {
+                event["searchStatus"] = "Success";
+              }
+            } else {
+              event["searchStatus"] = "Failure";
             }
-            this.disableSearch = false;
-        },
-        getTweets: async function () {
-            try {
-                console.log("Starting Query");
-                this.keywordTweets = this.keywordTweets.toLowerCase();
-                
-                const tweet = await API.graphql({
-                    query: listTweets,
-                    variables: {
-                      filter: { text: { contains: this.keywordTweets } },
-                    },
-                });
-                //console.log(this.tweets.length);
-                this.tweets = tweet.data.listTweets.items;
-            } catch (e) {
-                console.error(e);
+            this.$emit("twitterSearch", event);
+          } else {
+            event["searchStatus"] = "Success";
+            event["data"] = this.tweets;
+            this.$emit("twitterSearch", event);
+          }
+        } else if (this.searchIndex === 1) {
+          event["searchType"] = "TwitterUser";
+          if (this.twitterUsers.length === 0) {
+            event["searchStatus"] = "Fetching";
+            this.$emit("twitterSearch", event);
+            response = await fetchTwitterUser(this.keywordUsers);
+            if (response.ok) {
+              await this.getTwitterUsers();
+              event["data"] = this.twitterUsers;
+              if (this.twitterUsers.length > 0) {
+                event["searchStatus"] = "Success";
+              }
+            } else {
+              event["searchStatus"] = "Failure";
             }
-        },
-        getTwitterUsers: async function () {
-            try {
-                console.log("Starting Query");
-                this.keywordUsers = this.keywordUsers.toLowerCase();
-                const twitterUser = await API.graphql({
-                  query: listTweets,
-                  varibles: {
-                    filter: { name: { eq: this.keywordUsers } },
-                  },
-                });
-                this.twitterUsers = twitterUser.data.items
-            } catch (e) {
-                console.error(e);
-            }
+            this.$emit("twitterSearch", event);
+          } else {
+            event["searchStatus"] = "Success";
+            event["data"] = this.twitterUsers;
+            this.$emit("twitterSearch", event);
+          }
         }
-    }
-}
+      } catch (e) {
+        event["searchStatus"] = "Failure";
+        console.error(e);
+        this.$emit("twitterSearch", event);
+      }
+      this.disableSearch = false;
+      this.tweets = [];
+    },
+    getTweets: async function () {
+      // getting the current unix epoch of exactly 1 days ago
+      var timestamp = (+new Date/1000) - 86400;
+      try {
+        this.keywordTweets = this.keywordTweets.toLowerCase();
+        const tweet = await API.graphql({
+          query: tweetsByMostRecent,
+          variables: {
+            source: this.keywordTweets,
+            date: { ge: timestamp },
+            limit: 10,
+          },
+        });
+        //console.log(this.tweets.length);
+        this.tweets = tweet.data.tweetsByMostRecent.items;
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    getTwitterUsers: async function () {
+      var timestamp = (+new Date/1000) - 86400;
+      try {
+        console.log(this.keywordUser)
+        this.keywordUser = this.keywordUser.toLowerCase();
+        const tweet = await API.graphql({
+          query: userTweetsByMostRecent,
+          varibles: {
+            username: this.keywordUser,
+            date: { ge: timestamp },
+            limit: 10,
+          },
+        });
+        this.twitterUsers = tweet.data.userTweetsByMostRecent.items;
+      } catch (e) {
+        console.error(e);
+      }
+    },
+  },
+};
 </script>
 
 <style scoped>
