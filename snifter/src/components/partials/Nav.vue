@@ -12,6 +12,7 @@
         <a class="navbar-item router-hover" href="/news">News</a>
         <a class="navbar-item router-hover" href="/browse">Browse</a>
         <a class="navbar-item router-hover" href="/search">Search</a>
+        <a class="navbar-item router-hover" href="/wiki/home">Wiki</a>
       </va-navbar-item>
     </template>
     <template #right class="mb-2">
@@ -130,5 +131,6 @@ nav {
   cursor: pointer;
   background-color: rgba(0, 0, 0, 0.2);
   color: #ffffff;
+  border-radius: 5px;
 }
 </style>

@@ -63,7 +63,7 @@ type collectionStats @model @auth(rules: [{allow: public}]) {
 }
 
 # Collection related models
-type collection @model @searchable @auth(rules: [{allow: public}]){
+type collection @model @auth(rules: [{allow: public}]){
  id: ID!
  slug: ID!
  name: String!
@@ -123,11 +123,14 @@ type nftTraits @model @auth(rules: [{allow: public}]){
  updatedAt:AWSDateTime
 }
 
-type nft @model {
+type nft @model @searchable @auth(rules: [{allow: public}]){
  id: ID!
  address: ID! @index(name: "nftsByContract", sortKeyFields: ["token_id"])
  token_id: Int!
  num_sales: Int!
+ collection_slug: String
+ collection_name: String
+ collection_description: String
  background_color: String
  image_url: String
  image_preview_url: String
@@ -148,7 +151,7 @@ type nft @model {
  updatedAt:AWSDateTime
 }
 
-type Transaction @model @searchable {
+type Transaction @model @auth(rules: [{allow: public}]){
     id: ID!
     block_hash: ID!
     transaction_hash: ID!
@@ -161,7 +164,7 @@ type Transaction @model @searchable {
     updatedAt:AWSDateTime
 }
 
-type nftEvent @model @searchable {
+type nftEvent @model @searchable @auth(rules: [{allow: public}]){
     id: ID!
     event_type: String!
     auction_type: String
@@ -181,7 +184,7 @@ type nftEvent @model @searchable {
     updatedAt:AWSDateTime
 }
 
-type nftEventCheckpoint @model {
+type nftEventCheckpoint @model @auth(rules: [{allow: public}]){
     id: ID!
     saved_events: Int
     total_events: Int
@@ -190,12 +193,36 @@ type nftEventCheckpoint @model {
     updatedAt:AWSDateTime
 }
 
-type user @model {
+type user @model @auth(rules: [{allow: public}]){
     id: ID!
     username: ID!
     email: String
     favorite_nfts: [nft] @manyToMany(relationName: "UserFavoriteNft")
     watchlist_nfts: [nft] @manyToMany(relationName: "UserWatchlistNft")
+    completed_quizzes: [String]
+    quiz_points: Int
     createdAt: AWSDateTime
     updatedAt:AWSDateTime
+}
+
+type article @model @auth(rules: [{allow: public}]){
+ id: ID!
+ title: String!
+ blurb: String!
+ questions: [String]
+ answers: [String]
+ category: String
+ related_links: [String]
+ createdAt: AWSDateTime
+ updatedAt:AWSDateTime
+ }
+
+type quiz @model @auth(rules: [{allow: public}]){
+  id: ID!
+  title: String!
+  questions: [String]!
+  answers: [[String]]!
+  correct_answer: [String]!
+  createdAt: AWSDateTime
+  updatedAt: AWSDateTime
 }

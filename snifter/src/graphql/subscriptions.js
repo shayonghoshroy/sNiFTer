@@ -590,6 +590,9 @@ export const onCreateNft = /* GraphQL */ `
       address
       token_id
       num_sales
+      collection_slug
+      collection_name
+      collection_description
       background_color
       image_url
       image_preview_url
@@ -650,6 +653,9 @@ export const onUpdateNft = /* GraphQL */ `
       address
       token_id
       num_sales
+      collection_slug
+      collection_name
+      collection_description
       background_color
       image_url
       image_preview_url
@@ -710,6 +716,9 @@ export const onDeleteNft = /* GraphQL */ `
       address
       token_id
       num_sales
+      collection_slug
+      collection_name
+      collection_description
       background_color
       image_url
       image_preview_url
@@ -961,6 +970,8 @@ export const onCreateUser = /* GraphQL */ `
       watchlist_nfts {
         nextToken
       }
+      completed_quizzes
+      quiz_points
       createdAt
       updatedAt
     }
@@ -978,6 +989,8 @@ export const onUpdateUser = /* GraphQL */ `
       watchlist_nfts {
         nextToken
       }
+      completed_quizzes
+      quiz_points
       createdAt
       updatedAt
     }
@@ -995,6 +1008,92 @@ export const onDeleteUser = /* GraphQL */ `
       watchlist_nfts {
         nextToken
       }
+      completed_quizzes
+      quiz_points
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onCreateArticle = /* GraphQL */ `
+  subscription OnCreateArticle {
+    onCreateArticle {
+      id
+      title
+      blurb
+      questions
+      answers
+      category
+      related_links
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateArticle = /* GraphQL */ `
+  subscription OnUpdateArticle {
+    onUpdateArticle {
+      id
+      title
+      blurb
+      questions
+      answers
+      category
+      related_links
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteArticle = /* GraphQL */ `
+  subscription OnDeleteArticle {
+    onDeleteArticle {
+      id
+      title
+      blurb
+      questions
+      answers
+      category
+      related_links
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onCreateQuiz = /* GraphQL */ `
+  subscription OnCreateQuiz {
+    onCreateQuiz {
+      id
+      title
+      questions
+      answers
+      correct_answer
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateQuiz = /* GraphQL */ `
+  subscription OnUpdateQuiz {
+    onUpdateQuiz {
+      id
+      title
+      questions
+      answers
+      correct_answer
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteQuiz = /* GraphQL */ `
+  subscription OnDeleteQuiz {
+    onDeleteQuiz {
+      id
+      title
+      questions
+      answers
+      correct_answer
       createdAt
       updatedAt
     }
@@ -1011,6 +1110,9 @@ export const onCreateUserFavoriteNft = /* GraphQL */ `
         address
         token_id
         num_sales
+        collection_slug
+        collection_name
+        collection_description
         background_color
         image_url
         image_preview_url
@@ -1030,6 +1132,8 @@ export const onCreateUserFavoriteNft = /* GraphQL */ `
         id
         username
         email
+        completed_quizzes
+        quiz_points
         createdAt
         updatedAt
       }
@@ -1049,6 +1153,9 @@ export const onUpdateUserFavoriteNft = /* GraphQL */ `
         address
         token_id
         num_sales
+        collection_slug
+        collection_name
+        collection_description
         background_color
         image_url
         image_preview_url
@@ -1068,6 +1175,8 @@ export const onUpdateUserFavoriteNft = /* GraphQL */ `
         id
         username
         email
+        completed_quizzes
+        quiz_points
         createdAt
         updatedAt
       }
@@ -1087,6 +1196,9 @@ export const onDeleteUserFavoriteNft = /* GraphQL */ `
         address
         token_id
         num_sales
+        collection_slug
+        collection_name
+        collection_description
         background_color
         image_url
         image_preview_url
@@ -1106,6 +1218,8 @@ export const onDeleteUserFavoriteNft = /* GraphQL */ `
         id
         username
         email
+        completed_quizzes
+        quiz_points
         createdAt
         updatedAt
       }
@@ -1125,6 +1239,9 @@ export const onCreateUserWatchlistNft = /* GraphQL */ `
         address
         token_id
         num_sales
+        collection_slug
+        collection_name
+        collection_description
         background_color
         image_url
         image_preview_url
@@ -1144,6 +1261,8 @@ export const onCreateUserWatchlistNft = /* GraphQL */ `
         id
         username
         email
+        completed_quizzes
+        quiz_points
         createdAt
         updatedAt
       }
@@ -1163,6 +1282,9 @@ export const onUpdateUserWatchlistNft = /* GraphQL */ `
         address
         token_id
         num_sales
+        collection_slug
+        collection_name
+        collection_description
         background_color
         image_url
         image_preview_url
@@ -1182,6 +1304,8 @@ export const onUpdateUserWatchlistNft = /* GraphQL */ `
         id
         username
         email
+        completed_quizzes
+        quiz_points
         createdAt
         updatedAt
       }
@@ -1201,6 +1325,9 @@ export const onDeleteUserWatchlistNft = /* GraphQL */ `
         address
         token_id
         num_sales
+        collection_slug
+        collection_name
+        collection_description
         background_color
         image_url
         image_preview_url
@@ -1220,6 +1347,8 @@ export const onDeleteUserWatchlistNft = /* GraphQL */ `
         id
         username
         email
+        completed_quizzes
+        quiz_points
         createdAt
         updatedAt
       }
