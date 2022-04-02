@@ -4,17 +4,19 @@ input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONL
 
 type tweet @model @auth(rules: [{allow: public}]){
  id: ID! 
+ source: String @index(name: "ByMostRecent", sortKeyFields: ["date"], queryField: "tweetsByMostRecent")
+ date: Float
  text: String
- username: String
+ username: String @index(name: "ByUsersRecent", sortKeyFields: ["date"], queryField: "userTweetsByMostRecent")
  retweet_count: Int
  following_count: Int
  followers_count: Int
  favorite_count: Int
+ interaction_count: Int
  total_tweets: Int
  URL: String
  createdAt: AWSDateTime
  updatedAt:AWSDateTime
- date: String
 }
 
 type twitterUser @model @auth(rules: [{allow: public}]) {
