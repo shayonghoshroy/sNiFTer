@@ -1,31 +1,36 @@
 <template>
-    <div id="wikiComponent">
-        <h2>{{ article.title }}</h2>
-        <div v-if="article.related_links != undefined">
-          <div class="post" v-for="video_link in article.related_links" :key="video_link.id">
-            <div v-if="(video_link != undefined) && (video_link != '')">
-              <YouTube 
-                :src="video_link" 
-                @ready="onReady"
-                ref="youtube" />
-            </div>
-          </div>
-        </div>
-        <div class="post" v-for="(n, index) in article.questions.length" :key="index">
-          <h1>{{ questions[index]}} </h1>
-          <p>{{ answers[index] }}</p>
-          <br>
+  <div id="wikiComponent">
+    <h2>{{ article.title }}</h2>
+    <div v-if="article.related_links != undefined">
+      <div
+        class="post"
+        v-for="video_link in article.related_links"
+        :key="video_link.id"
+      >
+        <div v-if="video_link != undefined && video_link != ''">
+          <YouTube :src="video_link" @ready="onReady" ref="youtube" />
         </div>
       </div>
+    </div>
+    <div
+      class="post"
+      v-for="(n, index) in article.questions.length"
+      :key="index"
+    >
+      <h1>{{ questions[index] }}</h1>
+      <p>{{ answers[index] }}</p>
+      <br />
+    </div>
+  </div>
 </template>
 
 <script>
 import { API } from "aws-amplify";
 import { listArticles } from "../graphql/queries";
-import YouTube from 'vue3-youtube'
+import YouTube from "vue3-youtube";
 export default {
   name: "WikiComponent",
-  components: {YouTube},
+  components: { YouTube },
   async created() {
     //console.log(this.$route.query);
     this.articleData = this.$route.query;
@@ -36,7 +41,7 @@ export default {
     this.article = this.articleData;
     // console.log(this.article.related_links);
     //console.log(this.article.id);
-    this.$emit('getID', this.article.id)
+    this.$emit("getID", this.article.id);
     //console.log(this.questions);
     //console.log(this.articleData.id)
     //await this.getArticle(this.articleData.id);
@@ -53,28 +58,24 @@ export default {
     };
   },
   methods: {
-    onReady() {
-      
-    },
+    onReady() {},
     async getArticle(articleId) {
       try {
         const articles = await API.graphql({
           query: listArticles,
           variables: {
-            filters: {id: {eq: articleId}},
+            filters: { id: { eq: articleId } },
             limit: 1,
           },
-          
         });
         this.article = articles.data.listArticles.items;
         this.questions = this.article.questions;
         this.answers = this.article.answers;
         this.id = this.article.id;
-        
       } catch (e) {
         console.error(e);
       }
-    }
+    },
   },
 };
 </script>
