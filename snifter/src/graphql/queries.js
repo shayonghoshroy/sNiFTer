@@ -1,16 +1,16 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const searchCollections = /* GraphQL */ `
-  query SearchCollections(
-    $filter: SearchablecollectionFilterInput
-    $sort: [SearchablecollectionSortInput]
+export const searchNfts = /* GraphQL */ `
+  query SearchNfts(
+    $filter: SearchablenftFilterInput
+    $sort: [SearchablenftSortInput]
     $limit: Int
     $nextToken: String
     $from: Int
-    $aggregates: [SearchablecollectionAggregationInput]
+    $aggregates: [SearchablenftAggregationInput]
   ) {
-    searchCollections(
+    searchNfts(
       filter: $filter
       sort: $sort
       limit: $limit
@@ -20,70 +20,24 @@ export const searchCollections = /* GraphQL */ `
     ) {
       items {
         id
-        slug
+        address
+        token_id
+        num_sales
+        collection_slug
+        collection_name
+        collection_description
+        background_color
+        image_url
+        image_preview_url
+        image_thumbnail_url
+        image_original_url
+        animation_url
+        animation_original_url
         name
         description
-        image_url
-        external_url
-        banner_image_url
-        char_url
-        created_date
-        discord_url
-        featured
-        featured_image_url
-        payout_address
-        telegram_url
-        twitter_username
-        instagram_username
-        wiki_url
-        createdAt
-        updatedAt
-      }
-      nextToken
-      total
-      aggregateItems {
-        name
-        result {
-          ... on SearchableAggregateScalarResult {
-            value
-          }
-          ... on SearchableAggregateBucketResult {
-            buckets {
-              key
-              doc_count
-            }
-          }
-        }
-      }
-    }
-  }
-`;
-export const searchTransactions = /* GraphQL */ `
-  query SearchTransactions(
-    $filter: SearchableTransactionFilterInput
-    $sort: [SearchableTransactionSortInput]
-    $limit: Int
-    $nextToken: String
-    $from: Int
-    $aggregates: [SearchableTransactionAggregationInput]
-  ) {
-    searchTransactions(
-      filter: $filter
-      sort: $sort
-      limit: $limit
-      nextToken: $nextToken
-      from: $from
-      aggregates: $aggregates
-    ) {
-      items {
-        id
-        block_hash
-        transaction_hash
-        block_number
-        from_account
-        to_account
-        transaction_index
-        timestamp
+        external_link
+        perma_link
+        owner
         createdAt
         updatedAt
       }
@@ -391,43 +345,6 @@ export const listCollections = /* GraphQL */ `
         id
         slug
         name
-        traits {
-          id
-          trait_type
-          value
-          display_type
-          max_value
-          trait_count
-          order
-          createdAt
-          updatedAt
-        }
-        stats {
-          id
-          one_day_volume
-          one_day_change
-          one_day_sales
-          one_day_average_price
-          seven_day_volume
-          seven_day_change
-          seven_day_sales
-          seven_day_average_price
-          thirty_day_volume
-          thirty_day_change
-          thirty_day_sales
-          thirty_day_average_price
-          total_volume
-          total_sales
-          total_supply
-          count
-          num_owners
-          average_price
-          num_reports
-          market_cap
-          floor_price
-          createdAt
-          updatedAt
-        }
         description
         image_url
         external_url
@@ -574,6 +491,9 @@ export const getNft = /* GraphQL */ `
       address
       token_id
       num_sales
+      collection_slug
+      collection_name
+      collection_description
       background_color
       image_url
       image_preview_url
@@ -639,6 +559,9 @@ export const listNfts = /* GraphQL */ `
         address
         token_id
         num_sales
+        collection_slug
+        collection_name
+        collection_description
         background_color
         image_url
         image_preview_url
@@ -807,6 +730,8 @@ export const getUser = /* GraphQL */ `
       watchlist_nfts {
         nextToken
       }
+      completed_quizzes
+      quiz_points
       createdAt
       updatedAt
     }
@@ -823,12 +748,78 @@ export const listUsers = /* GraphQL */ `
         id
         username
         email
-        favorite_nfts {
-          nextToken
-        }
-        watchlist_nfts {
-          nextToken
-        }
+        completed_quizzes
+        quiz_points
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getArticle = /* GraphQL */ `
+  query GetArticle($id: ID!) {
+    getArticle(id: $id) {
+      id
+      title
+      blurb
+      questions
+      answers
+      category
+      related_links
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listArticles = /* GraphQL */ `
+  query ListArticles(
+    $filter: ModelArticleFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listArticles(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        title
+        blurb
+        questions
+        answers
+        category
+        related_links
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getQuiz = /* GraphQL */ `
+  query GetQuiz($id: ID!) {
+    getQuiz(id: $id) {
+      id
+      title
+      questions
+      answers
+      correct_answer
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listQuizzes = /* GraphQL */ `
+  query ListQuizzes(
+    $filter: ModelQuizFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listQuizzes(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        title
+        questions
+        answers
+        correct_answer
         createdAt
         updatedAt
       }
@@ -847,6 +838,9 @@ export const getUserFavoriteNft = /* GraphQL */ `
         address
         token_id
         num_sales
+        collection_slug
+        collection_name
+        collection_description
         background_color
         image_url
         image_preview_url
@@ -866,6 +860,8 @@ export const getUserFavoriteNft = /* GraphQL */ `
         id
         username
         email
+        completed_quizzes
+        quiz_points
         createdAt
         updatedAt
       }
@@ -907,6 +903,9 @@ export const getUserWatchlistNft = /* GraphQL */ `
         address
         token_id
         num_sales
+        collection_slug
+        collection_name
+        collection_description
         background_color
         image_url
         image_preview_url
@@ -926,6 +925,8 @@ export const getUserWatchlistNft = /* GraphQL */ `
         id
         username
         email
+        completed_quizzes
+        quiz_points
         createdAt
         updatedAt
       }

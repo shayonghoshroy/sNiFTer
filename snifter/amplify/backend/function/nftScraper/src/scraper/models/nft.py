@@ -12,7 +12,8 @@ class NFTAssetContract(BaseModel):
     asset_contract_type: str
     created_date: str
     description: str
-    slug: str
+    collection_slug: Optional[str]
+    collection_name: Optional[str]
     image_url: Optional[str]
 
     total_supply: Optional[str]
@@ -46,6 +47,8 @@ class NFT(BaseModel):
     num_sales: int
     address: str
     owner: str
+    collection_slug: Optional[str]
+    collection_name: Optional[str]
 
     image_url: Optional[str]
     image_preview_url: Optional[str]
@@ -74,6 +77,23 @@ class NFT(BaseModel):
             for trait in traits:
                 nft_traits.append(NFTTraits(**trait))
             data['traits'] = nft_traits
+
+        data.setdefault('collection_slug', "UNKNOWN")
+        data.setdefault('collection_name', 'UNKNOWN')
+        data.setdefault('collection_description', 'UNKNOWN')
+        collection = data.get('collection', None)
+        if collection is not None:
+            collection_slug = collection.get('slug', None)
+            if collection_slug is not None:
+                data['collection_slug'] = collection_slug
+
+            collection_name = collection.get('name', None)
+            if collection_name is not None:
+                data['collection_name'] = collection_name
+
+            collection_description = collection.get('description', None)
+            if collection_description is not None:
+                data['collection_description'] = collection_description
         
         super().__init__(**data)
     
