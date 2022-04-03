@@ -7,7 +7,7 @@
 
     <va-data-table
       :columns="columns"
-      :items="nftEventItems"
+      :items="nftEvents"
       :filter="filter"
       :per-page="perPage"
       :current-page="currentPage"
@@ -40,28 +40,24 @@ export default {
   },
   async created() {
     this.filteredTransactions = this.nftEventItems;
+    console.log(this.filteredTransactions);
   },
   computed: {
     nftEventItems() {
       console.log("Transactions", this.nftEvents);
       var events = this.nftEvents;
-      if (this.nftEvents.length === 0) return [];
+      if (events.length === 0) return [];
       var items = events.map((nftEvent) => {
-        var eventType = "";
-        if (nftEvent.event_type === "successful") eventType = "Sale";
-        else if (nftEvent.event_type === "transfer") eventType = "Transfer";
-        else eventType = "Bid";
+        console.log(nftEvent.event);
         return {
-          event: eventType,
-          price:
-            nftEvent.total_price !== 0
-              ? nftEvent.total_price
-              : nftEvent.bid_amount,
-          from: nftEvent.from_account ? nftEvent.from_account : "-",
-          to: nftEvent.to_account ? nftEvent.to_account : "-",
+          event: nftEvent.event,
+          price: nftEvent.price,
+          from: nftEvent.from_account ? nftEvent.from_account['address'] : "-",
+          to: nftEvent.to_account ? nftEvent.to_account['address'] : "-",
           created_date: nftEvent.created_date ? nftEvent.created_date : "-",
         };
       });
+      debugger;
       return items;
     },
     pages() {
@@ -92,5 +88,4 @@ export default {
   },
 };
 </script>
-
 <style lang="css" scoped></style>

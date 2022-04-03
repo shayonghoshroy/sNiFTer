@@ -77,3 +77,62 @@ export async function nftEventQueue(body) {
       return { ok: false };
     });
 }
+
+export async function getNftEventsDirectly(token_id, asset_contract_address) {
+  var url = "https://api.opensea.io/api/v1/events?" + "token_id=" + token_id + "&asset_contract_address=" + asset_contract_address;
+
+  var sales_url = url += "&event_type=successful&limit=50";
+  var bid_url = url += "&event_type=offer_entered&limit=150";
+  
+  var headers = {
+    "Accept": "application/json",
+    "X-API-KEY": "121e8a8126664ef8ab27769de9fc6549"
+  }
+
+  var sales = [];
+  sales = await fetch(sales_url, {
+    method: "GET",
+    headers: headers,
+  })
+  .then((resp) => {
+    return resp.json();
+  })
+  .then((data) => {
+    return data['asset_events'];
+  });
+
+  var bids = [];
+  bids = await fetch(bid_url, {
+    method: "GET",
+    headers: headers,
+  })
+  .then((resp) => {
+    return resp.json();
+  })
+  .then((data) => {
+    return data['asset_events'];
+  });
+
+  var events = bids.concat(sales);
+  return events;
+}
+
+export async function getCollectionStatsDirectly(collectionSlug) {
+  var url = "https://api.opensea.io/api/v1/collection/" + collectionSlug + "/stats";
+
+  var headers = {
+    "Accept": "application/json",
+    "X-API-KEY": "121e8a8126664ef8ab27769de9fc6549"
+  }
+
+  return await fetch(url, {
+    method: "GET",
+    headers: headers
+  })
+  .then((resp) => {
+    return resp.json();
+  })
+  .then((data) => {
+    return data;
+  });
+}
