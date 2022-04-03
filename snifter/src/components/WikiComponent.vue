@@ -1,27 +1,24 @@
 <template>
-  <div id="wikiComponent">
-    <h2>{{ article.title }}</h2>
-    <div v-if="article.related_links != undefined">
-      <div
-        class="post"
-        v-for="video_link in article.related_links"
-        :key="video_link.id"
-      >
-        <div v-if="video_link != undefined && video_link != ''">
-          <YouTube :src="video_link" @ready="onReady" ref="youtube" />
+    <div id="wikiComponent">
+        <h2 style="color: white">{{ article.title }}</h2>
+        <div v-if="article.related_links != undefined">
+          <div class="post" v-for="video_link in article.related_links" :key="video_link.id">
+            <div v-if="(video_link != undefined) && (video_link != '')">
+              <YouTube 
+                :src="video_link" 
+                @ready="onReady"
+                ref="youtube" />
+            </div>
+          </div>
+        </div>
+      <div class="qaflex">
+        <div class="post" v-for="(n, index) in article.questions.length" :key="index">
+          <h1>{{ questions[index]}} </h1>
+          <p>{{ answers[index] }}</p>
+          <br>
         </div>
       </div>
     </div>
-    <div
-      class="post"
-      v-for="(n, index) in article.questions.length"
-      :key="index"
-    >
-      <h1>{{ questions[index] }}</h1>
-      <p>{{ answers[index] }}</p>
-      <br />
-    </div>
-  </div>
 </template>
 
 <script>
@@ -100,6 +97,22 @@ h1 {
   margin-right: 50px;
   margin-left: 50px;
 }
+
+.articleflex {
+  display: flex;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  width: 60%;
+}
+
+.qaflex {
+  display: flex;
+  flex-direction: column;
+  width: 60rem;
+}
+
 h2 {
   font-size: clamp(24px, 3vw, 3vw);
   font-weight: 300;
