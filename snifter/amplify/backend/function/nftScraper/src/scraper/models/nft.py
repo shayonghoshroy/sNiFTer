@@ -23,6 +23,7 @@ class NFTAssetContract(BaseModel):
     
     def __init__(self, **data):
         data['id'] = f"{data['address']}-{data['name']}"
+        data.setdefault('slug', 'UNKNOWN')
         super().__init__(**data)
 
 class NFTTraits(BaseModel):
