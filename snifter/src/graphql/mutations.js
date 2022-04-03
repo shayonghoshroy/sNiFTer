@@ -8,17 +8,19 @@ export const createTweet = /* GraphQL */ `
   ) {
     createTweet(input: $input, condition: $condition) {
       id
+      source
+      date
       text
       username
       retweet_count
       following_count
       followers_count
       favorite_count
+      interaction_count
       total_tweets
       URL
       createdAt
       updatedAt
-      date
     }
   }
 `;
@@ -29,17 +31,19 @@ export const updateTweet = /* GraphQL */ `
   ) {
     updateTweet(input: $input, condition: $condition) {
       id
+      source
+      date
       text
       username
       retweet_count
       following_count
       followers_count
       favorite_count
+      interaction_count
       total_tweets
       URL
       createdAt
       updatedAt
-      date
     }
   }
 `;
@@ -50,17 +54,19 @@ export const deleteTweet = /* GraphQL */ `
   ) {
     deleteTweet(input: $input, condition: $condition) {
       id
+      source
+      date
       text
       username
       retweet_count
       following_count
       followers_count
       favorite_count
+      interaction_count
       total_tweets
       URL
       createdAt
       updatedAt
-      date
     }
   }
 `;
@@ -1065,6 +1071,7 @@ export const createUser = /* GraphQL */ `
       }
       completed_quizzes
       quiz_points
+      hasImage
       createdAt
       updatedAt
     }
@@ -1087,6 +1094,7 @@ export const updateUser = /* GraphQL */ `
       }
       completed_quizzes
       quiz_points
+      hasImage
       createdAt
       updatedAt
     }
@@ -1109,6 +1117,52 @@ export const deleteUser = /* GraphQL */ `
       }
       completed_quizzes
       quiz_points
+      hasImage
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createS3Object = /* GraphQL */ `
+  mutation CreateS3Object(
+    $input: CreateS3ObjectInput!
+    $condition: ModelS3ObjectConditionInput
+  ) {
+    createS3Object(input: $input, condition: $condition) {
+      id
+      bucket
+      region
+      key
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateS3Object = /* GraphQL */ `
+  mutation UpdateS3Object(
+    $input: UpdateS3ObjectInput!
+    $condition: ModelS3ObjectConditionInput
+  ) {
+    updateS3Object(input: $input, condition: $condition) {
+      id
+      bucket
+      region
+      key
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteS3Object = /* GraphQL */ `
+  mutation DeleteS3Object(
+    $input: DeleteS3ObjectInput!
+    $condition: ModelS3ObjectConditionInput
+  ) {
+    deleteS3Object(input: $input, condition: $condition) {
+      id
+      bucket
+      region
+      key
       createdAt
       updatedAt
     }
@@ -1254,6 +1308,7 @@ export const createUserFavoriteNft = /* GraphQL */ `
         email
         completed_quizzes
         quiz_points
+        hasImage
         createdAt
         updatedAt
       }
@@ -1300,6 +1355,7 @@ export const updateUserFavoriteNft = /* GraphQL */ `
         email
         completed_quizzes
         quiz_points
+        hasImage
         createdAt
         updatedAt
       }
@@ -1346,6 +1402,7 @@ export const deleteUserFavoriteNft = /* GraphQL */ `
         email
         completed_quizzes
         quiz_points
+        hasImage
         createdAt
         updatedAt
       }
@@ -1392,6 +1449,7 @@ export const createUserWatchlistNft = /* GraphQL */ `
         email
         completed_quizzes
         quiz_points
+        hasImage
         createdAt
         updatedAt
       }
@@ -1438,6 +1496,7 @@ export const updateUserWatchlistNft = /* GraphQL */ `
         email
         completed_quizzes
         quiz_points
+        hasImage
         createdAt
         updatedAt
       }
@@ -1484,6 +1543,7 @@ export const deleteUserWatchlistNft = /* GraphQL */ `
         email
         completed_quizzes
         quiz_points
+        hasImage
         createdAt
         updatedAt
       }

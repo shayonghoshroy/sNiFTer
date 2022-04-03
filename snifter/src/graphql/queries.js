@@ -118,17 +118,19 @@ export const getTweet = /* GraphQL */ `
   query GetTweet($id: ID!) {
     getTweet(id: $id) {
       id
+      source
+      date
       text
       username
       retweet_count
       following_count
       followers_count
       favorite_count
+      interaction_count
       total_tweets
       URL
       createdAt
       updatedAt
-      date
     }
   }
 `;
@@ -141,17 +143,19 @@ export const listTweets = /* GraphQL */ `
     listTweets(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
+        source
+        date
         text
         username
         retweet_count
         following_count
         followers_count
         favorite_count
+        interaction_count
         total_tweets
         URL
         createdAt
         updatedAt
-        date
       }
       nextToken
     }
@@ -805,6 +809,7 @@ export const getUser = /* GraphQL */ `
       }
       completed_quizzes
       quiz_points
+      hasImage
       createdAt
       updatedAt
     }
@@ -823,6 +828,38 @@ export const listUsers = /* GraphQL */ `
         email
         completed_quizzes
         quiz_points
+        hasImage
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getS3Object = /* GraphQL */ `
+  query GetS3Object($id: ID!) {
+    getS3Object(id: $id) {
+      id
+      bucket
+      region
+      key
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listS3Objects = /* GraphQL */ `
+  query ListS3Objects(
+    $filter: ModelS3ObjectFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listS3Objects(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        bucket
+        region
+        key
         createdAt
         updatedAt
       }
@@ -935,6 +972,7 @@ export const getUserFavoriteNft = /* GraphQL */ `
         email
         completed_quizzes
         quiz_points
+        hasImage
         createdAt
         updatedAt
       }
@@ -1000,6 +1038,7 @@ export const getUserWatchlistNft = /* GraphQL */ `
         email
         completed_quizzes
         quiz_points
+        hasImage
         createdAt
         updatedAt
       }
@@ -1023,6 +1062,80 @@ export const listUserWatchlistNfts = /* GraphQL */ `
         id
         nftID
         userID
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const tweetsByMostRecent = /* GraphQL */ `
+  query TweetsByMostRecent(
+    $source: String
+    $date: ModelFloatKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModeltweetFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    tweetsByMostRecent(
+      source: $source
+      date: $date
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        source
+        date
+        text
+        username
+        retweet_count
+        following_count
+        followers_count
+        favorite_count
+        interaction_count
+        total_tweets
+        URL
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const userTweetsByMostRecent = /* GraphQL */ `
+  query UserTweetsByMostRecent(
+    $username: String
+    $date: ModelFloatKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModeltweetFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    userTweetsByMostRecent(
+      username: $username
+      date: $date
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        source
+        date
+        text
+        username
+        retweet_count
+        following_count
+        followers_count
+        favorite_count
+        interaction_count
+        total_tweets
+        URL
         createdAt
         updatedAt
       }

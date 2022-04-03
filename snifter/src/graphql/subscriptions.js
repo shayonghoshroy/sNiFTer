@@ -5,17 +5,19 @@ export const onCreateTweet = /* GraphQL */ `
   subscription OnCreateTweet {
     onCreateTweet {
       id
+      source
+      date
       text
       username
       retweet_count
       following_count
       followers_count
       favorite_count
+      interaction_count
       total_tweets
       URL
       createdAt
       updatedAt
-      date
     }
   }
 `;
@@ -23,17 +25,19 @@ export const onUpdateTweet = /* GraphQL */ `
   subscription OnUpdateTweet {
     onUpdateTweet {
       id
+      source
+      date
       text
       username
       retweet_count
       following_count
       followers_count
       favorite_count
+      interaction_count
       total_tweets
       URL
       createdAt
       updatedAt
-      date
     }
   }
 `;
@@ -41,17 +45,19 @@ export const onDeleteTweet = /* GraphQL */ `
   subscription OnDeleteTweet {
     onDeleteTweet {
       id
+      source
+      date
       text
       username
       retweet_count
       following_count
       followers_count
       favorite_count
+      interaction_count
       total_tweets
       URL
       createdAt
       updatedAt
-      date
     }
   }
 `;
@@ -972,6 +978,7 @@ export const onCreateUser = /* GraphQL */ `
       }
       completed_quizzes
       quiz_points
+      hasImage
       createdAt
       updatedAt
     }
@@ -991,6 +998,7 @@ export const onUpdateUser = /* GraphQL */ `
       }
       completed_quizzes
       quiz_points
+      hasImage
       createdAt
       updatedAt
     }
@@ -1010,6 +1018,43 @@ export const onDeleteUser = /* GraphQL */ `
       }
       completed_quizzes
       quiz_points
+      hasImage
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onCreateS3Object = /* GraphQL */ `
+  subscription OnCreateS3Object {
+    onCreateS3Object {
+      id
+      bucket
+      region
+      key
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateS3Object = /* GraphQL */ `
+  subscription OnUpdateS3Object {
+    onUpdateS3Object {
+      id
+      bucket
+      region
+      key
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteS3Object = /* GraphQL */ `
+  subscription OnDeleteS3Object {
+    onDeleteS3Object {
+      id
+      bucket
+      region
+      key
       createdAt
       updatedAt
     }
@@ -1134,6 +1179,7 @@ export const onCreateUserFavoriteNft = /* GraphQL */ `
         email
         completed_quizzes
         quiz_points
+        hasImage
         createdAt
         updatedAt
       }
@@ -1177,6 +1223,7 @@ export const onUpdateUserFavoriteNft = /* GraphQL */ `
         email
         completed_quizzes
         quiz_points
+        hasImage
         createdAt
         updatedAt
       }
@@ -1220,6 +1267,7 @@ export const onDeleteUserFavoriteNft = /* GraphQL */ `
         email
         completed_quizzes
         quiz_points
+        hasImage
         createdAt
         updatedAt
       }
@@ -1263,6 +1311,7 @@ export const onCreateUserWatchlistNft = /* GraphQL */ `
         email
         completed_quizzes
         quiz_points
+        hasImage
         createdAt
         updatedAt
       }
@@ -1306,6 +1355,7 @@ export const onUpdateUserWatchlistNft = /* GraphQL */ `
         email
         completed_quizzes
         quiz_points
+        hasImage
         createdAt
         updatedAt
       }
@@ -1349,6 +1399,7 @@ export const onDeleteUserWatchlistNft = /* GraphQL */ `
         email
         completed_quizzes
         quiz_points
+        hasImage
         createdAt
         updatedAt
       }
