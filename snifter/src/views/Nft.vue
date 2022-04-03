@@ -268,7 +268,7 @@ export default {
     TransactionTable,
   },
   async created() {
-    this.getUser();
+    await this.getUser();
 
     console.log(this.$route.query);
     this.nftData = this.$route.query;
@@ -276,8 +276,7 @@ export default {
     await this.getNFT();
     if(this.nft === undefined) await this.getNFT();
 
-    console.log(this.nft);
-    await this.getNFTs(this.nftData.address);
+    await this.getNFTs(this.nftData.address)
 
     await this.setFavoriteStatus(this.user, this.nftData.id);
     await this.setTotalFavorites(this.nftData.id);
