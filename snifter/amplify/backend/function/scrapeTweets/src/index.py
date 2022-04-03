@@ -59,7 +59,7 @@ def scrape_user_tweets(api, users, numtweet):
         list_tweets = [tweet for tweet in tweets]
         for tweet in list_tweets:
             print(str(tweet.id) + " " + tweet.user.screen_name)
-            put_tweet(tweet)
+            put_tweet(tweet, "nft")
                     
 def scrape_hashtag(api, words, numtweet):
         client = boto3.client('dynamodb')
@@ -67,17 +67,25 @@ def scrape_hashtag(api, words, numtweet):
             tweets = tweepy.Cursor(api.search_tweets, word, lang="en", tweet_mode='extended', count = numtweet).items(numtweet)
             list_tweets = [tweet for tweet in tweets]
             for tweet in list_tweets:
-                put_tweet(tweet)
+                put_tweet(tweet, word)
                 
-def put_tweet(tweet):
+def put_tweet(tweet, word):
     client = boto3.client("dynamodb")
+    print(tweet.created_at)
     try:
-            text = tweet.retweeted_status.full_text
+        text = tweet.retweeted_status.full_text
     except AttributeError:
-            text = tweet.full_text
+        text = tweet.full_text
+    try:
+        like_count = tweet.retweeted_status.favorite_count
+    except AttributeError:
+        like_count = tweet.favorite_count
     data = client.put_item(
     TableName='tweet-u7k5bta6mvfefdvl7fidjvr7ay-stephendev',
     Item={
+        'source': {
+            'S': word.lower()
+        },
         'id': {
             'S': str(tweet.id)
         },
@@ -85,7 +93,7 @@ def put_tweet(tweet):
             'S': 'https://twitter.com/twitter/statuses/'+ str(tweet._json['id'])
         },
         'text': {
-            'S': text.lower()
+            'S': text
         },
         'username': {
             'S': tweet.user.screen_name
@@ -99,11 +107,14 @@ def put_tweet(tweet):
         'following_count': {
             'N': str(tweet.user.friends_count)
         },
+        'interaction_count': {
+            'N': str(tweet.retweet_count*2 + like_count)
+        },
         'date': {
-            'S': str(tweet.created_at)
+            'N': str(datetime.timestamp(tweet.created_at))
         },
         'favorite_count': {
-            'N': str(tweet.favorite_count)
+            'N': str(like_count)
         }
     })
 
@@ -124,9 +135,11 @@ def handler(event, context):
     api = auth()
     
     #Cloudwatch trigger
-    #scrape_hashtag(api, "nft", 50)
+    if context.invoked_function_arn == "arn:aws:events:us-east-2:722766780721:rule/EveryHour":
+        scrape_hashtag(api, "nft", 50)
+    else:
     #All events should contain event_type field of funciton switch
-    event_type = event.get("resource", None).replace("/", "")
+        event_type = event.get("resource", None).replace("/", "")
     
     #Bad Request
     if event_type is None or not event_type in ["tweet", "twitteruser"]:

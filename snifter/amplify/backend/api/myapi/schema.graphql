@@ -4,17 +4,19 @@ input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONL
 
 type tweet @model @auth(rules: [{allow: public}]){
  id: ID! 
+ source: String @index(name: "ByMostRecent", sortKeyFields: ["date"], queryField: "tweetsByMostRecent")
+ date: Float
  text: String
- username: String
+ username: String @index(name: "ByUsersRecent", sortKeyFields: ["date"], queryField: "userTweetsByMostRecent")
  retweet_count: Int
  following_count: Int
  followers_count: Int
  favorite_count: Int
+ interaction_count: Int
  total_tweets: Int
  URL: String
  createdAt: AWSDateTime
  updatedAt:AWSDateTime
- date: String
 }
 
 type twitterUser @model @auth(rules: [{allow: public}]) {
@@ -61,7 +63,7 @@ type collectionStats @model @auth(rules: [{allow: public}]) {
 }
 
 # Collection related models
-type collection @model @searchable @auth(rules: [{allow: public}]){
+type collection @model @auth(rules: [{allow: public}]){
  id: ID!
  slug: ID!
  name: String!
@@ -121,11 +123,14 @@ type nftTraits @model @auth(rules: [{allow: public}]){
  updatedAt:AWSDateTime
 }
 
-type nft @model @auth(rules: [{allow: public}]){
+type nft @model @searchable @auth(rules: [{allow: public}]){
  id: ID!
  address: ID! @index(name: "nftsByContract", sortKeyFields: ["token_id"])
  token_id: Int!
  num_sales: Int!
+ collection_slug: String
+ collection_name: String
+ collection_description: String
  background_color: String
  image_url: String
  image_preview_url: String
@@ -146,7 +151,7 @@ type nft @model @auth(rules: [{allow: public}]){
  updatedAt:AWSDateTime
 }
 
-type Transaction @model @searchable {
+type Transaction @model @auth(rules: [{allow: public}]){
     id: ID!
     block_hash: ID!
     transaction_hash: ID!
@@ -159,7 +164,7 @@ type Transaction @model @searchable {
     updatedAt:AWSDateTime
 }
 
-type nftEvent @model @searchable {
+type nftEvent @model @searchable @auth(rules: [{allow: public}]){
     id: ID!
     event_type: String!
     auction_type: String
@@ -179,7 +184,7 @@ type nftEvent @model @searchable {
     updatedAt:AWSDateTime
 }
 
-type nftEventCheckpoint @model {
+type nftEventCheckpoint @model @auth(rules: [{allow: public}]){
     id: ID!
     saved_events: Int
     total_events: Int
@@ -200,7 +205,7 @@ type user @model @auth(rules: [{allow: public}]){
     updatedAt:AWSDateTime
 }
 
-type article @model {
+type article @model @auth(rules: [{allow: public}]){
  id: ID!
  title: String!
  blurb: String!
@@ -212,7 +217,7 @@ type article @model {
  updatedAt:AWSDateTime
  }
 
-type quiz @model {
+type quiz @model @auth(rules: [{allow: public}]){
   id: ID!
   title: String!
   questions: [String]!

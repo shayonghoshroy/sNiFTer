@@ -131,5 +131,6 @@ nav {
   cursor: pointer;
   background-color: rgba(0, 0, 0, 0.2);
   color: #ffffff;
+  border-radius: 5px;
 }
 </style>

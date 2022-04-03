@@ -3,7 +3,7 @@
     <div>
       <WikiComponent class="sNiFTer Wiki" @getID="setID($event)" />
     </div>
-    
+
     <div v-if="id != ''">
       <QuizComponent :articleID="id" class="sNiFTer Quiz" />
     </div>
@@ -19,13 +19,13 @@ export default {
   data() {
     return {
       id: "",
-    }
+    };
   },
   methods: {
     setID(articleID) {
       this.id = articleID;
       //console.log(this.id);
-    }
+    },
   },
 };
 </script>
@@ -53,4 +53,4 @@ h1 {
     width: 90vw;
   }
 }
-</style> 
+</style>

@@ -24,10 +24,10 @@
 <script>
 import { API } from "aws-amplify";
 import { listArticles } from "../graphql/queries";
-import YouTube from 'vue3-youtube'
+import YouTube from "vue3-youtube";
 export default {
   name: "WikiComponent",
-  components: {YouTube},
+  components: { YouTube },
   async created() {
     //console.log(this.$route.query);
     this.articleData = this.$route.query;
@@ -38,7 +38,7 @@ export default {
     this.article = this.articleData;
     // console.log(this.article.related_links);
     //console.log(this.article.id);
-    this.$emit('getID', this.article.id)
+    this.$emit("getID", this.article.id);
     //console.log(this.questions);
     //console.log(this.articleData.id)
     //await this.getArticle(this.articleData.id);
@@ -55,28 +55,24 @@ export default {
     };
   },
   methods: {
-    onReady() {
-      
-    },
+    onReady() {},
     async getArticle(articleId) {
       try {
         const articles = await API.graphql({
           query: listArticles,
           variables: {
-            filters: {id: {eq: articleId}},
+            filters: { id: { eq: articleId } },
             limit: 1,
           },
-          
         });
         this.article = articles.data.listArticles.items;
         this.questions = this.article.questions;
         this.answers = this.article.answers;
         this.id = this.article.id;
-        
       } catch (e) {
         console.error(e);
       }
-    }
+    },
   },
 };
 </script>

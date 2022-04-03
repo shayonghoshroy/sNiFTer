@@ -1,10 +1,20 @@
 <template>
   <div id="wikiHomeComponent">
     <div v-if="this.user != undefined">
-      <h2 style="color: white">Welcome {{this.user.username}}!</h2><br>
-      <p style="color: white">Your current Wiki level is {{level}}. Read more articles and complete more quizzes to level up!</p>
-      <va-progress-bar :model-value="this.progressValue" size="medium" color="#FFFFFF">
-        <p style="color: white"> Progress to next level: {{ this.progressValue + '%' }} </p>
+      <h2 style="color: white">Welcome {{ this.user.username }}!</h2>
+      <br />
+      <p style="color: white">
+        Your current Wiki level is {{ level }}. Read more articles and complete
+        more quizzes to level up!
+      </p>
+      <va-progress-bar
+        :model-value="this.progressValue"
+        size="medium"
+        color="#FFFFFF"
+      >
+        <p style="color: white">
+          Progress to next level: {{ this.progressValue + "%" }}
+        </p>
       </va-progress-bar>
     </div>
     <div v-else>
@@ -14,22 +24,35 @@
       <div class="post" v-for="category in categories" :key="category.id">
         <div class="outerbox">
           <div class="categorybox">
-            <h1> {{category}} <br> Technology</h1>
+            <h1>
+              {{ category }} <br />
+              Technology
+            </h1>
           </div>
           <div class="box">
             <div v-for="article in categorize[category]" :key="article.id">
               <router-link
-                :to="{ name: 'Wiki', path: 'Wiki/'+ article.title,
-                query: article
-              }">
-                <va-card class="wiki-card" style="height: 300px; width: 300px" outlined>
+                :to="{
+                  name: 'Wiki',
+                  path: 'Wiki/' + article.title,
+                  query: article,
+                }"
+              >
+                <va-card
+                  class="wiki-card"
+                  style="height: 300px; width: 300px"
+                  outlined
+                >
                   <div class="cardflex" style="height: 300px; width: 300px">
                     <va-card-content>
-                      <h1>{{ article.title }}</h1> 
-                      {{article.blurb}}
-                      <div v-if="completedQuizzes.includes(article.id)" class = "flex-item-bottom">
-                        <va-icon name="done" color=#9BEC15 class="mr-4"/>
-                      </div> 
+                      <h1>{{ article.title }}</h1>
+                      {{ article.blurb }}
+                      <div
+                        v-if="completedQuizzes.includes(article.id)"
+                        class="flex-item-bottom"
+                      >
+                        <va-icon name="done" color="#9BEC15" class="mr-4" />
+                      </div>
                     </va-card-content>
                   </div>
                 </va-card>
@@ -38,7 +61,7 @@
           </div>
         </div>
       </div>
-      <br>
+      <br />
     </div>
   </div>
 </template>
@@ -50,7 +73,7 @@ import { Auth } from "aws-amplify";
 // Vue.use(LazyTube);
 export default {
   name: "WikiHomeComponent",
-  components: {  },
+  components: {},
   async created() {
     await this.getUser();
     await this.getArticle(this.searchtitle);
@@ -71,19 +94,19 @@ export default {
   },
   computed: {
     filteredArticles() {
-        return this.articles;
+      return this.articles;
     },
     filteredCategories() {
-        return this.categories;
+      return this.categories;
     },
     categorize() {
-        const groups = {};
-        this.filteredArticles.forEach(article => {
-            groups[article.category] = groups[article.category] || [];
-            groups[article.category].push(article);
-        })
+      const groups = {};
+      this.filteredArticles.forEach((article) => {
+        groups[article.category] = groups[article.category] || [];
+        groups[article.category].push(article);
+      });
       return groups;
-    }
+    },
   },
   methods: {
     async getUser() {
@@ -91,8 +114,7 @@ export default {
         const userAuth = await Auth.currentAuthenticatedUser();
         this.username = userAuth.username;
         // console.log(this.username);
-        if(userAuth != null) {
-          
+        if (userAuth != null) {
           const user = await API.graphql({
             query: listUsers,
             variables: {
@@ -101,26 +123,26 @@ export default {
             },
           });
 
-
           // console.log(user.data.listUsers.items[0].completed_quizzes);
           this.user = user.data.listUsers.items[0];
-          if(user.data.listUsers.items[0].completed_quizzes != null) {
-            this.completedQuizzes = user.data.listUsers.items[0].completed_quizzes;
+          if (user.data.listUsers.items[0].completed_quizzes != null) {
+            this.completedQuizzes =
+              user.data.listUsers.items[0].completed_quizzes;
           }
-          if(user.data.listUsers.items[0].quiz_points != null) {
+          if (user.data.listUsers.items[0].quiz_points != null) {
             this.quiz_score = user.data.listUsers.items[0].quiz_points;
           }
           this.evaluateProgress();
 
           // console.log(user);
-        } 
+        }
       } catch (e) {
-          console.error(e);
+        console.error(e);
       }
     },
 
     async getArticle(searchtitle) {
-      if(searchtitle == "") {
+      if (searchtitle == "") {
         try {
           const articles = await API.graphql({
             query: listArticles,
@@ -129,18 +151,17 @@ export default {
             },
           });
           this.articles = articles.data.listArticles.items;
-          // console.log(this.articles);
+          //console.log(this.articles);
         } catch (e) {
           console.error(e);
         }
-      }
-      else {
+      } else {
         try {
           // console.log(searchtitle);
           const articles = await API.graphql({
             query: listArticles,
             variables: {
-              filters: {title: {eq: this.searchtitle}},
+              filters: { title: { eq: this.searchtitle } },
               limit: 100,
             },
           });
@@ -157,7 +178,7 @@ export default {
       this.progressValue = ((this.quiz_score % 5) / 5) * 100;
       // console.log(this.progressValue);
       // console.log((this.quiz_score % 5) / 5);
-    }
+    },
   },
 };
 </script>
@@ -189,7 +210,7 @@ img {
   filter: grayscale();
   transition: filter 0.2s ease-in-out;
 }
-.outerbox{ 
+.outerbox {
   margin-left: 5px;
   margin-top: 5px;
   display: flex;
@@ -251,13 +272,13 @@ img {
   gap: 20px;
 }
 
- .cardflex {
+.cardflex {
   display: flex;
   flex-flow: row wrap;
 }
-  
-.box>*:first-child {
-    align-self: center;
+
+.box > *:first-child {
+  align-self: center;
 }
 button {
   height: 30px;
