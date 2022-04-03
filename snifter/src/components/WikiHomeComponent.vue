@@ -1,20 +1,17 @@
 <template>
   <div id="wikiHomeComponent">
-    <div v-if="this.user != undefined">
+    <div class="progressbox" v-if="this.user != undefined">
       <h2 style="color: white">Welcome {{ this.user.username }}!</h2>
-      <br />
       <p style="color: white">
         Your current Wiki level is {{ level }}. Read more articles and complete
-        more quizzes to level up!
+        more quizzes to level up! <br> Current progress to the next level:
       </p>
+      <p style="color: white"> </p>
       <va-progress-bar
         :model-value="this.progressValue"
-        size="medium"
+        size="large"
         color="#FFFFFF"
-      >
-        <p style="color: white">
-          Progress to next level: {{ this.progressValue + "%" }}
-        </p>
+      > <div v-if="this.progressValue > 0" style="color: black"> {{ this.progressValue + "%" }} </div>
       </va-progress-bar>
     </div>
     <div v-else>
@@ -70,7 +67,7 @@
 import { API } from "aws-amplify";
 import { listArticles, listUsers } from "../graphql/queries";
 import { Auth } from "aws-amplify";
-// Vue.use(LazyTube);
+
 export default {
   name: "WikiHomeComponent",
   components: {},
@@ -99,6 +96,12 @@ export default {
     filteredCategories() {
       return this.categories;
     },
+
+    /**
+      * Creates arrays with articles grouped by a category field present within the article model
+      *
+      * @return {{article}} groups of articles
+      */
     categorize() {
       const groups = {};
       this.filteredArticles.forEach((article) => {
@@ -109,11 +112,17 @@ export default {
     },
   },
   methods: {
+    /**
+      * Collects the currently logged in user (if logged in) and populate fields of related data in component
+      *
+      */
     async getUser() {
       try {
+        // Utilize Auth function to grab currently logged in user on cognito service
         const userAuth = await Auth.currentAuthenticatedUser();
         this.username = userAuth.username;
-        // console.log(this.username);
+        
+        // Query associated model from user table if a user is logged in
         if (userAuth != null) {
           const user = await API.graphql({
             query: listUsers,
@@ -123,25 +132,32 @@ export default {
             },
           });
 
-          // console.log(user.data.listUsers.items[0].completed_quizzes);
+          //// Populate related fields
           this.user = user.data.listUsers.items[0];
+          // Store completed quizzes if the user has completed any. Otherwise, leave the array blank.
           if (user.data.listUsers.items[0].completed_quizzes != null) {
             this.completedQuizzes =
               user.data.listUsers.items[0].completed_quizzes;
           }
+          // Store user's points from completing quizzes unless they haven't attempted any
           if (user.data.listUsers.items[0].quiz_points != null) {
             this.quiz_score = user.data.listUsers.items[0].quiz_points;
           }
+          // Evaluate progress from above metrics ^ for display
           this.evaluateProgress();
-
-          // console.log(user);
         }
       } catch (e) {
         console.error(e);
       }
     },
-
+    /**
+      * Collects all articles to display on home page of Wiki
+      *
+      * @param {string} searchTitle Title of article to be searched, currently left blank for all queries
+      *
+      */
     async getArticle(searchtitle) {
+      // Query all articles if searchTitle is blank, and store them to be categorized in computed
       if (searchtitle == "") {
         try {
           const articles = await API.graphql({
@@ -151,13 +167,12 @@ export default {
             },
           });
           this.articles = articles.data.listArticles.items;
-          //console.log(this.articles);
+
         } catch (e) {
           console.error(e);
         }
       } else {
         try {
-          // console.log(searchtitle);
           const articles = await API.graphql({
             query: listArticles,
             variables: {
@@ -166,18 +181,19 @@ export default {
             },
           });
           this.articles = articles.data.listArticles.items;
-          // console.log(this.articles);
-          // console.log("filtered articles");
+
         } catch (e) {
           console.error(e);
         }
       }
     },
+    /**
+      * Generate user progress for display, using quiz_score
+      *
+      */
     evaluateProgress() {
       this.level = Math.floor(this.quiz_score / 5) + 1;
       this.progressValue = ((this.quiz_score % 5) / 5) * 100;
-      // console.log(this.progressValue);
-      // console.log((this.quiz_score % 5) / 5);
     },
   },
 };
@@ -256,11 +272,20 @@ img {
   justify-content: space-around;
   flex-direction: column;
 }
+
 .flexbox {
   display: flex;
   align-items: left;
   flex-direction: column;
   margin-bottom: 3vw;
+}
+
+.progressbox {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin-bottom: 3vw;
+  gap: 2px;
 }
 
 .progressflex {
