@@ -284,7 +284,7 @@ export default {
     await this.setWatchStatus(this.user, this.nftData.id);
 
     if (this.collection === null || this.collection === undefined) {
-      await this.collectionRequest(this.currentContract.slug);
+      await this.collectionRequest(this.nft.collection_slug);
     }
 
     console.log(this.nftContract);
@@ -423,8 +423,10 @@ export default {
   },
   methods: {
     async getUser() {
-      const user = await Auth.currentAuthenticatedUser();
-      this.user = user.username;
+      try{
+        const user = await Auth.currentAuthenticatedUser();
+        this.user = user.username;
+      } catch(e) { console.log(e); }
     },
     async setWatchStatus(userID, nftID) {
       try {
