@@ -67,7 +67,7 @@
 import { API } from "aws-amplify";
 import { listArticles, listUsers } from "../graphql/queries";
 import { Auth } from "aws-amplify";
-// Vue.use(LazyTube);
+
 export default {
   name: "WikiHomeComponent",
   components: {},

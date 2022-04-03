@@ -30,19 +30,14 @@ export default {
   name: "WikiComponent",
   components: { YouTube },
   async created() {
-    //console.log(this.$route.query);
+    // Populate article related data
     this.articleData = this.$route.query;
-    //console.log(this.articleData.questions);
     this.questions = this.articleData.questions;
     this.answers = this.articleData.answers;
     this.title = this.articleData.title;
     this.article = this.articleData;
-    // console.log(this.article.related_links);
-    //console.log(this.article.id);
+    // Emit article ID so QuizComponent can query the correct quiz
     this.$emit("getID", this.article.id);
-    //console.log(this.questions);
-    //console.log(this.articleData.id)
-    //await this.getArticle(this.articleData.id);
   },
   data() {
     return {
@@ -57,6 +52,12 @@ export default {
   },
   methods: {
     onReady() {},
+
+    /**
+      * Collects the article associated with an articleID and populates related data in component
+      *
+      * @param {number} articleID the articleID as listed in the articles dynamo table
+      */
     async getArticle(articleId) {
       try {
         const articles = await API.graphql({

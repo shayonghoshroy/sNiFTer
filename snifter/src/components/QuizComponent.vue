@@ -171,6 +171,7 @@ export default {
         }
       }
     },
+
     /**
       * Restart quiz related data when user hits reset button, so they can take it again
       *
