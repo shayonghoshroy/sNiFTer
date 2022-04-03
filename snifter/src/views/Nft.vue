@@ -482,16 +482,21 @@ export default {
       }
     },
     async setTotalFavorites(nftID) {
+      console.log("nft id", nftID);
       try {
         const count = await API.graphql({
           query: listUserFavoriteNfts,
+          
           variables: {
             filter: { nftID: { eq: nftID } },
           },
+          
         });
+        console.log("favorite count", count)
         this.totalFavorites = Object.keys(
           count.data.listUserFavoriteNfts.items
         ).length;
+        console.log(this.totalFavorites, "total favorites");
       } catch (e) {
         console.error(e);
       }
@@ -651,7 +656,7 @@ export default {
         variables: variables,
       });
 
-      console.log(nftEvents.data.listNftEvents.items);
+      //console.log(nftEvents.data.listNftEvents.items);
 
       var events = [];
       var items = nftEvents.data.listNftEvents.items;
@@ -659,7 +664,7 @@ export default {
         events = events.concat(JSON.parse(JSON.stringify(event)));
       });
 
-      console.log(events);
+      //console.log(events);
 
       this.nftEvents = this.nftEvents.concat(events);
       return nftEvents.data.listNftEvents.nextToken;
