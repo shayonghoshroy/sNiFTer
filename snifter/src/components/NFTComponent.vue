@@ -55,7 +55,6 @@
 
 <script>
 require("@/assets/logo3.png");
-
 import { API } from "aws-amplify";
 import { Auth } from "aws-amplify";
 import { listNfts, listUserFavoriteNfts } from "../graphql/queries";
@@ -68,6 +67,16 @@ export default {
   async created() {
     this.getUser();
     this.getNFTs();
+  },
+  props: {
+    insertNfts: {
+      type: Boolean,
+      default: false
+    },
+    insertedNfts: {
+      type: Array,
+      default: () => []
+    }
   },
   data() {
     return {
@@ -87,18 +96,20 @@ export default {
       this.user = user.username;
     },
     async getNFTs() {
-      try {
-        const nfts = await API.graphql({
-          query: listNfts,
-          variables: {
-            limit: 300,
-          },
-        });
-        this.nfts = nfts.data.listNfts.items;
-      } catch (e) {
-        console.error(e);
+      if(!this.insertNfts) {
+        try {
+          const nfts = await API.graphql({
+            query: listNfts,
+            variables: {
+              limit: 300,
+            },
+          });
+          this.nfts = nfts.data.listNfts.items;
+        } catch (e) {
+          console.error(e);
+        }
       }
-
+      else this.nfts = this.insertedNfts;
       // add fields to nfts
       for (let i = 0; i < this.nfts.length; i++) {
         // add field to store if the user has favorited it
@@ -123,7 +134,6 @@ export default {
         } catch (e) {
           //console.error(e);
         }
-
         // add total number of favorites
         try {
           const count = await API.graphql({
@@ -156,7 +166,6 @@ export default {
             filter: { userID: { eq: userID }, nftID: { eq: nftID } },
           },
         });
-
         if (
           typeof has_favorited.data.listUserFavoriteNfts.items[0] !==
           "undefined"
@@ -166,7 +175,6 @@ export default {
           };
           console.log("removing favorite");
           this.nfts[index].totalFavorites -= 1;
-
           await API.graphql({
             query: deleteUserFavoriteNft,
             variables: { input: userFavoriteNftId },
@@ -174,7 +182,6 @@ export default {
         } else {
           console.log("adding favorite");
           this.nfts[index].totalFavorites += 1;
-
           const userFavoriteNft = { userID, nftID };
           await API.graphql({
             query: createUserFavoriteNft,
@@ -214,18 +221,15 @@ export default {
   cursor: pointer;
   box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.5);
 }
-
 .nft-name {
   text-align: center;
   display: inline-block;
 }
-
 .nft-stub {
   display: flex;
   justify-content: flex-end;
   flex-direction: row;
 }
-
 .nft-icon:hover {
   cursor: pointer;
   color: red;

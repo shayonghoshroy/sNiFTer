@@ -268,25 +268,20 @@ export default {
     TransactionTable,
   },
   async created() {
-    this.getUser();
+    await this.getUser();
 
     console.log(this.$route.query);
     this.nftData = this.$route.query;
-    var id = this.$route.query.id;
-    var splitId = id.split("-");
-    var address = splitId[0];
-    //var token_id = splitId[1];
-    await this.subscribeToEvents();
 
     await this.getNFT();
+    if(this.nft === undefined) await this.getNFT();
 
-    console.log(this.nft);
-    await this.getNFTs(address);
+    await this.getNFTs(this.nftData.address)
 
-    this.setFavoriteStatus(this.user, id);
-    this.setTotalFavorites(id);
+    await this.setFavoriteStatus(this.user, this.nftData.id);
+    await this.setTotalFavorites(this.nftData.id);
 
-    this.setWatchStatus(this.user, id);
+    await this.setWatchStatus(this.user, this.nftData.id);
 
     if (this.collection === null || this.collection === undefined) {
       await this.collectionRequest(this.currentContract.slug);
@@ -570,13 +565,14 @@ export default {
       try {
         var token_id = this.nftData.token_id;
         var address = this.nftData.address;
+        debugger;
 
         const nfts = await API.graphql({
           query: listNfts,
           variables: {
             filter: {
               address: { eq: address },
-              token_id: { eq: token_id },
+              token_id: { eq: parseInt(token_id) },
             },
           },
         });
