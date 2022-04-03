@@ -66,7 +66,7 @@ export default {
       level: 0,
       user: undefined,
       username: undefined,
-      categories: [ "NFT", "Blockchain" ],
+      categories: [ "NFT", "Blockchain", "Currency" ],
     };
   },
   computed: {
@@ -238,7 +238,7 @@ img {
 .flexbox {
   display: flex;
   align-items: left;
-  flex-direction: column-reverse;
+  flex-direction: column;
   margin-bottom: 3vw;
 }
 

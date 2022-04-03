@@ -1,44 +1,46 @@
 <template>
-  <div class="quizbox" v-if="(this.quiz != null) && (this.articleID != null)">
-    <form>
-      <div v-if="this.questionIndex == 0">
-        <h2>Try your luck at a quiz!</h2> 
-      </div>
-      <div v-if="this.questionIndex == 0" class="divider"> </div>
-      <div v-if="(this.questionIndex >= this.quiz.questions.length) && (score == count)">
-        <h2>Great job! You mastered this concept!</h2>
-      </div>
-      <div v-if="(this.questionIndex >= this.quiz.questions.length) && (score != count)">
-        <h2>Looks like you missed some things. Give it another shot!</h2>
-      </div>
-
-      <div v-if="this.questionIndex < this.quiz.questions.length">
-        <h1>{{ this.quiz.questions[this.questionIndex] }} </h1> <br>
-        <div>
-          <va-radio style="padding-left: 10px; padding-right: 10px; break-after: always;"
-            v-for="c in this.quiz.answers[this.questionIndex]"
-            :key="c"
-            v-model="answer"
-            :option="c"
-            :label="c"
-          />
+  <div>
+    <div class="quizbox" v-if="(this.quiz != null) && (this.articleID != null)">
+      <form>
+        <div class="questionbox" v-if="(this.questionIndex < this.quiz.questions.length)"> 
+          <h2>Question {{this.questionIndex+1}}</h2> 
         </div>
-      </div>
-      <div v-else>
-        <br>
-        <va-button type="button" @click="restart">Restart</va-button> <br>
-      </div>
-      <div v-if="this.questionIndex < this.quiz.questions.length">
-        <br>
-        <va-button type="button" @click="submit">Check</va-button>
-      </div>
-      
-    </form>
-    <p>score: {{ Math.round((score/count)*100 )}}%</p>
+        <div v-if="(this.questionIndex < this.quiz.questions.length)" class="divider"> </div> 
+        <div v-if="(this.questionIndex >= this.quiz.questions.length) && (score == count)">
+          <h2>Great job! You mastered this concept!</h2>
+        </div>
+        <div v-if="(this.questionIndex >= this.quiz.questions.length) && (score != count)">
+          <h2>Looks like you missed some things. Give it another shot!</h2>
+        </div>
+
+        <div class="textbox" v-if="this.questionIndex < this.quiz.questions.length">
+          <h1>{{ this.quiz.questions[this.questionIndex] }} </h1> <br>
+          <div class="answerflex">
+            <div class="answerChoice" v-for="c in this.quiz.answers[this.questionIndex]" :key="c" >
+              <va-button class="answerButton" size="large"  type="button" @click="submit && (this.answer = c)">{{ c }}</va-button> <br>
+            </div>
+          </div>
+        </div>
+
+        <div class="submitflex">
+          <div v-if="this.questionIndex < this.quiz.questions.length">
+            <br>
+            <va-button type="button" @click="submit">Check</va-button>
+          </div>
+          <div v-else>
+            <br>
+            <va-button type="button" @click="restart">Restart</va-button> <br>
+          </div>
+          <p>score: {{ Math.round((score/count)*100 )}}%</p>
+        </div>
+        
+      </form>
+      <br>
+    </div>
     <br>
   </div>
-
 </template>
+
 <script>
 import { API, graphqlOperation, Auth } from "aws-amplify";
 import { listQuizzes, listUsers } from "../graphql/queries";
@@ -135,17 +137,18 @@ export default {
         console.error(e);
       }
     },
-    
     async getQuiz() {
       try {
         const quiz = await API.graphql({
           query: listQuizzes,
           variables: {
-            limit: 5,
             filter: {id: {eq: this.articleID}}
           },
         });
         this.quiz = quiz.data.listQuizzes.items[0];
+        console.log("fired");
+        console.log(this.quiz);
+        console.log(this.articleID);
       } catch (e) {
         console.error(e);
       }
@@ -225,15 +228,44 @@ img {
 }
 .quizbox {
   display: flex;
-  align-items: center;
-  width: 52rem;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: space-between;
+  width: 60rem;
+  height: 30rem;
   border: 15px solid white;
-  background: #FAFAFA;
+  background: #FFFFFF;
   border-radius: 0.5rem;
   padding-top: 5px;
-  margin: 20px;
+  margin-bottom: 0px;
   box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
 }
+
+.answerflex {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 2px;
+  width: 100%;
+}
+
+.answerChoice {
+  width: inherit;
+}
+
+.answerButton {
+  width: inherit;
+}
+
+.submitflex {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 2px;
+}
+
 .divider {
   border-bottom: 1px solid black;
   margin: 5px
@@ -249,6 +281,17 @@ img {
 	width: 30rem;
 	min-height: 30rem;
 }
+.questionbox {
+  display: flex;
+  flex-direction: row;
+}
+
+.textbox {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
 .box>*:first-child {
     align-self: center;
 }
