@@ -205,6 +205,15 @@ type user @model @auth(rules: [{allow: public}]){
     updatedAt:AWSDateTime
 }
 
+type S3Object @model @auth(rules: [{allow: public}]){
+    id: ID!
+    bucket: String!
+    region: String!
+    key: String!
+    createdAt: AWSDateTime
+    updatedAt:AWSDateTime
+}
+
 type article @model @auth(rules: [{allow: public}]){
  id: ID!
  title: String!
