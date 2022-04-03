@@ -99,99 +99,57 @@
           <div class="transaction-section">
             <h1>Transactions</h1>
             <div class="recent-sales-info">
-              <div class="bid-info">
-                <va-list>
-                  <va-list-item>
-                    <va-list-item-section>
-                      <p>Bid Volume:</p>
-                    </va-list-item-section>
-                    <va-list-item-section>
-                      <p>{{ transactionStats["bid_volume"] }} eth</p>
-                    </va-list-item-section>
-                  </va-list-item>
-                  <va-list-item>
-                    <va-list-item-section>
-                      <p>Last Bid:</p>
-                    </va-list-item-section>
-                    <va-list-item-section>
-                      <p>{{ transactionStats["last_bid"] }} eth</p>
-                    </va-list-item-section>
-                  </va-list-item>
-                  <va-list-item>
-                    <va-list-item-section>
-                      <p>Highest Bid:</p>
-                    </va-list-item-section>
-                    <va-list-item-section>
-                      <p>{{ transactionStats["highest_bid"] }} eth</p>
-                    </va-list-item-section>
-                  </va-list-item>
-                  <va-list-item>
-                    <va-list-item-section>
-                      <p>Average Bid:</p>
-                    </va-list-item-section>
-                    <va-list-item-section>
-                      <p>{{ transactionStats["average_bid"] }} eth</p>
-                    </va-list-item-section>
-                  </va-list-item>
-                  <va-list-item>
-                    <va-list-item-section>
-                      <p>Total Bids:</p>
-                    </va-list-item-section>
-                    <va-list-item-section>
-                      <p>{{ transactionStats["total_bids"] }}</p>
-                    </va-list-item-section>
-                  </va-list-item>
-                </va-list>
-              </div>
               <div class="sale-info">
-                <va-list>
-                  <va-list-item>
-                    <va-list-item-section>
-                      <p>Number of Sales:</p>
-                    </va-list-item-section>
-                    <va-list-item-section>
-                      <p>{{ nft.num_sales }}</p>
-                    </va-list-item-section>
-                  </va-list-item>
-                  <va-list-item>
-                    <va-list-item-section>
-                      <p>Sales Volume:</p>
-                    </va-list-item-section>
-                    <va-list-item-section>
-                      <p>{{ transactionStats["sales_volume"] }} eth</p>
-                    </va-list-item-section>
-                  </va-list-item>
-                  <va-list-item>
-                    <va-list-item-section>
-                      <p>Last Sale:</p>
-                    </va-list-item-section>
-                    <va-list-item-section>
-                      <p>{{ transactionStats["last_sale"] }}</p>
-                    </va-list-item-section>
-                  </va-list-item>
-                  <va-list-item>
-                    <va-list-item-section>
-                      <p>Average Sale:</p>
-                    </va-list-item-section>
-                    <va-list-item-section>
-                      <p>{{ transactionStats["average_sale"] }}</p>
-                    </va-list-item-section>
-                  </va-list-item>
-                  <va-list-item>
-                    <va-list-item-section>
-                      <p>Highest Sale:</p>
-                    </va-list-item-section>
-                    <va-list-item-section>
-                      <p>{{ transactionStats["highest_sale"] }}</p>
-                    </va-list-item-section>
-                  </va-list-item>
-                </va-list>
+                <div class="va-table-responsive">
+                  <table class="va-table sales-table">
+                    <thead>
+                      <tr>
+                        <th>Bid Stats</th>
+                        <th>Eth</th>
+                        <th>Sales Stats</th>
+                        <th>Eth</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Total Bids</td>
+                        <td>{{ transactionStats['total_bids'] }}</td>
+                        <td>Total Sales</td>
+                        <td>{{ transactionStats['total_sales'] }}</td>
+                      </tr>
+                      <tr>
+                        <td>Last Bid</td>
+                        <td>{{ transactionStats['last_bid'] }}</td>
+                        <td>Last Sale</td>
+                        <td>{{ transactionStats['last_sale'] }}</td>
+                      </tr>
+                      <tr>
+                        <td>Highest Bid</td>
+                        <td>{{ transactionStats['highest_bid'] }}</td>
+                        <td>Highest Sale</td>
+                        <td>{{ transactionStats['highest_sale'] }}</td>
+                      </tr>
+                      <tr>
+                        <td>Average Bid</td>
+                        <td>{{ transactionStats['average_bid'] }}</td>
+                        <td>Last Sale</td>
+                        <td>{{ transactionStats['average_sale'] }}</td>
+                      </tr>
+                      <tr>
+                        <td>Bid Volume</td>
+                        <td>{{ transactionStats['last_bid'] }}</td>
+                        <td>Sales Volume</td>
+                        <td>{{ transactionStats['sales_volume'] }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
             <va-accordion v-model="showTransactions">
               <va-collapse header="Transactions">
                 <div v-if="nftEvents && nftEvents.length > 0">
-                  <TransactionTable :nftEvents="nftEvents" />
+                  <TransactionTable :nftEvents="nftEventItems" />
                 </div>
               </va-collapse>
             </va-accordion>
@@ -214,15 +172,13 @@
             </va-card-content>
           </va-card>
         </div>
-
-        <div v-if="nftContract" class="contract-section">
-          <h1>Contract</h1>
-          <contract-stats :contracts="nftContract"> </contract-stats>
-        </div>
-
         <div v-if="collection" class="collection-section">
           <h1>Collection</h1>
-          <CollectionInfo :collection="collection" />
+          <CollectionInfo :collection="collection">
+            <template v-slot:contractInfo>
+              <ContractStats :contracts="nftContract"></ContractStats>
+            </template>
+          </CollectionInfo>
         </div>
       </div>
     </div>
@@ -240,8 +196,9 @@ import {
   //listNftEventCheckpoints,
   listUserFavoriteNfts,
   listUserWatchlistNfts,
+  getCollection,
 } from "../graphql/queries";
-import { fetchCollection, nftEventQueue } from "../services/nftScraperService";
+import { fetchCollection, nftEventQueue, getNftEventsDirectly, getCollectionStatsDirectly } from "../services/nftScraperService";
 import {
   createUserFavoriteNft,
   deleteUserFavoriteNft,
@@ -257,6 +214,7 @@ import CollectionInfo from "../components/nft/CollectionInfo";
 import TraitTable from "../components/nft/TraitTable";
 import EntityCardList from "../components/nft/EntityCardList";
 import TransactionTable from "../components/nft/TransactionTable.vue";
+const Web3 = require('web3');
 
 export default {
   name: "Nft",
@@ -270,7 +228,6 @@ export default {
   async created() {
     await this.getUser();
 
-    console.log(this.$route.query);
     this.nftData = this.$route.query;
 
     await this.getNFT();
@@ -287,22 +244,13 @@ export default {
       await this.collectionRequest(this.nft.collection_slug);
     }
 
-    console.log(this.nftContract);
-    console.log(this.collection);
-    console.log(this.nftEvents, "NFTEVENTS");
+    this.nftEvents = await getNftEventsDirectly(this.nft.token_id, this.nft.address);
+    if(this.nftEvents.length > 0) {
+      this.transactionStatus = "complete";
+    }
 
     // Make sure to fetch the sales
-    await this.fetchNFTEvents(this.nft.address, this.nft.token, "successful");
-
-    var resp = await this.fetchNFTEvents(this.nft.address, this.nft.token_id);
-
-    if (resp)
-      await setTimeout(() => {
-        this.getAllNftEvents();
-      }, 15000);
-
-    await this.subscribeToCheckpoint(resp["messageId"]);
-    console.log(this.nftEvents);
+    await getNftEventsDirectly(this.nft.address, this.nft.token);
   },
   data() {
     return {
@@ -363,6 +311,40 @@ export default {
       console.log(entities);
       return entities;
     },
+    nftEventItems() {
+      var events = this.nftEvents;
+      if (events.length === 0) return [];
+      var items = events.map((nftEvent) => {
+        var eventType = "";
+        if (nftEvent.event_type === "successful") {
+          eventType = "Sale";
+          nftEvent['from'] = nftEvent['from_account'];
+        }
+        else if (nftEvent.event_type === "transfer") eventType = "Transfer";
+        else {
+          eventType = "Bid";
+          nftEvent['from'] = nftEvent.from_account['address'];
+        }
+
+        nftEvent['to'] = nftEvent['asset']['owner']['address'];
+        var price = nftEvent.bid_amount;
+        if(eventType === 'Sale') {
+          price = nftEvent.total_price;
+        }
+        // Convert from wei to eth
+        price = parseFloat(Web3.utils.fromWei(price.toString())).toFixed(3);
+        
+        // Round to two decimals
+        return {
+          event: eventType,
+          price: price,
+          from: nftEvent['from'] ? nftEvent['from'] : "-",
+          to: nftEvent['to']? nftEvent['to'] : "-",
+          created_date: nftEvent.created_date ? nftEvent.created_date : "-",
+        };
+      });
+      return items;
+    },
     transactionStats() {
       var last_bid = 0;
       var newestCreatedDate = null;
@@ -376,47 +358,75 @@ export default {
       var average_sale = 0;
       var last_sale = 0;
       var sales_volume = 0;
-      this.nftEvents.forEach((event) => {
-        var currentTime = Date.parse(event.created_date);
-        if (
-          event["event_type"] === "offer_entered" ||
-          event["event_type"] === "bid_entered"
-        ) {
-          var bid_amount = event["bid_amount"];
-          if (bid_amount) {
-            total_bids += 1;
-            average_bid += bid_amount;
-            bid_volume += bid_amount;
+      // if(this.nftEventItems.length === 0) {
+      //   return {
+      //     last_bid: last_bid,
+      //     highest_bid: highest_bid,
+      //     total_bids: total_bids,
+      //     total_sales: totalSales,
+      //     bid_volume: bid_volume,
+      //     average_bid: average_bid / total_bids,
+      //     last_sale: last_sale,
+      //     highest_sale: highest_sale,
+      //     average_sale: average_sale / totalSales,
+      //     sales_volume: sales_volume,
+      //   };
+      // }
+      debugger;
+      if(this.nftEvents.length > 0) {
+        this.nftEventItems.forEach((event) => {
+          var currentTime = Date.parse(event.created_date);
+          if (
+            event["event"] === "Bid"
+          ) {
+            var bid_amount = event["price"];
+            if (bid_amount) {
+              bid_amount = parseFloat(bid_amount);
+              total_bids += 1;
+              average_bid += bid_amount;
+              bid_volume += bid_amount;
+            }
+            if (currentTime > newestCreatedDate && bid_amount) {
+              last_bid = bid_amount;
+              newestCreatedDate = currentTime;
+            }
+            if (bid_amount > highest_bid) highest_bid = bid_amount;
           }
-          if (currentTime > newestCreatedDate && bid_amount) {
-            last_bid = bid_amount;
-            newestCreatedDate = currentTime;
+          if (event["event"] === "Sale") {
+            debugger;
+            var saleAmount = event["price"];
+            if (saleAmount) {
+              saleAmount = parseFloat(saleAmount);
+              average_sale += saleAmount;
+              totalSales += 1;
+              sales_volume += saleAmount;
+            }
+            if (currentTime > newestSaleDate && saleAmount) {
+              last_sale = saleAmount;
+              newestSaleDate = currentTime;
+            }
+            if (saleAmount > highest_sale) highest_sale = saleAmount;
           }
-          if (bid_amount > highest_bid) highest_bid = bid_amount;
-        }
-        if (event["event_type"] === "successful") {
-          var saleAmount = event["total_price"];
-          if (saleAmount) {
-            average_sale += saleAmount;
-            totalSales += 1;
-            sales_volume += saleAmount;
-          }
-          if (currentTime > newestSaleDate && saleAmount) {
-            last_sale = saleAmount;
-            newestSaleDate = currentTime;
-          }
-          if (saleAmount > highest_sale) highest_sale = saleAmount;
-        }
-      });
+        });
+      }
+      var avg_bid = 0;
+      var avg_sale = 0;
+      if (average_bid > 0) {
+        avg_bid = (average_bid / total_bids).toFixed(3);
+      }
+      if (average_sale > 0) {
+        avg_sale = (average_sale / totalSales).toFixed(3);
+      }
       return {
         last_bid: last_bid,
         highest_bid: highest_bid,
         total_bids: total_bids,
+        total_sales: totalSales,
         bid_volume: bid_volume,
-        average_bid: average_bid / total_bids,
+        average_bid: avg_bid,
         last_sale: last_sale,
         highest_sale: highest_sale,
-        average_sale: average_sale / totalSales,
+        average_sale: avg_sale,
         sales_volume: sales_volume,
       };
     },
@@ -970,5 +980,13 @@ h1 {
 
 #container > * {
   position: absolute;
+}
+
+.sale-info {
+  width: 100%;
+}
+
+.sales-table {
+  width: 100%;
 }
 </style>

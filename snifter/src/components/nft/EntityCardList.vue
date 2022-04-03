@@ -42,10 +42,8 @@ export default {
 </script>
 
 <style lang="css" scoped>
-
 .entity-item:hover {
-    cursor: pointer;
     background-color: gray;
+    color: white;
 }
-
 </style>
