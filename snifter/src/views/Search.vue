@@ -19,12 +19,7 @@
         </va-alert>
       </div>
       <div v-else>
-        <NFTDisplay v-if="searchType === 'nft'" :nfts="data" />
-        <CollectionDisplay
-          class="background"
-          v-else-if="searchType === 'collection'"
-          :collections="data"
-        />
+        <NFTComponent v-if="searchType === 'nft'" :insertNfts="true" :insertedNfts="data" />
       </div>
     </div>
     <div class="search-description" v-else-if="!searched">
@@ -38,15 +33,12 @@
 
 <script>
 import SearchComponent from "../components/SearchComponent";
-import NFTDisplay from "../components/nft/NFTDisplay.vue";
-import CollectionDisplay from "../components/nft/CollectionDisplay.vue";
-
+import NFTComponent from "../components/NFTComponent.vue";
 export default {
   name: "Search",
   components: {
     SearchComponent,
-    NFTDisplay,
-    CollectionDisplay,
+    NFTComponent,
   },
   setup() {
     return {};

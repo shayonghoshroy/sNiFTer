@@ -359,6 +359,43 @@ export const listCollections = /* GraphQL */ `
         twitter_username
         instagram_username
         wiki_url
+        traits {
+          id
+          trait_type
+          value
+          display_type
+          max_value
+          trait_count
+          order
+          createdAt
+          updatedAt
+        }
+        stats {
+          id
+          one_day_volume
+          one_day_change
+          one_day_sales
+          one_day_average_price
+          seven_day_volume
+          seven_day_change
+          seven_day_sales
+          seven_day_average_price
+          thirty_day_volume
+          thirty_day_change
+          thirty_day_sales
+          thirty_day_average_price
+          total_volume
+          total_sales
+          total_supply
+          count
+          num_owners
+          average_price
+          num_reports
+          market_cap
+          floor_price
+          createdAt
+          updatedAt
+        }
         createdAt
         updatedAt
       }
@@ -574,6 +611,42 @@ export const listNfts = /* GraphQL */ `
         external_link
         perma_link
         owner
+        primary_asset_contract {
+          id
+          slug
+          address
+          name
+          symbol
+          payout_address
+          asset_contract_type
+          created_date
+          description
+          image_url
+          total_supply
+          nft_version
+          opensea_version
+          schema_name
+          external_link
+          createdAt
+          updatedAt
+        }
+        traits {
+          id
+          trait_type
+          value
+          display_type
+          max_value
+          trait_count
+          order
+          createdAt
+          updatedAt
+        }
+        favorited_by {
+          nextToken
+        }
+        watched_by {
+          nextToken
+        }
         createdAt
         updatedAt
       }
