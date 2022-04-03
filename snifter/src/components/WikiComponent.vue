@@ -1,6 +1,7 @@
 <template>
     <div id="wikiComponent">
         <h2 style="color: white">{{ article.title }}</h2>
+        <br>
         <div v-if="article.related_links != undefined">
           <div class="post" v-for="video_link in article.related_links" :key="video_link.id">
             <div v-if="(video_link != undefined) && (video_link != '')">

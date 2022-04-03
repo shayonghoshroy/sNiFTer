@@ -72,11 +72,17 @@ export default {
       },
   },
   methods: {
+    /**
+      * Collects the currently logged in user (if logged in) and populate fields of related data in component
+      *
+      */
     async getUser() {
       try {
+        // Utilize Auth function to grab currently logged in user on cognito service
         const userAuth = await Auth.currentAuthenticatedUser();
         const currentusername = userAuth.username;
-        // console.log(currentusername);
+
+        // Query associated model from user table if a user is logged in
         if(userAuth != null) {
           const user = await API.graphql({
             query: listUsers,
@@ -86,99 +92,89 @@ export default {
             },
           });
 
-
-          // console.log(user.data.listUsers.items[0]);
-          // console.log(user.data.listUsers.items[0].completed_quizzes);
+          //// Populate related fields
           if(user.data.listUsers.items[0] != null) {
             this.user = user.data.listUsers.items[0];
           }
+          // Store completed quizzes if the user has completed any. Otherwise, leave the array blank.
           if(user.data.listUsers.items[0].completed_quizzes != null) {
             this.completedQuizzes = user.data.listUsers.items[0].completed_quizzes;
           }
+          // Store user's points from completing quizzes unless they haven't attempted any
           if(user.data.listUsers.items[0].quiz_points != null) {
             this.quiz_score = user.data.listUsers.items[0].quiz_points;
           }
-          
-          // console.log(user);
         }
       } catch (e) {
           console.error(e);
       }
     },
+
+    /**
+      * Update user with additional completed quiz and new quiz score after completing quiz
+      *
+      */
     async updateUser() {
       try {
+        // Push the new completed quiz onto array of completed quizzes
         this.completedQuizzes.push(this.articleID);
-        /*
-        const user = await API.graphql({
-          mutation: updateUser,
-          input: {
-            id: this.user.id,
-            completed_quizzes: this.completedQuizzes,
-          }
-        });
-        */
-
+        // Mutate user in dynamo model to store this information
         await API.graphql(graphqlOperation(updateUser, {input: {id: this.user.id, completed_quizzes: this.completedQuizzes, quiz_points: this.quiz_score}}));
 
-        // console.log(this.completedQuizzes);
-        
-        /*
-        console.log(this.user.data.listUsers.items[0].completed_quizzes);
-        if(this.user.data.listUsers.items[0] != null) {
-          this.user = user.data.listUsers.items[0];
-          console.log(this.user);
-        }
-        if(this.user.data.listUsers.items[0].completed_quizzes != null) {
-          this.completedQuizzes = user.data.listUsers.items[0].completed_quizzes;
-        }
-        */
-        
       } catch (e) {
         console.error(e);
       }
     },
+
+    /**
+      * Query and store the quiz associated with the articleID of the current Wiki article
+      *
+      */
     async getQuiz() {
       try {
+        // Query fires here, filtering for correct articleID
         const quiz = await API.graphql({
           query: listQuizzes,
           variables: {
             filter: {id: {eq: this.articleID}}
           },
         });
+        // Store it
         this.quiz = quiz.data.listQuizzes.items[0];
-        console.log("fired");
-        console.log(this.quiz);
-        console.log(this.articleID);
       } catch (e) {
         console.error(e);
       }
     },
+
+    /**
+      * Fires when user advances quiz question. Either increments questions and fixes score, or prepares to submit progress from completed quiz
+      *
+      */
     submit() {
-      //const { answer, quiz, questionIndex } = this;
+      // Update score for this quiz if answer is right
       if (this.answer === this.quiz.correct_answer[this.questionIndex]) {
         this.score++;
       }
+      // Advance count of completed questions
       if(this.questionIndex != 0) {
         this.count++;
       }
+      // Advance index of the arrays of question, answer choices, and correct answers 
       if (this.questionIndex < this.quiz.questions.length) {
         this.questionIndex++;
       }
-
+      // If user completes quiz and scores 100%, update their overall quiz score (experience field) and mutate user in database to store it
       if((this.questionIndex >= this.quiz.questions.length) && (this.score == this.count)) {
-        /*
-        console.log(this.user);
-        console.log("should fire");
-        console.log("articleID: " + this.articleID);
-        console.log(this.user != null);
-        console.log(!(this.completedQuizzes.includes(this.articleID)));
-        */
         if((this.user != null) && !(this.completedQuizzes.includes(this.articleID))) {
           this.quiz_score += this.quiz.questions.length;
-          this.updateUser();
+          this.updateUser(); // Call mutatator funtion
         }
       }
     },
+    /**
+      * Restart quiz related data when user hits reset button, so they can take it again
+      *
+      */
     restart() {
       this.answer = "";
       this.questionIndex = 0;
@@ -263,6 +259,7 @@ img {
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
+  flex-wrap: nowrap;
   gap: 2px;
 }
 
