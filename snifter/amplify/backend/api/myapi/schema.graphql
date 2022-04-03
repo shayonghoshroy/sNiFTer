@@ -201,6 +201,7 @@ type user @model @auth(rules: [{allow: public}]){
     watchlist_nfts: [nft] @manyToMany(relationName: "UserWatchlistNft")
     completed_quizzes: [String]
     quiz_points: Int
+    hasImage: Boolean
     createdAt: AWSDateTime
     updatedAt:AWSDateTime
 }
