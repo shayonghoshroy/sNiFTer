@@ -17,7 +17,7 @@
               <h1 v-if="nft.name">
                 {{ nft.name }}
               </h1>
-              <h1 v-else-if="currentContract">
+              <h1 v-else-if="currentContract && nft.token_id">
                 {{ currentContract.name + " #" + nft.token_id }}
               </h1>
             </div>
@@ -95,7 +95,7 @@
           </div>
         </div>
 
-        <div v-if="loadingStatus === 'complete'">
+        <div v-if="loadingStatus === 'complete'" style="width: 100%;">
           <div class="transaction-section">
             <h1>Transactions</h1>
             <div class="recent-sales-info">
@@ -149,7 +149,12 @@
             <va-accordion v-model="showTransactions">
               <va-collapse header="Transactions">
                 <div v-if="nftEvents && nftEvents.length > 0">
-                  <TransactionTable :nftEvents="nftEventItems" />
+                  <va-button-toggle 
+                  v-model="transactionDisplayState"
+                  :options="transactionDisplay"
+                  />
+                  <TransactionTable v-if="transactionDisplayState === 'table'" :nftEvents="nftEventItems" />
+                  <TransactionChart v-else :nftEvents="nftEventItems" />
                 </div>
               </va-collapse>
             </va-accordion>
@@ -191,14 +196,12 @@ import { Auth } from "aws-amplify";
 import {
   listCollections,
   listNftAssetContracts,
-  listNfts,
-  listNftEvents,
   //listNftEventCheckpoints,
   listUserFavoriteNfts,
   listUserWatchlistNfts,
-  getCollection,
+  searchNfts,
 } from "../graphql/queries";
-import { fetchCollection, nftEventQueue, getNftEventsDirectly, getCollectionStatsDirectly } from "../services/nftScraperService";
+import { fetchCollection, nftEventQueue, getNftEventsDirectly } from "../services/nftScraperService";
 import {
   createUserFavoriteNft,
   deleteUserFavoriteNft,
@@ -214,6 +217,7 @@ import CollectionInfo from "../components/nft/CollectionInfo";
 import TraitTable from "../components/nft/TraitTable";
 import EntityCardList from "../components/nft/EntityCardList";
 import TransactionTable from "../components/nft/TransactionTable.vue";
+import TransactionChart from "../components/nft/TransactionChart.vue";
 const Web3 = require('web3');
 
 export default {
@@ -224,11 +228,15 @@ export default {
     TraitTable,
     EntityCardList,
     TransactionTable,
+    TransactionChart
   },
   async created() {
-    await this.getUser();
-
     this.nftData = this.$route.query;
+    await this.$nextTick();
+    console.log("data", this.nftData);
+  },
+  async mounted() {
+    await this.getUser();    
 
     await this.getNFT();
     if(this.nft === undefined) await this.getNFT();
@@ -244,13 +252,10 @@ export default {
       await this.collectionRequest(this.nft.collection_slug);
     }
 
-    this.nftEvents = await getNftEventsDirectly(this.nft.token_id, this.nft.address);
+    this.nftEvents = await getNftEventsDirectly(this.nftData.token_id, this.nftData.address);
     if(this.nftEvents.length > 0) {
       this.transactionStatus = "complete";
     }
-
-    // Make sure to fetch the sales
-    await getNftEventsDirectly(this.nft.address, this.nft.token);
   },
   data() {
     return {
@@ -271,6 +276,15 @@ export default {
       totalFavorites: null,
       user: "",
       lastCheckpoint: {},
+      transactionDisplayState: 'chart',
+      transactionDisplay: [
+        {
+          label: 'Table', value: 'table'
+        },
+        { 
+          label: 'Chart', value: 'chart'
+        }
+      ],
     };
   },
   computed: {
@@ -327,6 +341,7 @@ export default {
         }
 
         nftEvent['to'] = nftEvent['asset']['owner']['address'];
+        debugger;
         var price = nftEvent.bid_amount;
         if(eventType === 'Sale') {
           price = nftEvent.total_price;
@@ -372,7 +387,6 @@ export default {
       //     sales_volume: sales_volume,
       //   };
       // }
-      debugger;
       if(this.nftEvents.length > 0) {
         this.nftEventItems.forEach((event) => {
           var currentTime = Date.parse(event.created_date);
@@ -575,23 +589,21 @@ export default {
     async initSubscriptions() {},
     async getNFT() {
       try {
-        var token_id = this.nftData.token_id;
+        var token_id = this.nftData['token_id'];
         var address = this.nftData.address;
-        debugger;
 
         const nfts = await API.graphql({
-          query: listNfts,
+          query: searchNfts,
           variables: {
             filter: {
-              address: { eq: address },
-              token_id: { eq: parseInt(token_id) },
+              token_id: {eq: token_id},
+              address: {eq: address},
             },
           },
         });
 
-        this.nft = nfts.data.listNfts.items.at(0);
+        this.nft = nfts.data.searchNfts.items.at(0);
       } catch (error) {
-        console.log(error);
         return null;
       }
     },
@@ -653,33 +665,6 @@ export default {
       if (response.ok) {
         await this.getCollection();
       }
-    },
-    async getNFTEvents(contractAddress, tokenId, nextToken = null) {
-      var variables = {
-        filter: {
-          contract_address: { eq: contractAddress },
-          token_id: { eq: tokenId },
-        },
-      };
-      if (nextToken) variables["nextToken"] = nextToken;
-
-      const nftEvents = await API.graphql({
-        query: listNftEvents,
-        variables: variables,
-      });
-
-      //console.log(nftEvents.data.listNftEvents.items);
-
-      var events = [];
-      var items = nftEvents.data.listNftEvents.items;
-      items.forEach((event) => {
-        events = events.concat(JSON.parse(JSON.stringify(event)));
-      });
-
-      //console.log(events);
-
-      this.nftEvents = this.nftEvents.concat(events);
-      return nftEvents.data.listNftEvents.nextToken;
     },
     async getAllNftEvents() {
       console.log("reading database");

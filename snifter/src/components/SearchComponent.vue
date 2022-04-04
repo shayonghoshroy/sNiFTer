@@ -167,16 +167,13 @@ export default {
       var suggestions = [];
       var suggestionNames = [];
       var nfts = this.nfts;
-      console.log(nfts);
       for(var i = 0; i < nfts.length; i++){
         var nft = nfts.at(i);
         if(nft['collection_name'] && !suggestionNames.includes(nft['collection_name'])) {
-          console.log(nft['collection_name']);
           suggestions.push({'collection_name': nft['collection_name'], 'image_url': nft['image_url']});
           suggestionNames.push(nft['collection_name']);
         }
       }
-      console.log(suggestions);
       return suggestions;
     }
   },
@@ -213,7 +210,6 @@ export default {
       }
       else
         filter[searchField] = {matchPhrasePrefix: this.generalSearchField};
-      console.log(filter);
       const results = await API.graphql({
         query: searchNfts,
         variables: {
@@ -222,7 +218,6 @@ export default {
         },
       );
       this.nfts = results.data.searchNfts.items;
-      console.log(this.nfts);
       this.$emit("getNFTs", this.nfts);
     },
     targetedSearch: async function(event) {
@@ -234,6 +229,10 @@ export default {
           var response = await fetchNFTs(this.address, this.tokenid);
           if (response.ok) {
             await this.getNFTs();
+          }
+
+          if (this.nft === null) {
+            await setTimeout(this.getNFTs(), 3000);
           }
         }
       } catch(e) {
@@ -266,7 +265,6 @@ export default {
     },
     getNFTs: async function () {
       try {
-        console.log("Starting Query");
         this.address = this.address.toLowerCase();
         if (this.tokenid == "") {
           const nfts = await API.graphql({
@@ -278,9 +276,8 @@ export default {
           this.nfts = nfts.data.listNfts.items;
           this.$emit("getNFTs", this.nfts);
         } else {
-          console.log(this.address, this.tokenid);
           const nfts = await API.graphql({
-            query: listNfts,
+            query: searchNfts,
             variables: {
               filter: {
                 token_id: { eq: this.tokenid },
@@ -288,8 +285,7 @@ export default {
               },
             },
           });
-          this.nfts = nfts.data.listNfts.items;
-          console.log("GET", this.nfts);
+          this.nfts = nfts.data.searchNfts.items;
           this.$emit("getNFTs", this.nfts);
         }
       } catch (e) {
@@ -298,7 +294,6 @@ export default {
     },
     getCollection: async function () {
       try {
-        console.log("Starting Query");
         this.collectionSlug = this.collectionSlug.toLowerCase();
         debugger;
         const collection = await API.graphql({
