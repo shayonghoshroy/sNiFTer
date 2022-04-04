@@ -246,7 +246,6 @@ export default {
     }
   },
   async created() {
-    debugger;
     var stats = await getCollectionStatsDirectly(this.collection.slug);
     this.latestStats = stats;
     this.statsLoaded = true;

@@ -341,7 +341,6 @@ export default {
         }
 
         nftEvent['to'] = nftEvent['asset']['owner']['address'];
-        debugger;
         var price = nftEvent.bid_amount;
         if(eventType === 'Sale') {
           price = nftEvent.total_price;
@@ -407,7 +406,6 @@ export default {
             if (bid_amount > highest_bid) highest_bid = bid_amount;
           }
           if (event["event"] === "Sale") {
-            debugger;
             var saleAmount = event["price"];
             if (saleAmount) {
               saleAmount = parseFloat(saleAmount);
@@ -476,6 +474,9 @@ export default {
     // if user is watching, remove watch
     // else add watch
     async watch(userID, nftID) {
+      if (!this.user) {
+        this.$router.push("/user");
+      }
       this.isWatching = !this.isWatching;
       try {
         const is_watching = await API.graphql({
@@ -552,6 +553,9 @@ export default {
     // if user has favorited, remove favorite
     // else add favorite
     async favorite(userID, nftID) {
+      if (!this.user) {
+        this.$router.push("/user");
+      }
       this.hasFavorited = !this.hasFavorited;
       try {
         const has_favorited = await API.graphql({
@@ -752,7 +756,6 @@ export default {
         query: onCreateNftEvent,
       }).subscribe({
         next: (data) => {
-          debugger;
           console.log("Event", data);
         },
         error: (e) => {
