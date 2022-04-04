@@ -1,25 +1,27 @@
 <template>
-    <div id="wikiComponent">
-        <h2 style="color: white">{{ article.title }}</h2>
-        <br>
-        <div v-if="article.related_links != undefined">
-          <div class="post" v-for="video_link in article.related_links" :key="video_link.id">
-            <div v-if="(video_link != undefined) && (video_link != '')">
-              <YouTube 
-                :src="video_link" 
-                @ready="onReady"
-                ref="youtube" />
-            </div>
-          </div>
-        </div>
-      <div class="qaflex">
-        <div class="post" v-for="(n, index) in article.questions.length" :key="index">
-          <h1>{{ questions[index]}} </h1>
-          <p>{{ answers[index] }}</p>
-          <br>
+  <div id="wikiComponent">
+    <h2>{{ article.title }}</h2>
+    <div v-if="article.related_links != undefined">
+      <div
+        class="post"
+        v-for="video_link in article.related_links"
+        :key="video_link.id"
+      >
+        <div v-if="video_link != undefined && video_link != ''">
+          <YouTube :src="video_link" @ready="onReady" ref="youtube" />
         </div>
       </div>
     </div>
+    <div
+      class="post"
+      v-for="(n, index) in article.questions.length"
+      :key="index"
+    >
+      <h1>{{ questions[index] }}</h1>
+      <p>{{ answers[index] }}</p>
+      <br />
+    </div>
+  </div>
 </template>
 
 <script>
@@ -30,14 +32,19 @@ export default {
   name: "WikiComponent",
   components: { YouTube },
   async created() {
-    // Populate article related data
+    //console.log(this.$route.query);
     this.articleData = this.$route.query;
+    //console.log(this.articleData.questions);
     this.questions = this.articleData.questions;
     this.answers = this.articleData.answers;
     this.title = this.articleData.title;
     this.article = this.articleData;
-    // Emit article ID so QuizComponent can query the correct quiz
+    // console.log(this.article.related_links);
+    //console.log(this.article.id);
     this.$emit("getID", this.article.id);
+    //console.log(this.questions);
+    //console.log(this.articleData.id)
+    //await this.getArticle(this.articleData.id);
   },
   data() {
     return {
@@ -52,12 +59,6 @@ export default {
   },
   methods: {
     onReady() {},
-
-    /**
-      * Collects the article associated with an articleID and populates related data in component
-      *
-      * @param {number} articleID the articleID as listed in the articles dynamo table
-      */
     async getArticle(articleId) {
       try {
         const articles = await API.graphql({
@@ -89,36 +90,24 @@ p {
   margin-right: 50px;
   margin-left: 50px;
   justify-content: left;
+  color: #d3d3d3;
+  width: 50%;
+  margin: 0 auto;
 }
 h1 {
   font-size: 24px;
   line-height: 2;
-  color: #000000d0;
+  color: #ffffff;
   margin-top: 20px;
   margin-bottom: 10px;
   margin-right: 50px;
   margin-left: 50px;
 }
-
-.articleflex {
-  display: flex;
-  align-content: center;
-  align-items: center;
-  justify-content: center;
-  flex-direction: row;
-  width: 60%;
-}
-
-.qaflex {
-  display: flex;
-  flex-direction: column;
-  width: 60rem;
-}
-
 h2 {
   font-size: clamp(24px, 3vw, 3vw);
   font-weight: 300;
   margin: 0;
+  color: white;
 }
 ul {
   margin-top: clamp(3em, 4vw, 4vw);

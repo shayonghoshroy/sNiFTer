@@ -1,14 +1,20 @@
 <template>
-  <h2 class="mt-5 mb-2 is-white">Welcome home</h2>
+  <h2 class="mb-2 is-white">Welcome home {{ username }}!</h2>
   <div class="is-white">
-    <va-divider horizontal />
     <div>
-      <span class="flex lg1"> Username: {{ username }} |</span>
-      <span class="flex lg1"> Email: {{ email }} |</span>
-      <span class="flex lg1"> Phone: undefined</span>
+      <div>
+        <UserImage
+          style="margin-bottom: 10px"
+          v-model="form.avatar"
+          default-src=""
+        />
+      </div>
+      <span class="flex lg1" style="color: #d3d3d3"> Email: {{ email }}</span>
     </div>
-    <va-divider horizontal />
-    <Watchlist />
+    <div class="column">
+      <Watchlist />
+      <FavoritesList />
+    </div>
   </div>
 </template>
 
@@ -16,16 +22,20 @@
 //Import auth
 import { Auth } from "aws-amplify";
 import Watchlist from "./Watchlist";
-
+import FavoritesList from "./FavoritesList";
+import UserImage from "./partials/UserImage";
 export default {
   name: "Profile",
-  components: { Watchlist },
+  components: { Watchlist, UserImage, FavoritesList },
   data() {
     return {
       username: "",
       email: "",
       first_name: "",
       last_name: "",
+      form: {
+        avatar: null,
+      },
     };
   },
   async created() {

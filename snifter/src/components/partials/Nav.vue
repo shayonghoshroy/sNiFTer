@@ -10,32 +10,37 @@
         </a>
         <a class="navbar-item router-hover" href="/about">About</a>
         <a class="navbar-item router-hover" href="/news">News</a>
-        <a class="navbar-item router-hover" href="/browse">Browse</a>
         <a class="navbar-item router-hover" href="/search">Search</a>
         <a class="navbar-item router-hover" href="/wiki/home">Wiki</a>
       </va-navbar-item>
     </template>
     <template #right class="mb-2">
       <div>
-        <div v-if="user.username">
-          <div class="buttons">
-            <router-link to="/user" class="button is-purple">{{
-              user.username
-            }}</router-link>
+        <div v-if="src">
+          <div class="navbar-item">
+            <router-link to="/user"
+              ><img :src="src" class="avatar"
+            /></router-link>
             <div @click="connectToMetaMask()">
-              <va-icon name="account_balance_wallet" size="large" />
+              <va-icon
+                name="account_balance_wallet"
+                size="large"
+                class="navbar-item"
+              />
             </div>
           </div>
         </div>
         <div v-else>
-          <div class="buttons">
-            <div class="navbar-item">
-              <router-link to="/user" class="button is-purple">
-                <div class="is-purple">Sign In</div>
-              </router-link>
-              <div @click="connectToMetaMask()">
-                <va-icon name="account_balance_wallet" size="large" />
-              </div>
+          <div class="navbar-item">
+            <router-link to="/user"
+              ><img src="../../assets/stockavatar.png" class="avatar"
+            /></router-link>
+            <div @click="connectToMetaMask()">
+              <va-icon
+                name="account_balance_wallet"
+                size="large"
+                class="navbar-item"
+              />
             </div>
           </div>
         </div>
@@ -46,21 +51,26 @@
 
 <script setup>
 import "@aws-amplify/ui-vue/styles.css";
-import Amplify from "aws-amplify";
+import { Amplify, API } from "aws-amplify";
 import awsconfig from "../../aws-exports";
-
+import avatar from "../../assets/stockavatar.png";
+import { Storage } from "aws-amplify";
+import awsExports from "../../aws-exports";
+import stockavatar from "../../assets/stockavatar.png";
+import { getUser } from "../../graphql/queries";
 Amplify.configure(awsconfig);
 </script>
 
 <script>
 import { Auth } from "aws-amplify";
-
 export default {
   name: "Nav",
   components: {},
   data() {
     return {
       user: [],
+      src: null,
+      avatar,
     };
   },
   methods: {
@@ -74,15 +84,31 @@ export default {
         console.log(accounts);
       }
     },
-    reloadPage() {
-      window.location.reload();
-    },
   },
-  // Function to check if user is logged in
   async created() {
     try {
       const user = await Auth.currentAuthenticatedUser();
       this.user = user;
+      let username = this.user.username;
+      this.imgKey = "profile-image-" + username;
+      // Get user
+      const userData = await API.graphql({
+        query: getUser,
+        variables: {
+          id: username,
+        },
+      });
+      let hasImage = userData.data.getUser.hasImage;
+      console.log(hasImage);
+      if (hasImage) {
+        this.src = await Storage.get(this.imgKey, {
+          level: "public",
+          bucket: awsExports.aws_user_files_s3_bucket,
+          region: awsExports.aws_user_files_s3_bucket_region,
+        });
+      } else {
+        this.src = stockavatar;
+      }
     } catch (e) {
       console.log(e);
     }
@@ -132,5 +158,13 @@ nav {
   background-color: rgba(0, 0, 0, 0.2);
   color: #ffffff;
   border-radius: 5px;
+}
+.avatar {
+  min-height: 35px;
+  width: 35px;
+  border-radius: 50%;
+  border: 1px solid #666666;
+  background-color: #ffffff;
+  margin-top: 6px;
 }
 </style>

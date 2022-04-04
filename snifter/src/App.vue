@@ -60,6 +60,6 @@ export default {
   z-index: 200; /* high z index so other content scrolls underneath */
 }
 .margin-top {
-  margin-top: 100px;
+  margin-top: 85px;
 }
 </style>
