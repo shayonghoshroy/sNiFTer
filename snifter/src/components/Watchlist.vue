@@ -31,7 +31,7 @@
     <div v-else>
       <div class="mt-1">Go add some NFTs to your watchlist!</div>
     </div>
-    <div class="mt-1">{{ Watchlist.length }}/5 NFTs in your watchlist</div>
+    <!-- <div class="mt-1">{{ Watchlist.length }}/5 NFTs in your watchlist</div> -->
   </div>
 </template>
 
