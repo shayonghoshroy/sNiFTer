@@ -21,13 +21,6 @@
             <router-link to="/user"
               ><img :src="src" class="avatar"
             /></router-link>
-            <div @click="connectToMetaMask()">
-              <va-icon
-                name="account_balance_wallet"
-                size="large"
-                class="navbar-item"
-              />
-            </div>
           </div>
         </div>
         <div v-else>
@@ -35,13 +28,6 @@
             <router-link to="/user"
               ><img src="../../assets/stockavatar.png" class="avatar"
             /></router-link>
-            <div @click="connectToMetaMask()">
-              <va-icon
-                name="account_balance_wallet"
-                size="large"
-                class="navbar-item"
-              />
-            </div>
           </div>
         </div>
       </div>
@@ -73,18 +59,7 @@ export default {
       avatar,
     };
   },
-  methods: {
-    connectToMetaMask() {
-      console.log("connecting...");
-      if (window.ethereum !== undefined) {
-        console.log("ethereum defined");
-        const accounts = window.ethereum.request({
-          method: "eth_requestAccounts",
-        });
-        console.log(accounts);
-      }
-    },
-  },
+  methods: {},
   async created() {
     try {
       const user = await Auth.currentAuthenticatedUser();
