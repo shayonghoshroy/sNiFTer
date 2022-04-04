@@ -33,7 +33,6 @@
           </div>
           <p>score: {{ Math.round((score/count)*100 )}}%</p>
         </div>
-        
       </form>
       <br>
     </div>
