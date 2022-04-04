@@ -281,6 +281,11 @@
           ]
         }
       ]
+    },
+    "S3Trigger0b3be9ec": {
+      "service": "Lambda",
+      "providerPlugin": "awscloudformation",
+      "build": true
     }
   },
   "hosting": {
@@ -288,6 +293,28 @@
       "service": "amplifyhosting",
       "providerPlugin": "awscloudformation",
       "type": "manual"
+    }
+  },
+  "storage": {
+    "s383a7453f": {
+      "service": "S3",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [
+        {
+          "category": "function",
+          "resourceName": "S3Trigger0b3be9ec",
+          "attributes": [
+            "Name",
+            "Arn",
+            "LambdaExecutionRole"
+          ]
+        }
+      ]
+    },
+    "profiledata": {
+      "service": "S3",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": []
     }
   }
 }
