@@ -1,0 +1,16 @@
+{
+    "resourceName": "profiledata",
+    "policyUUID": "5d5da837",
+    "bucketName": "snifter-profile-data-new",
+    "storageAccess": "authAndGuest",
+    "guestAccess": [
+      "READ"
+    ],
+    "authAccess": [
+      "CREATE_AND_UPDATE",
+      "READ",
+      "DELETE"
+    ],
+    "triggerFunction": "NONE",
+    "groupAccess": {}
+}

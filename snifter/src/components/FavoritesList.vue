@@ -1,8 +1,8 @@
 <template>
   <div>
-    <h2 class="mt-3">Watchlist</h2>
-    <div v-if="Watchlist.length != 0">
-      <div class="mt-1" style="color: #d3d3d3">You have pretty good taste</div>
+    <h2 class="mt-3">Favorites</h2>
+    <div v-if="Favorites.length != 0">
+      <div class="mt-1" style="color: #d3d3d3">They love you too</div>
       <div id="nftcomponent">
         <simple-grid-container class="container" columnWidth="50px">
           <div class="post" v-for="nft in nfts" :key="nft.id">
@@ -29,21 +29,21 @@
       </div>
     </div>
     <div v-else>
-      <div class="mt-1">Go add some NFTs to your watchlist!</div>
+      <div class="mt-1">Go add some NFTs to your Favorites</div>
     </div>
-    <div class="mt-1">{{ Watchlist.length }}/5 NFTs in your watchlist</div>
   </div>
 </template>
 
 <script>
 import { API } from "aws-amplify";
-import { listUserWatchlistNfts, searchNfts } from "../graphql/queries";
+import { listUserFavoriteNfts, searchNfts } from "../graphql/queries";
 import Auth from "@aws-amplify/auth";
+
 export default {
-  name: "Watchlist",
+  name: "Favorites",
   data() {
     return {
-      Watchlist: [],
+      Favorites: [],
       nfts: [],
     };
   },
@@ -52,17 +52,17 @@ export default {
       const user = await Auth.currentAuthenticatedUser();
       this.user = user;
       this.username = user.username;
-      await this.getWatchlist();
+      await this.getFavorites();
       await this.getNFTs();
     } catch (e) {
       console.error(e);
     }
   },
   methods: {
-    async getWatchlist() {
+    async getFavorites() {
       try {
-        const Watchlist = await API.graphql({
-          query: listUserWatchlistNfts,
+        const Favorites = await API.graphql({
+          query: listUserFavoriteNfts,
           variables: {
             limit: 10,
             filter: {
@@ -70,19 +70,19 @@ export default {
             },
           },
         });
-        this.Watchlist = Watchlist.data.listUserWatchlistNfts.items;
+        this.Favorites = Favorites.data.listUserFavoriteNfts.items;
       } catch (e) {
         console.error(e);
       }
     },
     async getNFTs() {
       try {
-        for (let i = 0; i < this.Watchlist.length; i++) {
+        for (let i = 0; i < this.Favorites.length; i++) {
           const nft = await API.graphql({
             query: searchNfts,
             variables: {
               filter: {
-                id: { eq: this.Watchlist[i].nftID },
+                id: { eq: this.Favorites[i].nftID },
               },
             },
           });
@@ -127,10 +127,12 @@ h2 {
   cursor: pointer;
   box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.5);
 }
+
 .nft-name {
   text-align: center;
   display: inline-block;
 }
+
 .nft-stub {
   display: flex;
   justify-content: flex-end;

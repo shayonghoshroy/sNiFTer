@@ -1,5 +1,5 @@
 <template>
-  <div id="nftcomponent">
+  <div id="nftcomponent" ref="scrollComponent">
     <simple-grid-container class="container" columnWidth="300px">
       <div class="post" v-for="nft in nfts" :key="nft.id">
         <div class="row div">
@@ -62,6 +62,7 @@ import {
   createUserFavoriteNft,
   deleteUserFavoriteNft,
 } from "../graphql/mutations";
+
 export default {
   name: "NFTComponent",
   async created() {
@@ -71,12 +72,12 @@ export default {
   props: {
     insertNfts: {
       type: Boolean,
-      default: false
+      default: false,
     },
     insertedNfts: {
       type: Array,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
   data() {
     return {
@@ -88,28 +89,29 @@ export default {
       token_id: "",
       nfts: [],
       user: "",
+      value: 1,
+      nftsTemp: [],
     };
   },
   methods: {
-    async getUser (){
+    async getUser() {
       const user = await Auth.currentAuthenticatedUser();
       this.user = user.username;
     },
     async getNFTs() {
-      if(!this.insertNfts) {
+      if (!this.insertNfts) {
         try {
           const nfts = await API.graphql({
             query: listNfts,
             variables: {
-              limit: 300,
+              limit: 100,
             },
           });
           this.nfts = nfts.data.listNfts.items;
         } catch (e) {
           console.error(e);
         }
-      }
-      else this.nfts = this.insertedNfts;
+      } else this.nfts = this.insertedNfts;
       // add fields to nfts
       for (let i = 0; i < this.nfts.length; i++) {
         // add field to store if the user has favorited it

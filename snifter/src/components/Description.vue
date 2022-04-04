@@ -48,7 +48,7 @@ export default {
 p {
   font-size: 18px;
   line-height: 2;
-  color: #ffffff;
+  color: #d3d3d3;
 }
 h2 {
   font-size: clamp(24px, 3vw, 3vw);

@@ -3,12 +3,19 @@
     <div class="height">
       <div>
         <authenticator>
-          <template v-slot="{ signOut }">
+          <template v-slot="{}">
             <div class="margin-bottom">
               <Profile />
             </div>
             <div>
-              <button class="button is-purple" @click="signOut">
+              <button
+                class="button is-purple mb-5"
+                @click="
+                  {
+                    signOutFunc();
+                  }
+                "
+              >
                 Sign Out
               </button>
             </div>
@@ -25,16 +32,11 @@ import "@aws-amplify/ui-vue/styles.css";
 import Amplify from "aws-amplify";
 import awsconfig from "../aws-exports";
 import { Auth } from "aws-amplify";
-
 Amplify.configure(awsconfig);
-
-const auth = useAuthenticator();
-auth.signOut();
 </script>
 
 <script>
 import Profile from "../components/Profile.vue";
-
 export default {
   name: "SignIn",
   components: {
@@ -56,11 +58,9 @@ export default {
     }
   },
   methods: {
-    reloadPage() {
-      Auth.signOut();
-      window.location.reload();
-    },
-    goToHome() {
+    signOutFunc() {
+      const auth = useAuthenticator();
+      auth.signOut();
       this.$router.push("/");
     },
   },
@@ -79,9 +79,10 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-bottom: 50px;
 }
 .background-height {
-  height: 90vh;
+  height: 80vh;
 }
 .center {
   display: flex;
