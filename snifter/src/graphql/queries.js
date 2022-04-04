@@ -37,7 +37,43 @@ export const searchNfts = /* GraphQL */ `
         description
         external_link
         perma_link
+        primary_asset_contract {
+          id
+          slug
+          address
+          name
+          symbol
+          payout_address
+          asset_contract_type
+          created_date
+          description
+          image_url
+          total_supply
+          nft_version
+          opensea_version
+          schema_name
+          external_link
+          createdAt
+          updatedAt
+        }
         owner
+        traits {
+          id
+          trait_type
+          value
+          display_type
+          max_value
+          trait_count
+          order
+          createdAt
+          updatedAt
+        }
+        favorited_by {
+          nextToken
+        }
+        watched_by {
+          nextToken
+        }
         createdAt
         updatedAt
       }
