@@ -173,14 +173,12 @@ export default {
           const userFavoriteNftId = {
             id: has_favorited.data.listUserFavoriteNfts.items[0].id,
           };
-          console.log("removing favorite");
           this.nfts[index].totalFavorites -= 1;
           await API.graphql({
             query: deleteUserFavoriteNft,
             variables: { input: userFavoriteNftId },
           });
         } else {
-          console.log("adding favorite");
           this.nfts[index].totalFavorites += 1;
           const userFavoriteNft = { userID, nftID };
           await API.graphql({

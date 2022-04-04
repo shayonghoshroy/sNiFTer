@@ -53,7 +53,6 @@ export default {
   },
   computed: {
     contractStats() {
-      console.log(this.contract[0]);
       return this.contract[0];
     },
     cleanContractDescription() {

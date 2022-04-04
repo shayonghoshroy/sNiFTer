@@ -167,16 +167,13 @@ export default {
       var suggestions = [];
       var suggestionNames = [];
       var nfts = this.nfts;
-      console.log(nfts);
       for(var i = 0; i < nfts.length; i++){
         var nft = nfts.at(i);
         if(nft['collection_name'] && !suggestionNames.includes(nft['collection_name'])) {
-          console.log(nft['collection_name']);
           suggestions.push({'collection_name': nft['collection_name'], 'image_url': nft['image_url']});
           suggestionNames.push(nft['collection_name']);
         }
       }
-      console.log(suggestions);
       return suggestions;
     }
   },
@@ -221,7 +218,6 @@ export default {
         },
       );
       this.nfts = results.data.searchNfts.items;
-      console.log(this.nfts);
       this.$emit("getNFTs", this.nfts);
     },
     targetedSearch: async function(event) {
@@ -280,7 +276,6 @@ export default {
           this.nfts = nfts.data.listNfts.items;
           this.$emit("getNFTs", this.nfts);
         } else {
-          console.log(this.address, this.tokenid);
           const nfts = await API.graphql({
             query: searchNfts,
             variables: {
@@ -299,7 +294,6 @@ export default {
     },
     getCollection: async function () {
       try {
-        console.log("Starting Query");
         this.collectionSlug = this.collectionSlug.toLowerCase();
         debugger;
         const collection = await API.graphql({
