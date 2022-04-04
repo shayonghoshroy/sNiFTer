@@ -1,11 +1,10 @@
 <template>
   <div class="tweetSearchComponent">
     <div class="search-wrapper">
-      <va-button-dropdown 
+      <va-button-dropdown
+        :icon="searchTypes.at(searchIndex)[1]"
         :label="searchTypes.at(searchIndex)[0]"
-        split
       >
-        
         <va-list class="search-item-list">
           <va-list-item
             class="search-item"
@@ -63,7 +62,6 @@ export default {
   components: { Tweet },
   async created() { 
     //await this.listAllTweets();
-    this.tweetFilters(0);
   },
   setup() {
     function onTweetLoadSuccess(embedNode) {
