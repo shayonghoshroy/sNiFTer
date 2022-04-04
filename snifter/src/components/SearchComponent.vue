@@ -184,7 +184,6 @@ export default {
       await this.startSearch();
     },
     generalSearch: async function() {
-      debugger;
       var searchIndex = this.searchIndex;
       var searchField = '';
       switch (searchIndex) {
@@ -295,7 +294,6 @@ export default {
     getCollection: async function () {
       try {
         this.collectionSlug = this.collectionSlug.toLowerCase();
-        debugger;
         const collection = await API.graphql({
           query: listCollections,
           variables: {

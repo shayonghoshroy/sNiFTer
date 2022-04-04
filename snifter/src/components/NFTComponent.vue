@@ -159,6 +159,9 @@ export default {
     // if user has favorited, remove favorite
     // else add favorite
     async favorite(userID, nftID) {
+      if (!this.user) {
+        this.$router.push("/user");
+      }
       const index = this.nfts.findIndex((x) => x.id === nftID);
       this.nfts[index].hasFavorited = !this.nfts[index].hasFavorited;
       try {

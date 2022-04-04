@@ -57,7 +57,6 @@ export default {
           created_date: nftEvent.created_date ? nftEvent.created_date : "-",
         };
       });
-      debugger;
       return items;
     },
     pages() {
