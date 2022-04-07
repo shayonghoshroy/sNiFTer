@@ -132,7 +132,7 @@
                       <tr>
                         <td>Average Bid</td>
                         <td>{{ transactionStats['average_bid'] }}</td>
-                        <td>Last Sale</td>
+                        <td>Average Sale</td>
                         <td>{{ transactionStats['average_sale'] }}</td>
                       </tr>
                       <tr>
