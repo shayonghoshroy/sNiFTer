@@ -17,9 +17,21 @@
               <h1 v-if="nft.name">
                 {{ nft.name }}
               </h1>
-              <h1 v-else-if="currentContract && nft.token_id">
-                {{ currentContract.name + " #" + nft.token_id }}
+              <h1 v-else-if="nft.collection_name && nft.token_id">
+                {{ nft.collection_name + " #" + nft.token_id }}
               </h1>
+              <div class="rating" style="display: flex;">
+                <div class="rating-stars" v-for="i in parseInt(10)" :key="i">
+                  <va-icon
+                  v-if="i <= averageRating"
+                  name="star"
+                  />
+                  <va-icon
+                  v-else
+                  name="star_border"
+                  />
+                </div>
+              </div>
             </div>
             <va-image
               class="rounded-card nft-image"
@@ -185,6 +197,14 @@
             </template>
           </CollectionInfo>
         </div>
+        <div v-if="this.nft" class="comment-section">
+          <CommentDisplay
+          ref="comments"
+          :nft_id="this.nft.id"
+          :collection="this.nft.collection_slug"
+          @ratingChange="getAverageRatings()"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -218,6 +238,7 @@ import TraitTable from "../components/nft/TraitTable";
 import EntityCardList from "../components/nft/EntityCardList";
 import TransactionTable from "../components/nft/TransactionTable.vue";
 import TransactionChart from "../components/nft/TransactionChart.vue";
+import CommentDisplay from "../components/comment/CommentDisplay.vue";
 const Web3 = require('web3');
 
 export default {
@@ -228,7 +249,8 @@ export default {
     TraitTable,
     EntityCardList,
     TransactionTable,
-    TransactionChart
+    TransactionChart,
+    CommentDisplay
   },
   async created() {
     this.nftData = this.$route.query;
@@ -256,6 +278,8 @@ export default {
     if(this.nftEvents.length > 0) {
       this.transactionStatus = "complete";
     }
+
+    this.getAverageRatings();
   },
   data() {
     return {
@@ -285,6 +309,7 @@ export default {
           label: 'Chart', value: 'chart'
         }
       ],
+      averageRating: 0,
     };
   },
   computed: {
@@ -767,6 +792,10 @@ export default {
         eventSubscriber.unsubscribe();
       }, 60000);
     },
+    getAverageRatings() {
+      var average = this.$refs['comments'].getAverageRating();
+      this.averageRating = average;
+    }
   },
 };
 </script>
@@ -975,6 +1004,10 @@ h1 {
 }
 
 .sales-table {
+  width: 100%;
+}
+
+.comment-section {
   width: 100%;
 }
 </style>
