@@ -236,3 +236,15 @@ type quiz @model @auth(rules: [{allow: public}]){
   createdAt: AWSDateTime
   updatedAt: AWSDateTime
 }
+
+type message @model @auth(rules: [{allow: public}]){
+  id: ID!
+  sender: String!
+  message: String!
+  collection: String
+  nft_id: String
+  nft_rating: Int
+  likes: Int
+  createdAt: AWSDateTime
+  updatedAt: AWSDateTime
+}
