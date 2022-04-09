@@ -240,14 +240,19 @@ export default {
     },
     stats() {
       if(this.latestStats) {
-        return this.latestStats['stats'];
+        return this.latestStats;
       }
       return null;
     }
   },
   async created() {
     var stats = await getCollectionStatsDirectly(this.collection.slug);
-    this.latestStats = stats;
+    var latestStats = {};
+    for(var [key, val] of Object.entries(stats['stats'])) { 
+      latestStats[key] = val.toFixed(3);
+    }
+    this.latestStats = latestStats;
+    console.log(this.latestStats);
     this.statsLoaded = true;
   },
   methods: {
