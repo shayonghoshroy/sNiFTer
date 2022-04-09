@@ -43,6 +43,7 @@
             :nft_rating="comment.nft_rating"
             :likes="comment.likes"
             :user="user"
+            @commentDeleted="deleteComment"
             />
         </div>
     </div>
@@ -146,6 +147,19 @@ import { Auth } from "aws-amplify";
                 this.comments.push(createdComment);
                 this.clearComment();
                 this.$vaToast.init({ message: 'Comment Added', color: 'success' });
+                this.$emit("ratingChange");
+            },
+            deleteComment(id) {
+                console.log(id);
+
+                for(var i = 0; i < this.comments.length; i++) {
+                    if(this.comments[i].id === id['id']) {
+                        // Remove 1 comment at the ith index
+                        this.comments.splice(i, 1);
+                        this.$vaToast.init({ message: 'Comment Deleted', color: 'danger' });
+                        break;
+                    }
+                }
                 this.$emit("ratingChange");
             }
         },

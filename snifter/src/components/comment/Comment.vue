@@ -6,7 +6,7 @@
                 <div v-if="this.user === this.sender" class="user-control">
                     <va-button-group>
                         <va-button icon="edit"/>
-                        <va-button icon="delete" />
+                        <va-button @click="$emit('commentDeleted', { id })" icon="delete" />
                     </va-button-group>
                 </div>
             </va-card-title>
