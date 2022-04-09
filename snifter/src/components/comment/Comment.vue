@@ -3,29 +3,51 @@
         <va-card>
             <va-card-title>
                 {{ sender }}
-                <div v-if="this.user === this.sender" class="user-control">
+                <div v-if="this.user === this.sender && !this.isEditable" class="user-control">
                     <va-button-group>
-                        <va-button icon="edit"/>
+                        <va-button @click="this.isEditable = true;" icon="edit"/>
                         <va-button @click="$emit('commentDeleted', { id })" icon="delete" />
                     </va-button-group>
                 </div>
             </va-card-title>
             <va-card-content>
                 <div class="comment-content">
-                    <div class="rating">
+                    <div v-if="!isEditable" class="rating">
                         <div class="rating-stars" v-for="n in parseInt(10)" :key="n">
                             <va-icon
-                            v-if="n <= nft_rating"
-                            name="star"
+                            :name="n <= latestRating ? 'star' : 'star_border'"
                             />
-                            <va-icon 
+                        </div>
+                    </div>
+                    <div v-else class="rating">
+                        <div class="rating-stars" v-for="n in parseInt(10)" :key="n">
+                            <va-icon
+                            v-if="!isEditable"
+                            :name="n <= latestRating ? 'star' : 'star_border'"
+                            />
+                            <va-icon
                             v-else
-                            name="star_border"
+                            :name="n <= latestRating ? 'star' : 'star_border'"
+                            @click="latestRating = n"
                             />
                         </div>
                     </div>
                     <div class="message">
-                        <p style="text-align: left;">{{ sanitizedMessage }}</p>
+                        <p v-if="!isEditable" style="text-align: left;">{{ sanitizedMessage }}</p>
+                        <div v-else>
+                            <va-input
+                            class="mb-4"
+                            v-model="latestMessage"
+                            type="textarea"
+                            style="width: 100%;"
+                            />
+                            <va-button 
+                            style="text-align: right;"
+                            @click="$emit('updateComment', { 'message': latestMessage, 'nft_rating': latestRating }); this.isEditable = false;"
+                            >
+                                Update Review
+                            </va-button>
+                        </div>
                     </div>
                     <div class="comment-stub">
                         <div>
@@ -79,9 +101,20 @@
                 default: ''
             }
         },
+        mounted() {
+            this.latestMessage = this.message;
+            this.latestRating = this.nft_rating;
+        },
+        data() {
+            return {
+                isEditable: false,
+                latestMessage: "",
+                latestRating: 0
+            }
+        },
         computed: {
             sanitizedMessage() {
-                var message = this.message;
+                var message = this.latestMessage;
                 var sanitizedMessage = "";
                 if(message.length > 50) {
                     while(message.length > 0) {
@@ -121,6 +154,10 @@
 
 .favorite-icon:hover {
     cursor: pointer;
+}
+
+.message {
+    width: 100%;
 }
 
 </style>

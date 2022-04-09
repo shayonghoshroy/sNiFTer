@@ -9,6 +9,7 @@
                     <va-input 
                     class="mb-4"
                     v-model="newComment"
+                    ref="input"
                     type="textarea"
                     :disabled="disableCommentInput"
                     autosize
@@ -18,11 +19,8 @@
                         @click="setRating(i)"
                         >
                             <va-icon
-                            v-if="i <= newRating"
-                            name="star" />
-                            <va-icon
-                            v-else
-                            name="star_border" />
+                            :name="i <= newRating ? 'star' : 'star_border'"
+                            />
                         </div>
                     </div>
                     <p style="text-align: left;">{{ newCommentLength }} / 250</p>
