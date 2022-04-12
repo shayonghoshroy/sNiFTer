@@ -49,6 +49,7 @@
 
         <va-form class="search-input-form" v-else-if="searchIndex === 3">
           <va-button-dropdown
+          gradient
           :label="expressionOptions.at(expressionIndex)"
           >
             <va-list class="search-item-list">
@@ -88,7 +89,10 @@
         </va-form>
       </div>
 
-      <va-button :disabled="disableSearch" @click="startSearch()"
+      <va-button
+      gradient
+      :disabled="disableSearch" 
+      @click="startSearch()"
         >Search</va-button>
     </div>
     <div class="suggestions">
@@ -184,6 +188,7 @@ export default {
       await this.startSearch();
     },
     generalSearch: async function() {
+      debugger;
       var searchIndex = this.searchIndex;
       var searchField = '';
       switch (searchIndex) {

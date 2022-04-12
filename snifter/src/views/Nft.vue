@@ -149,7 +149,7 @@
                       </tr>
                       <tr>
                         <td>Bid Volume</td>
-                        <td>{{ transactionStats['last_bid'] }}</td>
+                        <td>{{ transactionStats['bid_volume'] }}</td>
                         <td>Sales Volume</td>
                         <td>{{ transactionStats['sales_volume'] }}</td>
                       </tr>
@@ -397,26 +397,14 @@ export default {
       var average_sale = 0;
       var last_sale = 0;
       var sales_volume = 0;
-      // if(this.nftEventItems.length === 0) {
-      //   return {
-      //     last_bid: last_bid,
-      //     highest_bid: highest_bid,
-      //     total_bids: total_bids,
-      //     total_sales: totalSales,
-      //     bid_volume: bid_volume,
-      //     average_bid: average_bid / total_bids,
-      //     last_sale: last_sale,
-      //     highest_sale: highest_sale,
-      //     average_sale: average_sale / totalSales,
-      //     sales_volume: sales_volume,
-      //   };
-      // }
+
       if(this.nftEvents.length > 0) {
         this.nftEventItems.forEach((event) => {
           var currentTime = Date.parse(event.created_date);
           if (
             event["event"] === "Bid"
           ) {
+            debugger;
             var bid_amount = event["price"];
             if (bid_amount) {
               bid_amount = parseFloat(bid_amount);
@@ -455,16 +443,16 @@ export default {
         avg_sale = (average_sale / totalSales).toFixed(3);
       }
       return {
-        last_bid: last_bid,
-        highest_bid: highest_bid,
+        last_bid: last_bid.toFixed(3),
+        highest_bid: highest_bid.toFixed(3),
         total_bids: total_bids,
         total_sales: totalSales,
-        bid_volume: bid_volume,
+        bid_volume: bid_volume.toFixed(3),
         average_bid: avg_bid,
-        last_sale: last_sale,
-        highest_sale: highest_sale,
+        last_sale: last_sale.toFixed(3),
+        highest_sale: highest_sale.toFixed(3),
         average_sale: avg_sale,
-        sales_volume: sales_volume,
+        sales_volume: sales_volume.toFixed(3),
       };
     },
   },

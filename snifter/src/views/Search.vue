@@ -1,8 +1,8 @@
 <template>
   <div class="search description">
     <article>
-      <h2>Take your pick</h2>
-      <p>You've already got your eye on these</p>
+      <h2>Feeling nosey?</h2>
+      <p>Take your pick!</p>
     </article>
     <SearchComponent ref="searchComponent" @getNFTs="searchResult($event)" />
     <div v-if="searched">
@@ -24,7 +24,7 @@
     </div>
     <div class="search-description" v-else-if="!searched">
       <article>
-        <p>Search for Collections, Tokens, Owners, and Creators!</p>
+        <p>Search for Collections, and NFTs!</p>
       </article>
     </div>
     <div v-else></div>

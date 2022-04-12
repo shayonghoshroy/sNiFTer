@@ -3,7 +3,7 @@
         <va-card>
             <va-card-title>
                 {{ sender }}
-                <div v-if="this.user === this.sender && !this.isEditable" class="user-control">
+                <div v-if="this.user === this.sender && !this.isEditable && !isStatic" class="user-control">
                     <va-button-group>
                         <va-button @click="this.isEditable = true;" icon="edit"/>
                         <va-button @click="$emit('commentDeleted', { id })" icon="delete" />
@@ -38,15 +38,11 @@
                             <va-input
                             class="mb-4"
                             v-model="latestMessage"
+                            :rules="[(v) => v.length <= 250 || `Comments must be 250 characters or less`]"
                             type="textarea"
                             style="width: 100%;"
                             />
-                            <va-button 
-                            style="text-align: right;"
-                            @click="$emit('updateComment', { 'message': latestMessage, 'nft_rating': latestRating }); this.isEditable = false;"
-                            >
-                                Update Review
-                            </va-button>
+                            <p style="text-align: left;">{{ latestMessage.length }} / 250</p>
                         </div>
                     </div>
                     <div class="comment-stub">
@@ -60,6 +56,21 @@
                     </div>
                 </div>
             </va-card-content>
+            <va-card-actions v-if="isEditable" align="right">
+                <va-button 
+                style="text-align: right;"
+                @click="latestMessage = message; isEditable = false;"
+                >
+                    Cancel
+                </va-button>
+                <va-button 
+                style="text-align: right;"
+                :disabled="disableCommentSubmit"
+                @click="$emit('commentUpdated', { 'id': id, 'message': latestMessage, 'nft_rating': latestRating }); this.isEditable = false;"
+                >
+                    Update Review
+                </va-button>
+            </va-card-actions>
         </va-card>
     </div>
 </template>
@@ -99,6 +110,10 @@
             user: {
                 type: String,
                 default: ''
+            },
+            isStatic: {
+                type: Boolean,
+                default: false
             }
         },
         mounted() {
@@ -114,7 +129,7 @@
         },
         computed: {
             sanitizedMessage() {
-                var message = this.latestMessage;
+                var message = this.message;
                 var sanitizedMessage = "";
                 if(message.length > 50) {
                     while(message.length > 0) {
@@ -125,6 +140,9 @@
                 else sanitizedMessage = message;
 
                 return sanitizedMessage.trim();
+            },
+            disableCommentSubmit() {
+                return this.latestMessage.length > 250;
             }
         },
     }
