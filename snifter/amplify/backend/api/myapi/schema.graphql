@@ -202,7 +202,6 @@ type user @model @auth(rules: [{allow: public}]){
     completed_quizzes: [String]
     quiz_points: Int
     hasImage: Boolean
-    messages: [message] @connection(name: "UserMessage")
     createdAt: AWSDateTime
     updatedAt:AWSDateTime
 }
@@ -240,7 +239,7 @@ type quiz @model @auth(rules: [{allow: public}]){
 
 type message @model @auth(rules: [{allow: public}]){
   id: ID!
-  sender: User! @connection(name: "UserMessage")
+  sender: String!
   message: String!
   collection: String
   nft_id: String

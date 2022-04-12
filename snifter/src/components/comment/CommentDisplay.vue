@@ -3,15 +3,16 @@
         <div>
             <va-card>
                 <va-card-title>
-                    Review NFT
+                    Thread
                 </va-card-title>
                 <va-card-content>
                     <va-input 
                     class="mb-4"
                     v-model="newComment"
+                    :rules="[(v) => v.length <= 250 || `Comments must be 250 characters or less`]"
                     ref="input"
                     type="textarea"
-                    :disabled="disableCommentInput"
+                    maxlength="250"
                     autosize
                     />
                     <div class="rating">
@@ -27,7 +28,9 @@
                 </va-card-content>
                 <va-card-actions align="right">
                     <va-button @click="clearComment">Clear</va-button>
-                    <va-button @click="createComment">Post</va-button>
+                    <va-button 
+                    :disabled="disableCommentSubmit"
+                    @click="createComment">Post</va-button>
                 </va-card-actions>
             </va-card>
         </div>
@@ -87,17 +90,13 @@ import { Auth } from "aws-amplify";
                 return this.newComment.length;
             },
             disableCommentInput() {
-                return this.newComment.length >= 250 || this.user === '';
+                return this.user === '';
+            },
+            disableCommentSubmit() {
+                return this.newComment.length > 250;
             }
         },
         watch: {
-            newComment() {
-                if (this.newComment.length > 250) {
-                    console.log("sanitizing");
-                    this.newComment = this.newComment.substring(0, 250);
-                    console.log(this.newComment.length);
-                }
-            }
         },
         methods: {
             getAverageRating() {
@@ -126,7 +125,7 @@ import { Auth } from "aws-amplify";
 
                 var id = Date.now();
                 var sender = this.user;
-                var message = this.newComment;
+                var message = this.newComment.substring(0, 250);
                 var collection = this.collection;
                 var nft_id = this.nft_id;
                 var nft_rating = this.newRating;
@@ -142,7 +141,7 @@ import { Auth } from "aws-amplify";
                     likes
                 };
 
-                this.comments.push(createdComment);
+                this.comments.splice(0, 0, createdComment);
                 this.clearComment();
                 this.$vaToast.init({ message: 'Comment Added', color: 'success' });
                 this.$emit("ratingChange");
