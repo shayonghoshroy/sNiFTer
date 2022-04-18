@@ -51,7 +51,7 @@
         <va-form class="search-input-form" v-else-if="searchIndex === 3">
           <va-button-dropdown
           gradient
-          :label="expressionOptions.at(expressionIndex)"
+          :label="expressionOptions.at(expressionIndex)[0]"
           >
             <va-list class="search-item-list">
               <va-list-item
@@ -146,11 +146,9 @@ export default {
         'value': 0
       },
       expressionOptions: [
-        'gt',
-        'gte',
-        'lt',
-        'lte',
-        'eq'
+        ['Greater Than', 'gt'],
+        ['Less Than', 'lt'],
+        ['Equal', 'eq']
       ],
       expressionIndex: 0,
       expressionValue: 0,
@@ -245,7 +243,7 @@ export default {
       }
       var filter = {};
       if(searchField === 'num_sales') {
-        var expression = this.expressionOptions.at(this.expressionIndex);
+        var expression = this.expressionOptions.at(this.expressionIndex)[1];
         var value = this.expressionValue;
         filter[searchField] = {};
         filter[searchField][expression] = value;
