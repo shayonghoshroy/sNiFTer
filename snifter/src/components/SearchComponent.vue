@@ -69,6 +69,7 @@
             class="mb-4"
             v-model="expressionValue"
             label="Value"
+            :rules="[(v) => v >= 0 || `Value must be non-negative`]"
             type="number"
           />
         </va-form>
@@ -91,7 +92,7 @@
 
       <va-button
       gradient
-      :disabled="disableSearch" 
+      :disabled="disableSearch || disableSearchInvalidInput" 
       @click="startSearch()"
         >Search</va-button>
     </div>
@@ -203,6 +204,14 @@ export default {
       return this.collections.filter(collection => {
         collection['name'];
       });
+    },
+    disableSearchInvalidInput() {
+      if (this.searchTypes[this.searchIndex][0] === "Number of Sales") {
+        if (this.expressionValue < 0)
+          return true;
+      }
+
+      return false;
     }
   },
   methods: {
