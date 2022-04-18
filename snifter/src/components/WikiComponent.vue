@@ -1,7 +1,7 @@
 <template>
   <div id="wikiComponent">
     <h2>{{ article.title }}</h2>
-    <div v-if="article.related_links != undefined">
+    <div class="videobox" v-if="article.related_links != undefined">
       <div
         class="post"
         v-for="video_link in article.related_links"
@@ -58,14 +58,15 @@ export default {
     };
   },
   methods: {
-    onReady() {},
+    onReady() {
+      this.$refs.youtube.playVideo();
+    },
     async getArticle(articleId) {
       try {
         const articles = await API.graphql({
           query: listArticles,
           variables: {
             filters: { id: { eq: articleId } },
-            limit: 1,
           },
         });
         this.article = articles.data.listArticles.items;
@@ -81,6 +82,11 @@ export default {
 </script>
 
 <style scoped>
+.videobox {
+  width: 640px;
+  height: 320px;
+  margin-bottom: 5rem;
+}
 p {
   font-size: 18px;
   line-height: 2;
