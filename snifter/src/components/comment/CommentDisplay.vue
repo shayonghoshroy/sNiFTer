@@ -256,7 +256,9 @@ import { API, Auth } from "aws-amplify";
                         // Remove 1 comment at the ith index
                         this.removeComment(id)
                         .then(() => {
-                            this.comments.splice(i, 1);
+                            // Index may have changed by now
+                            var currentIndex = this.comments.findIndex((comment) => { comment.id === id['id'] });
+                            this.comments.splice(currentIndex, 1);
                             if(!suppressToast)
                                 this.$vaToast.init({ message: 'Review Deleted', color: 'danger' });
                             this.$emit("ratingChange");
@@ -305,10 +307,12 @@ import { API, Auth } from "aws-amplify";
                 console.log(result);
             },
             overWriteComment() {
+                debugger;
                 var existingComment = this.existingUserComment;
                 this.createComment(true);
                 this.deleteComment({ id: existingComment.id }, true);
                 this.$refs['confirmReviewChange'].hide();
+                console.log(this.comments);
             }
         },
     }
