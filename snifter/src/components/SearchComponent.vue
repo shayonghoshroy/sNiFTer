@@ -27,6 +27,7 @@
             class="mb-4"
             v-model="generalSearchField"
             label="Search By Collection Name"
+            :rules="[(v) => v.length > 0 || `Must provide value for search`]"
             placeholder="Required"
           />
         </va-form>
@@ -191,7 +192,6 @@ export default {
             var nft = nfts[j];
             if(nft['collection_name'] && !suggestionNames.includes(nft['collection_name'])) {
               var nftCollection = this.collections.filter((col) => col.name === nft['collection_name'])[0];
-              console.log(nft, nftCollection);
               suggestions.splice(0, 0, {'collection_name': nftCollection['name'], 'image_url': nftCollection['image_url']});
               suggestionNames.push(nftCollection['name']);
             }
@@ -208,6 +208,11 @@ export default {
     disableSearchInvalidInput() {
       if (this.searchTypes[this.searchIndex][0] === "Number of Sales") {
         if (this.expressionValue < 0)
+          return true;
+      }
+
+      else if (this.searchTypes[this.searchIndex][0] === "Collection Name") {
+        if (this.generalSearchField === '')
           return true;
       }
 
@@ -277,6 +282,8 @@ export default {
       }
     },
     startSearch: async function () {
+      if (this.disableSearchInvalidInput)
+        return;
       this.disableSearch = true;
       var previousTime = this.keyUpControl;
       var now = new Date().getTime();
