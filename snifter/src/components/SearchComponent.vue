@@ -127,6 +127,9 @@ import { fetchNFTs } from "../services/nftScraperService";
 export default {
   name: "SearchComponent",
   components: {},
+  async mounted() {
+    await this.getCollections();
+  },
   data() {
     return {
       tokenid: "",
@@ -167,18 +170,39 @@ export default {
       return this.searchTypes[this.searchIndex][this.searchIndex];
     },
     searchSuggestions() {
-      if(this.nfts.length == 0) return [];
       var suggestions = [];
       var suggestionNames = [];
-      var nfts = this.nfts;
-      for(var i = 0; i < nfts.length; i++){
-        var nft = nfts.at(i);
-        if(nft['collection_name'] && !suggestionNames.includes(nft['collection_name'])) {
-          suggestions.push({'collection_name': nft['collection_name'], 'image_url': nft['image_url']});
-          suggestionNames.push(nft['collection_name']);
+      var generalSearch = this.generalSearchField;
+      var collections = this.collections;
+      if(this.searchTypes[this.searchIndex][0] === "Collection Name") {
+        for(var i = 0; i < collections.length; i++){
+          var collection = collections[i];
+          if(collection['name'] && !suggestionNames.includes(collection['name']) && collection['name'].toLowerCase().includes(generalSearch.toLowerCase())) {
+            suggestions.splice(0, 0, {'collection_name': collection['name'], 'image_url': collection['image_url']});
+            suggestionNames.push(collection['name']);
+          }
+        }
+      }
+      else {
+        if(this.nfts.length > 0) {
+          var nfts = this.nfts;
+          for(var j = 0; j < nfts.length; j++) {
+            var nft = nfts[j];
+            if(nft['collection_name'] && !suggestionNames.includes(nft['collection_name'])) {
+              var nftCollection = this.collections.filter((col) => col.name === nft['collection_name'])[0];
+              console.log(nft, nftCollection);
+              suggestions.splice(0, 0, {'collection_name': nftCollection['name'], 'image_url': nftCollection['image_url']});
+              suggestionNames.push(nftCollection['name']);
+            }
+          }
         }
       }
       return suggestions;
+    },
+    collectionNames() {
+      return this.collections.filter(collection => {
+        collection['name'];
+      });
     }
   },
   methods: {
@@ -188,13 +212,13 @@ export default {
       await this.startSearch();
     },
     generalSearch: async function() {
-      debugger;
       var searchIndex = this.searchIndex;
       var searchField = '';
       switch (searchIndex) {
         case 0:
           searchField = 'collection_name';
-          break;
+          await this.searchByCollectionName();
+          return;
         case 1:
           searchField = 'name';
           break;
@@ -213,15 +237,15 @@ export default {
         filter[searchField][expression] = value;
       }
       else
-        filter[searchField] = {matchPhrasePrefix: this.generalSearchField};
+        filter[searchField] = {beginsWith: this.generalSearchField};
       const results = await API.graphql({
-        query: searchNfts,
+        query: listNfts,
         variables: {
             filter
           },
         },
       );
-      this.nfts = results.data.searchNfts.items;
+      this.nfts = results.data.listNfts.items;
       this.$emit("getNFTs", this.nfts);
     },
     targetedSearch: async function(event) {
@@ -296,20 +320,36 @@ export default {
         console.error(e);
       }
     },
-    getCollection: async function () {
+    getCollections: async function () {
       try {
-        this.collectionSlug = this.collectionSlug.toLowerCase();
         const collection = await API.graphql({
-          query: listCollections,
-          variables: {
-            filter: { slug: { eq: this.collectionSlug } },
-          },
+          query: listCollections
         });
         this.collections = collection.data.listCollections.items;
+        console.log(this.collections);
       } catch (e) {
         console.error(e);
       }
     },
+    searchByCollectionName: async function() {
+      try {
+        var searchTerm = this.generalSearchField;
+        for(var i = 0; i < this.collections.length; i++) {
+          if (this.collections[i]['name'].toLowerCase().includes(searchTerm.toLowerCase())) {
+            const results = await API.graphql({
+            query: listNfts,
+            variables: {
+                filter: {collection_name: {eq: this.collections[i]['name']}}
+              },
+            });
+            this.nfts = results.data.listNfts.items;
+            this.$emit("getNFTs", this.nfts);
+          }
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
   },
 };
 </script>

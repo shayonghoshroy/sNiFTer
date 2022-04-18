@@ -36,7 +36,7 @@
 
 <script>
 import { API } from "aws-amplify";
-import { listUserFavoriteNfts, searchNfts } from "../graphql/queries";
+import { listUserFavoriteNfts, listNfts } from "../graphql/queries";
 import Auth from "@aws-amplify/auth";
 
 export default {
@@ -64,7 +64,6 @@ export default {
         const Favorites = await API.graphql({
           query: listUserFavoriteNfts,
           variables: {
-            limit: 10,
             filter: {
               userID: { eq: this.username },
             },
@@ -79,14 +78,14 @@ export default {
       try {
         for (let i = 0; i < this.Favorites.length; i++) {
           const nft = await API.graphql({
-            query: searchNfts,
+            query: listNfts,
             variables: {
               filter: {
                 id: { eq: this.Favorites[i].nftID },
               },
             },
           });
-          this.nfts.push(nft.data.searchNfts.items[0]);
+          this.nfts.push(nft.data.listNfts.items[0]);
         }
       } catch (e) {
         console.error(e);

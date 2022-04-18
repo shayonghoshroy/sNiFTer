@@ -1270,6 +1270,57 @@ export const deleteQuiz = /* GraphQL */ `
     }
   }
 `;
+export const createMessage = /* GraphQL */ `
+  mutation CreateMessage(
+    $input: CreateMessageInput!
+    $condition: ModelMessageConditionInput
+  ) {
+    createMessage(input: $input, condition: $condition) {
+      id
+      sender
+      message
+      collection
+      nft_id
+      nft_rating
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateMessage = /* GraphQL */ `
+  mutation UpdateMessage(
+    $input: UpdateMessageInput!
+    $condition: ModelMessageConditionInput
+  ) {
+    updateMessage(input: $input, condition: $condition) {
+      id
+      sender
+      message
+      collection
+      nft_id
+      nft_rating
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteMessage = /* GraphQL */ `
+  mutation DeleteMessage(
+    $input: DeleteMessageInput!
+    $condition: ModelMessageConditionInput
+  ) {
+    deleteMessage(input: $input, condition: $condition) {
+      id
+      sender
+      message
+      collection
+      nft_id
+      nft_rating
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const createUserFavoriteNft = /* GraphQL */ `
   mutation CreateUserFavoriteNft(
     $input: CreateUserFavoriteNftInput!

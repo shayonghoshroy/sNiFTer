@@ -116,7 +116,9 @@
 
 <script>
 import Comment from "./Comment.vue";
-import { Auth } from "aws-amplify";
+import { listMessages } from "../../graphql/queries";
+import {  createMessage, deleteMessage, updateMessage } from "../../graphql/mutations";
+import { API, Auth } from "aws-amplify";
 
     export default {
         name: "CommentDisplay",
@@ -137,6 +139,7 @@ import { Auth } from "aws-amplify";
             try {
                 const userResult = await Auth.currentAuthenticatedUser();
                 this.user = userResult.username;
+                await this.getComments();
             } catch(e) {
                 void(0);
             }
@@ -192,10 +195,22 @@ import { Auth } from "aws-amplify";
                 this.newComment = '';
                 this.newRating = 0;
             },
+            async getComments() {
+                const result = await API.graphql({
+                    query: listMessages,
+                    variables: { 
+                        filter: {'nft_id': {'eq': this.nft_id}}
+                     },
+                });
+                var comments = result.data.listMessages.items;
+                comments.forEach(comment => {
+                    this.comments.push(comment);
+                });
+            },
             createComment(byPassCommentExists = false) {
                 this.handleUserLoggedIn();
 
-                debugger;
+
                 var exists = this.userCommentExists;
                 if(!exists || byPassCommentExists) {
                     var id = Date.now();
@@ -204,7 +219,6 @@ import { Auth } from "aws-amplify";
                     var collection = this.collection;
                     var nft_id = this.nft_id;
                     var nft_rating = this.newRating;
-                    var likes = 0;
 
                     var createdComment = {
                         id,
@@ -212,33 +226,51 @@ import { Auth } from "aws-amplify";
                         message,
                         collection,
                         nft_id,
-                        nft_rating,
-                        likes
+                        nft_rating
                     };
-
-                    this.comments.splice(0, 0, createdComment);
-                    this.clearComment();
-                    this.$vaToast.init({ message: 'Review Added', color: 'success' });
-                    this.$emit("ratingChange");
+                    this.saveComment(createdComment)
+                    .then(() => {
+                        this.comments.splice(0, 0, createdComment);
+                        this.clearComment();
+                        this.$vaToast.init({ message: 'Review Added', color: 'success' });
+                        this.$emit("ratingChange");
+                    });
                 }
                 else {
                     this.$refs['confirmReviewChange'].show();
                 }
             },
+            async saveComment(comment) {
+                const newComment = comment;
+                const result = await API.graphql({
+                    query: createMessage,
+                    variables: { input: newComment },
+                });
+                console.log(result);
+            },
             deleteComment(id, suppressToast = false) {
                 console.log(id);
-                debugger;
                 console.log(this.comments);
                 for(var i = 0; i < this.comments.length; i++) {
                     if(this.comments[i].id === id['id']) {
                         // Remove 1 comment at the ith index
-                        this.comments.splice(i, 1);
-                        if(!suppressToast)
-                            this.$vaToast.init({ message: 'Review Deleted', color: 'danger' });
+                        this.removeComment(id)
+                        .then(() => {
+                            this.comments.splice(i, 1);
+                            if(!suppressToast)
+                                this.$vaToast.init({ message: 'Review Deleted', color: 'danger' });
+                            this.$emit("ratingChange");
+                        });
                         break;
                     }
                 }
-                this.$emit("ratingChange");
+            },
+            async removeComment(commentId) {
+                const result = await API.graphql({
+                    query: deleteMessage,
+                    variables: { input: commentId },
+                });
+                console.log(result);
             },
             updateComment(event) {
                 console.log(event);
@@ -252,17 +284,27 @@ import { Auth } from "aws-amplify";
                         var comment = this.comments[i];
                         comment.message = message;
                         comment.nft_rating = nft_rating;
-                        this.comments.splice(i, 1);
-                        this.comments.splice(i, 1, comment);
-                        console.log(this.comments[i]);
+                        this.changeComment(comment)
+                        .then(() => {
+                            this.comments.splice(i, 1);
+                            this.comments.splice(i, 1, comment);
+                            console.log(this.comments[i]);
+                            this.$emit('ratingChange');
+                        });
                         break;
                     }
                 }
 
                 this.$emit('ratingChange');
             },
+            async changeComment(comment) {
+                const result = await API.graphql({
+                    query: updateMessage,
+                    variables: {input: comment}
+                });
+                console.log(result);
+            },
             overWriteComment() {
-                debugger;
                 var existingComment = this.existingUserComment;
                 this.createComment(true);
                 this.deleteComment({ id: existingComment.id }, true);

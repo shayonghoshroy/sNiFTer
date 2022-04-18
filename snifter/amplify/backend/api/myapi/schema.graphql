@@ -244,7 +244,6 @@ type message @model @auth(rules: [{allow: public}]){
   collection: String
   nft_id: String
   nft_rating: Int
-  likes: Int
   createdAt: AWSDateTime
   updatedAt: AWSDateTime
 }

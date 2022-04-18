@@ -86,7 +86,6 @@ export default {
           const user = await API.graphql({
             query: listUsers,
             variables: {
-              limit: 300,
               filter: { id: { eq: currentusername } },
             },
           });

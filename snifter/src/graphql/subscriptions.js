@@ -1144,6 +1144,48 @@ export const onDeleteQuiz = /* GraphQL */ `
     }
   }
 `;
+export const onCreateMessage = /* GraphQL */ `
+  subscription OnCreateMessage {
+    onCreateMessage {
+      id
+      sender
+      message
+      collection
+      nft_id
+      nft_rating
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateMessage = /* GraphQL */ `
+  subscription OnUpdateMessage {
+    onUpdateMessage {
+      id
+      sender
+      message
+      collection
+      nft_id
+      nft_rating
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteMessage = /* GraphQL */ `
+  subscription OnDeleteMessage {
+    onDeleteMessage {
+      id
+      sender
+      message
+      collection
+      nft_id
+      nft_rating
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const onCreateUserFavoriteNft = /* GraphQL */ `
   subscription OnCreateUserFavoriteNft {
     onCreateUserFavoriteNft {

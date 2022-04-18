@@ -37,43 +37,7 @@ export const searchNfts = /* GraphQL */ `
         description
         external_link
         perma_link
-        primary_asset_contract {
-          id
-          slug
-          address
-          name
-          symbol
-          payout_address
-          asset_contract_type
-          created_date
-          description
-          image_url
-          total_supply
-          nft_version
-          opensea_version
-          schema_name
-          external_link
-          createdAt
-          updatedAt
-        }
         owner
-        traits {
-          id
-          trait_type
-          value
-          display_type
-          max_value
-          trait_count
-          order
-          createdAt
-          updatedAt
-        }
-        favorited_by {
-          nextToken
-        }
-        watched_by {
-          nextToken
-        }
         createdAt
         updatedAt
       }
@@ -966,6 +930,41 @@ export const listQuizzes = /* GraphQL */ `
         questions
         answers
         correct_answer
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getMessage = /* GraphQL */ `
+  query GetMessage($id: ID!) {
+    getMessage(id: $id) {
+      id
+      sender
+      message
+      collection
+      nft_id
+      nft_rating
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listMessages = /* GraphQL */ `
+  query ListMessages(
+    $filter: ModelMessageFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listMessages(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        sender
+        message
+        collection
+        nft_id
+        nft_rating
         createdAt
         updatedAt
       }

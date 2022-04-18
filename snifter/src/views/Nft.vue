@@ -216,10 +216,10 @@ import { Auth } from "aws-amplify";
 import {
   listCollections,
   listNftAssetContracts,
+  listNfts,
   //listNftEventCheckpoints,
   listUserFavoriteNfts,
   listUserWatchlistNfts,
-  searchNfts,
 } from "../graphql/queries";
 import { fetchCollection, nftEventQueue, getNftEventsDirectly } from "../services/nftScraperService";
 import {
@@ -404,7 +404,6 @@ export default {
           if (
             event["event"] === "Bid"
           ) {
-            debugger;
             var bid_amount = event["price"];
             if (bid_amount) {
               bid_amount = parseFloat(bid_amount);
@@ -610,7 +609,7 @@ export default {
         var address = this.nftData.address;
 
         const nfts = await API.graphql({
-          query: searchNfts,
+          query: listNfts,
           variables: {
             filter: {
               token_id: {eq: token_id},
@@ -618,10 +617,10 @@ export default {
             },
           },
         });
-
-        this.nft = nfts.data.searchNfts.items.at(0);
+        this.nft = nfts.data.listNfts.items.at(0);
+        console.log(this.nft);
       } catch (error) {
-        return null;
+        console.log(error);
       }
     },
     async getNFTs(address) {
@@ -781,6 +780,7 @@ export default {
       }, 60000);
     },
     getAverageRatings() {
+      console.log(this.$refs);
       var average = this.$refs['comments'].getAverageRating();
       this.averageRating = average;
     }

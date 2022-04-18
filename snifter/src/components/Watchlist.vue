@@ -37,7 +37,7 @@
 
 <script>
 import { API } from "aws-amplify";
-import { listUserWatchlistNfts, searchNfts } from "../graphql/queries";
+import { listUserWatchlistNfts, listNfts } from "../graphql/queries";
 import Auth from "@aws-amplify/auth";
 export default {
   name: "Watchlist",
@@ -79,14 +79,14 @@ export default {
       try {
         for (let i = 0; i < this.Watchlist.length; i++) {
           const nft = await API.graphql({
-            query: searchNfts,
+            query: listNfts,
             variables: {
               filter: {
                 id: { eq: this.Watchlist[i].nftID },
               },
             },
           });
-          this.nfts.push(nft.data.searchNfts.items[0]);
+          this.nfts.push(nft.data.listNfts.items[0]);
         }
       } catch (e) {
         console.error(e);

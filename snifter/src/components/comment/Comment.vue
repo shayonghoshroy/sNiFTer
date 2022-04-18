@@ -45,15 +45,6 @@
                             <p style="text-align: left;">{{ latestMessage.length }} / 250</p>
                         </div>
                     </div>
-                    <div class="comment-stub">
-                        <div>
-                            <va-icon
-                            class="favorite-icon"
-                            name="favorite_border"
-                            />
-                            {{ likes }}
-                        </div>
-                    </div>
                 </div>
             </va-card-content>
             <va-card-actions v-if="isEditable" align="right">
