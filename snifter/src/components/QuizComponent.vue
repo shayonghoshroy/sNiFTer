@@ -27,7 +27,19 @@
             <br>
             <va-button type="button" @click="submit">Check</va-button>
           </div>
-          <div v-else>
+          <div v-if="(this.questionIndex >= this.quiz.questions.length) && (score == count)">
+            <router-link
+                :to="{
+                  name: 'WikiHome',
+                  path: 'wiki/home',
+                }"
+              >
+              <va-button type="button">Wiki Homepage</va-button>
+            </router-link>
+            <div style="height: 0.25rem"></div>
+            <va-button type="button" @click="restart">Restart</va-button>
+          </div>
+          <div v-if="(this.questionIndex >= this.quiz.questions.length) && (score != count)">
             <br>
             <va-button type="button" @click="restart">Restart</va-button> <br>
           </div>
@@ -79,6 +91,7 @@ export default {
       try {
         // Utilize Auth function to grab currently logged in user on cognito service
         const userAuth = await Auth.currentAuthenticatedUser();
+        // console.log(userAuth);
         const currentusername = userAuth.username;
 
         // Query associated model from user table if a user is logged in
@@ -102,6 +115,12 @@ export default {
           if(user.data.listUsers.items[0].quiz_points != null) {
             this.quiz_score = user.data.listUsers.items[0].quiz_points;
           }
+
+          /*
+          console.log(this.user);
+          console.log(this.completedQuizzes);
+          console.log(this.quiz_score);
+          */
         }
       } catch (e) {
           console.error(e);
@@ -150,23 +169,33 @@ export default {
       */
     submit() {
       // Update score for this quiz if answer is right
-      if (this.answer === this.quiz.correct_answer[this.questionIndex]) {
-        this.score++;
-      }
-      // Advance count of completed questions
-      if(this.questionIndex != 0) {
-        this.count++;
-      }
-      // Advance index of the arrays of question, answer choices, and correct answers 
-      if (this.questionIndex < this.quiz.questions.length) {
-        this.questionIndex++;
-      }
-      // If user completes quiz and scores 100%, update their overall quiz score (experience field) and mutate user in database to store it
-      if((this.questionIndex >= this.quiz.questions.length) && (this.score == this.count)) {
-        if((this.user != null) && !(this.completedQuizzes.includes(this.articleID))) {
-          this.quiz_score += this.quiz.questions.length;
-          this.updateUser(); // Call mutatator funtion
+      /*
+      console.log(this.answer);
+      console.log(this.quiz.answers[this.questionIndex]);
+      */
+
+      // Check that user has selected an answer for the Question
+      if(this.quiz.answers[this.questionIndex].includes(this.answer)) {
+        if (this.answer === this.quiz.correct_answer[this.questionIndex]) {
+          this.score++;
         }
+        // Advance count of completed questions
+        if(this.questionIndex != 0) {
+          this.count++;
+        }
+        // Advance index of the arrays of question, answer choices, and correct answers 
+        if (this.questionIndex < this.quiz.questions.length) {
+          this.questionIndex++;
+        }
+        // If user completes quiz and scores 100%, update their overall quiz score (experience field) and mutate user in database to store it
+        if((this.questionIndex >= this.quiz.questions.length) && (this.score == this.count)) {
+          if((this.user != null) && !(this.completedQuizzes.includes(this.articleID))) {
+            this.quiz_score += this.quiz.questions.length;
+            this.updateUser(); // Call mutatator funtion
+          }
+        }
+        // Reset current answer to nothing
+        this.answer = '';
       }
     },
 
@@ -227,7 +256,7 @@ img {
   align-items: stretch;
   justify-content: space-between;
   width: 60rem;
-  height: 30rem;
+  height: 35rem;
   border: 15px solid white;
   background: #FFFFFF;
   border-radius: 0.5rem;
@@ -251,6 +280,21 @@ img {
 
 .answerButton {
   width: inherit;
+}
+
+.answerButton:focus {
+  width: inherit;
+  background: rgba(150,120,245) !important;
+}
+
+.answerButton:hover {
+  width: inherit;
+  background: rgba(137,85,206) !important;
+}
+
+.answerButton:active {
+  width: inherit;
+  background: rgba(150,120,245) !important;
 }
 
 .submitflex {
@@ -280,6 +324,10 @@ img {
 .questionbox {
   display: flex;
   flex-direction: row;
+}
+
+button:focus{
+    background:olive;
 }
 
 .textbox {
