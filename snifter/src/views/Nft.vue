@@ -8,7 +8,7 @@
           : 'nft-default-background'
       "
     >
-      <div v-if="nft" :src="nft" class="nft-card background mb-5">
+      <div v-if="nft" :src="nft" class="nft-content background">
         <!-- Top row of nft card -->
         <div class="top-row">
           <!-- Leftmost section of nft card -->
@@ -887,7 +887,7 @@ export default {
   padding-right: 16em;
 }
 
-.nft-card {
+.nft-content {
   display: flex;
   flex-flow: column;
   justify-content: center;
