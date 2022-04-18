@@ -61,7 +61,7 @@
                 @click="expressionIndex = index"
               >
                 <va-list-item-section>
-                  <va-list-item-label>{{ type[0] }}</va-list-item-label>
+                  <va-list-item-label :class="'search-type-label'">{{ type[0] }}</va-list-item-label>
                 </va-list-item-section>
               </va-list-item>
             </va-list>
@@ -160,7 +160,7 @@ export default {
         ["Token Name", "generating_tokens"],
         ["Owner", "account_balance_wallet"],
         ["Number of Sales", "palette"],
-        ["Targeted", "adjust"]
+        ["Focused", "adjust"]
       ],
       searchIndex: 0,
       requestCount: 0,
@@ -438,5 +438,8 @@ export default {
   background-color: white;
   width: 50%;
   border-radius: 15px;
+}
+.va-list-item-label {
+  overflow: none !important;
 }
 </style>
