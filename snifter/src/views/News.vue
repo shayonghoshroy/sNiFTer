@@ -94,4 +94,7 @@ h2 {
 .is-white {
   color: #ffffff;
 }
+.search {
+  overflow-x: none;
+}
 </style>
