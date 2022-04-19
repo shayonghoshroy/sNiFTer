@@ -61,7 +61,7 @@ export default {
     signOutFunc() {
       const auth = useAuthenticator();
       auth.signOut();
-      this.$router.push("/");
+      this.$router.push("/user");
     },
   },
 };
