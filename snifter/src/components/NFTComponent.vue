@@ -1,6 +1,6 @@
 <template>
   <div id="nftcomponent" ref="scrollComponent">
-    <simple-grid-container class="container" columnWidth="300px">
+    <div class="container">
       <div class="post" v-for="nft in nfts" :key="nft.id">
         <div class="row div">
           <div class="flex md6 lg4">
@@ -49,7 +49,7 @@
           </div>
         </div>
       </div>
-    </simple-grid-container>
+    </div>
   </div>
 </template>
 
@@ -66,8 +66,8 @@ import {
 export default {
   name: "NFTComponent",
   async created() {
-    this.getUser();
-    this.getNFTs();
+    await this.getUser();
+    await this.getNFTs();
   },
   props: {
     insertNfts: {
@@ -95,8 +95,12 @@ export default {
   },
   methods: {
     async getUser() {
-      const user = await Auth.currentAuthenticatedUser();
-      this.user = user.username;
+      try {
+        const user = await Auth.currentAuthenticatedUser();
+        this.user = user.username;
+      } catch(e) {
+        console.error(e);
+      }
     },
     async getNFTs() {
       if (!this.insertNfts) {
@@ -108,6 +112,7 @@ export default {
             },
           });
           this.nfts = nfts.data.listNfts.items;
+          console.log(this.nfts);
         } catch (e) {
           console.error(e);
         }
@@ -214,7 +219,10 @@ export default {
   color: #888;
 }
 .container {
-  justify-items: stretch;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
   width: 83.5%;
 }
 .rounded-card {

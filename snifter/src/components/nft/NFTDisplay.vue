@@ -1,6 +1,6 @@
 <template>
   <div id="nftcomponent">
-    <simple-grid-container class="container" columnWidth="300px">
+    <div class="container">
       <div class="post" v-for="nft in nfts" :key="nft.id">
         <div class="row div">
           <div class="flex md6 lg4">
@@ -26,7 +26,7 @@
           </div>
         </div>
       </div>
-    </simple-grid-container>
+    </div>
   </div>
 </template>
 
@@ -64,7 +64,9 @@ export default {
   color: #888;
 }
 .container {
-  justify-items: stretch;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 83.5%;
 }
 .rounded-card {
