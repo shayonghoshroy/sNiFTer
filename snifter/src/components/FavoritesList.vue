@@ -4,7 +4,7 @@
     <div v-if="Favorites.length != 0">
       <div class="mt-1" style="color: #d3d3d3">They love you too</div>
       <div id="nftcomponent">
-        <simple-grid-container class="container" columnWidth="50px">
+        <div class="container">
           <div class="post" v-for="nft in nfts" :key="nft.id">
             <div class="row div">
               <div class="flex md6 lg4">
@@ -25,7 +25,7 @@
               </div>
             </div>
           </div>
-        </simple-grid-container>
+        </div>
       </div>
     </div>
     <div v-else>
@@ -116,8 +116,11 @@ h2 {
   color: #888;
 }
 .container {
-  justify-items: stretch;
   width: 83.5%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
 }
 .rounded-card {
   border-radius: 5px;
