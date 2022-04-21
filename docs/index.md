@@ -1,5 +1,8 @@
 # Welcome to sNiFTER
 
+<p align="center">
+ <img src="https://user-images.githubusercontent.com/59932579/164501399-6ebf3880-e9cf-4283-9358-a9782e30fc3c.png" />
+</p>
 [![image](https://user-images.githubusercontent.com/59932579/164502470-e1c6a93c-7f6e-4f7c-9cdf-e07358ac0a5b.png)](https://www.youtube.com/watch?v=NpEaa2P7qZI)
 
 sNiFTer is an information platform, with the goal to decrease the learning curve, increase engagement, and provide reliable, actionable information for the NFT space. sNiFTer aims to tackle this challenge on 3 fronts; insights and tracking into the performance of and engagement with an NFT entity, interactive educational resources on NFT and blockChain technology, and interaction between users in a social manner for community engagement. By NFT entity, we are referring to an individual token, an NFT collection, or an NFT creator.
@@ -26,11 +29,15 @@ Our site also features robust search functionality designed to make it easier th
 
 Users can search through our database of NFTs using a variety of filters, including collection names, token names, owners, number of sales, and a specific address and accompanying token number. 
 
-![searchoptions](https://user-images.githubusercontent.com/59932579/164489822-f420d048-10db-46cb-a57b-fde4c0ada5e9.PNG)
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/59932579/164489822-f420d048-10db-46cb-a57b-fde4c0ada5e9.PNG" />
+</p>
 
 Our search functionality also offers predictive user input for collection names, allowing users to quickly find collections they were looking for, or even ones they weren't fully aware of.
 
-![predictivesearch](https://user-images.githubusercontent.com/59932579/164489746-efa78a4a-59fb-425b-96c3-ce7300c99b98.PNG)
+<p align="center">
+ <img src="https://user-images.githubusercontent.com/59932579/164489746-efa78a4a-59fb-425b-96c3-ce7300c99b98.PNG" />
+</p>
 
 ## Viewing NFTs
 
@@ -78,7 +85,7 @@ Here is an example view of a logged in user looking at the Wiki page. Users are 
 
 ## User Profile
 
-![profilepage](https://user-images.githubusercontent.com/59932579/164499360-bf295ee2-c032-4df8-bdce-498cdef2f305.png)
+![profile](https://user-images.githubusercontent.com/59932579/164542629-888d6529-832a-430d-ad81-f4a9ed8752e8.png)
 
 Users can view their liked and watchlisted NFTs on their profile page by clicking the profile icon in the upper right corner. They are able to change their website avatar by uploading their own images, and can quickly look at any saved NFTs by clicking on them from the page.
 
@@ -88,9 +95,18 @@ Users can view their liked and watchlisted NFTs on their profile page by clickin
 Users who are not signed in will be given the option to sign in or create an account. When registering, users will enter a username, password (which they also confirm with a second entry), and email address. 
 
 ![confirmaccount](https://user-images.githubusercontent.com/59932579/164500961-fea5dea6-ab2c-427a-beb1-8605abcca873.PNG)
-![image](https://user-images.githubusercontent.com/59932579/164501399-6ebf3880-e9cf-4283-9358-a9782e30fc3c.png)
+
+<p align="center">
+ <img src="https://user-images.githubusercontent.com/59932579/164501399-6ebf3880-e9cf-4283-9358-a9782e30fc3c.png" />
+</p>
 
 After registering, users will be prompted to confirm their account with a code sent to their email. If the code is not sent, users can request to have it sent again. Upon entering the correct confirmation code, users will be routed to their new profile page.
+
+<p align="center">
+ <img src="https://user-images.githubusercontent.com/59932579/164543011-d52e6471-3434-49cc-820c-2ad9240ef0a5.png" />
+</p>
+
+Additionally, any watchlisted NFTs for a user will have email alerts sent to a user after a transaction of that token occurs, with an example of this email shown above.
 
 ## About Us
 
