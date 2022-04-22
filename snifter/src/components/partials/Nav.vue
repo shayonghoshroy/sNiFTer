@@ -16,10 +16,10 @@
     </template>
     <template #right class="mb-2">
       <div>
-        <div v-if="src">
+        <div v-if="isLoggedIn">
           <div class="navbar-item">
             <router-link to="/user"
-              ><img :src="src" class="avatar"
+              ><img :src="store.src" class="avatar"
             /></router-link>
           </div>
         </div>
@@ -49,6 +49,8 @@ Amplify.configure(awsconfig);
 
 <script>
 import { Auth } from "aws-amplify";
+import { store } from "../../store/store.js";
+
 export default {
   name: "Nav",
   components: {},
@@ -57,13 +59,22 @@ export default {
       user: [],
       src: null,
       avatar,
+      store,
     };
+  },
+  computed: {
+    isLoggedIn() {
+      return this.store.isLoggedIn;
+    },
   },
   methods: {},
   async created() {
     try {
       const user = await Auth.currentAuthenticatedUser();
       this.user = user;
+      if (this.user) {
+        this.store.isLoggedIn = true;
+      }
       let username = this.user.username;
       this.imgKey = "profile-image-" + username;
       // Get user
@@ -81,6 +92,7 @@ export default {
           bucket: awsExports.aws_user_files_s3_bucket,
           region: awsExports.aws_user_files_s3_bucket_region,
         });
+        this.store.src = this.src;
       } else {
         this.src = stockavatar;
       }

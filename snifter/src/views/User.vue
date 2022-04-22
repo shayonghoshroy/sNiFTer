@@ -32,6 +32,7 @@ import "@aws-amplify/ui-vue/styles.css";
 import Amplify from "aws-amplify";
 import awsconfig from "../aws-exports";
 import { Auth } from "aws-amplify";
+import { store } from "../store/store.js";
 Amplify.configure(awsconfig);
 </script>
 
@@ -46,6 +47,7 @@ export default {
   data() {
     return {
       username: this.username,
+      store,
     };
   },
   async created() {
@@ -59,6 +61,7 @@ export default {
   },
   methods: {
     signOutFunc() {
+      this.store.isLoggedIn = false;
       const auth = useAuthenticator();
       auth.signOut();
       this.$router.push("/user");
