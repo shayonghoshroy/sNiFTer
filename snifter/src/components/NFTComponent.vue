@@ -108,7 +108,6 @@ export default {
           const nfts = await API.graphql({
             query: listNfts,
             variables: {
-              limit: 100,
             },
           });
           this.nfts = nfts.data.listNfts.items;

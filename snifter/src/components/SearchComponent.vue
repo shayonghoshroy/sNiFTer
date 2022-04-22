@@ -39,7 +39,7 @@
             placeholder="Required"
           />
         </va-form>
-        <va-form @keyup="startSearch()" class="search-input-form" v-else-if="searchIndex === 2">
+        <va-form @keypress="startSearch()" class="search-input-form" v-else-if="searchIndex === 2">
           <va-input
             class="mb-4"
             v-model="generalSearchField"
@@ -124,7 +124,7 @@
 
 <script>
 import { API } from "aws-amplify";
-import { listNfts, listCollections, searchNfts } from "../graphql/queries";
+import { listNfts, listCollections } from "../graphql/queries";
 import { fetchNFTs } from "../services/nftScraperService";
 export default {
   name: "SearchComponent",
@@ -163,6 +163,7 @@ export default {
       searchIndex: 0,
       requestCount: 0,
       disableSearch: false,
+      lastSearch: ''
     };
   },
   computed: {
@@ -170,6 +171,7 @@ export default {
       return this.searchTypes[this.searchIndex][this.searchIndex];
     },
     searchSuggestions() {
+      debugger;
       var suggestions = [];
       var suggestionNames = [];
       var generalSearch = this.generalSearchField;
@@ -196,7 +198,7 @@ export default {
           }
         }
       }
-      return suggestions;
+      return suggestions.slice(0, 5);
     },
     collectionNames() {
       return this.collections.filter(collection => {
@@ -252,6 +254,7 @@ export default {
         filter[searchField] = {beginsWith: this.generalSearchField};
       const results = await API.graphql({
         query: listNfts,
+        limit: 1000000,
         variables: {
             filter
           },
@@ -283,10 +286,9 @@ export default {
       if (this.disableSearchInvalidInput)
         return;
       this.disableSearch = true;
-      var previousTime = this.keyUpControl;
-      var now = new Date().getTime();
-      if(previousTime !== null && now - previousTime < 300) return;
-      this.keyUpControl = now;
+      //var previousTime = this.keyUpControl;
+      //if(previousTime !== null && now - previousTime < 300) return;
+      //this.keyUpControl = now;
       //var response = null;
       var event = {
         searchStatus: "Failure",
@@ -312,22 +314,27 @@ export default {
           const nfts = await API.graphql({
             query: listNfts,
             variables: {
+              limit: 1000000,
               filter: { address: { eq: this.address } },
             },
           });
-          this.nfts = nfts.data.listNfts.items;
+
+          var nftItems = nfts.data.listNfts.items;
+          this.nfts = nftItems;
           this.$emit("getNFTs", this.nfts);
         } else {
           const nfts = await API.graphql({
-            query: searchNfts,
+            query: listNfts,
             variables: {
+              limit: 1000000,
               filter: {
                 token_id: { eq: this.tokenid },
                 address: { eq: this.address },
               },
             },
           });
-          this.nfts = nfts.data.searchNfts.items;
+
+          this.nfts = nfts.data.listNfts.items;
           this.$emit("getNFTs", this.nfts);
         }
       } catch (e) {
@@ -350,13 +357,15 @@ export default {
         var searchTerm = this.generalSearchField;
         for(var i = 0; i < this.collections.length; i++) {
           if (this.collections[i]['name'].toLowerCase().includes(searchTerm.toLowerCase())) {
-            const results = await API.graphql({
+            const nfts = await API.graphql({
             query: listNfts,
             variables: {
+              limit: 1000000,
                 filter: {collection_name: {eq: this.collections[i]['name']}}
               },
             });
-            this.nfts = results.data.listNfts.items;
+
+            this.nfts = nfts.data.listNfts.items;
             this.$emit("getNFTs", this.nfts);
           }
         }

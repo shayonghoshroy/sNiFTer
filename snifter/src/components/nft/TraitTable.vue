@@ -15,20 +15,31 @@
 </template>
 
 <script>
+import {
+  listNftTraits
+} from "../../graphql/queries";
+
+import { API } from "aws-amplify";
+
 export default {
   name: "TraitTable",
   props: {
-    traits: {
-      type: Array,
+    id: {
+      type: String,
       require: true,
     },
     totalSupply: {
-      type: Number,
+      type: String,
       require: true,
     },
   },
+  created() {
+    this.getTraits()
+    .then(() => { console.log(this.traits) });
+  },
   computed: {
     traitItems() {
+      debugger;
       var supply = this.totalSupply;
       if (supply === "0") supply = 10000;
       return this.traits.map((trait) => {
@@ -36,10 +47,25 @@ export default {
           type: trait.trait_type,
           value: trait.value,
           count: trait.trait_count,
-          rarity: trait.trait_count / supply,
+          rarity: (trait.trait_count / supply).toFixed(3),
         };
       });
     },
+  },
+  methods: {
+    async getTraits() {
+      const nftTraits = await API.graphql({
+        query: listNftTraits,
+        variables: {
+          limit: 1000000,
+          filter: {
+            id: { beginsWith: this.id }
+          }
+        }
+      });
+      this.traits = nftTraits.data.listNftTraits.items;
+      console.log(this.id, this.traits);
+    }
   },
   data() {
     return {
@@ -50,6 +76,7 @@ export default {
         { key: "count", sortable: true },
         { key: "rarity", sortable: true },
       ],
+      traits: []
     };
   },
 };

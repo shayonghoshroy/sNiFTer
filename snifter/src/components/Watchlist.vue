@@ -64,7 +64,7 @@ export default {
         const Watchlist = await API.graphql({
           query: listUserWatchlistNfts,
           variables: {
-            limit: 10,
+            limit: 1000000,
             filter: {
               userID: { eq: this.username },
             },
@@ -81,6 +81,7 @@ export default {
           const nft = await API.graphql({
             query: listNfts,
             variables: {
+              limit: 1000000,
               filter: {
                 id: { eq: this.Watchlist[i].nftID },
               },

@@ -97,9 +97,9 @@
                 </div>
                 <div v-else-if="collapse.title === 'Traits'">
                   <TraitTable
-                    v-if="nft.traits && currentContract?.total_supply"
-                    :traits="nft.traits"
-                    :totalSupply="currentContract.total_supply"
+                    v-if="nft && totalSupply"
+                    :id="nft.id"
+                    :totalSupply="totalSupply"
                   />
                 </div>
               </va-collapse>
@@ -168,6 +168,9 @@
                   <TransactionTable v-if="transactionDisplayState === 'table'" :nftEvents="nftEventItems" />
                   <TransactionChart v-else :nftEvents="nftEventItems" />
                 </div>
+                <div v-else>
+                  <h1>No bids or sales provided from OpenSea</h1>
+                </div>
               </va-collapse>
             </va-accordion>
           </div>
@@ -191,7 +194,7 @@
         </div>
         <div v-if="collection" class="collection-section">
           <h1>Collection</h1>
-          <CollectionInfo :collection="collection">
+          <CollectionInfo @totalSupply="setTotalSupply" :collection="collection">
             <template v-slot:contractInfo>
               <ContractStats :contracts="nftContract"></ContractStats>
             </template>
@@ -216,22 +219,19 @@ import { Auth } from "aws-amplify";
 import {
   listCollections,
   listNftAssetContracts,
-  listNfts,
+  getNft,
   //listNftEventCheckpoints,
   listUserFavoriteNfts,
   listUserWatchlistNfts,
+  listNftTraits
 } from "../graphql/queries";
-import { fetchCollection, nftEventQueue, getNftEventsDirectly } from "../services/nftScraperService";
+import { fetchCollection, getNftEventsDirectly } from "../services/nftScraperService";
 import {
   createUserFavoriteNft,
   deleteUserFavoriteNft,
   createUserWatchlistNft,
   deleteUserWatchlistNft,
 } from "../graphql/mutations";
-import {
-  onCreateNftEvent,
-  onUpdateNftEventCheckpoint,
-} from "../graphql/subscriptions";
 import ContractStats from "../components/ContractInfo";
 import CollectionInfo from "../components/nft/CollectionInfo";
 import TraitTable from "../components/nft/TraitTable";
@@ -252,16 +252,14 @@ export default {
     TransactionChart,
     CommentDisplay
   },
-  async created() {
+  created() {
     this.nftData = this.$route.query;
-    await this.$nextTick();
-    console.log("data", this.nftData);
   },
   async mounted() {
-    await this.getUser();    
+    await this.getUser();
 
     await this.getNFT();
-    if(this.nft === undefined) await this.getNFT();
+    //if(this.nft === undefined) await this.getNFT();
 
     await this.getNFTs(this.nftData.address)
 
@@ -277,17 +275,20 @@ export default {
     this.nftEvents = await getNftEventsDirectly(this.nftData.token_id, this.nftData.address);
     if(this.nftEvents.length > 0) {
       this.transactionStatus = "complete";
+    } else {
+      this.transactionStatus = "none";
     }
 
     this.getAverageRatings();
   },
   data() {
     return {
+      totalSupply: null,
       nftData: null,
       nft: null,
       showContract: false,
       showCollection: false,
-      showTransactions: false,
+      showTransactions: [false],
       transactionStatus: "fetching",
       nftCollapses: [{ title: "Ownership" }, { title: "Traits" }],
       nftContract: [],
@@ -347,7 +348,6 @@ export default {
           image_url: this.currentContract.image_url,
         });
       }
-      console.log(entities);
       return entities;
     },
     nftEventItems() {
@@ -455,6 +455,16 @@ export default {
       };
     },
   },
+  // watch: {
+  //   nftData() {
+  //     if(this.nftData.id) {
+  //       this.getNFT()
+  //       .then(() => {
+  //         console.log(this.nft);
+  //       });
+  //     }
+  //   }
+  // },
   methods: {
     async getUser() {
       try{
@@ -467,6 +477,7 @@ export default {
         const is_watching = await API.graphql({
           query: listUserWatchlistNfts,
           variables: {
+            limit: 1000000,
             filter: { userID: { eq: userID }, nftID: { eq: nftID } },
           },
         });
@@ -494,6 +505,7 @@ export default {
         const is_watching = await API.graphql({
           query: listUserWatchlistNfts,
           variables: {
+            limit: 1000000,
             filter: { userID: { eq: userID }, nftID: { eq: nftID } },
           },
         });
@@ -605,19 +617,32 @@ export default {
     async initSubscriptions() {},
     async getNFT() {
       try {
-        var token_id = this.nftData['token_id'];
-        var address = this.nftData.address;
+        var id = this.nftData.id;
 
+        debugger;
         const nfts = await API.graphql({
-          query: listNfts,
+          query: getNft,
           variables: {
-            filter: {
-              token_id: {eq: token_id},
-              address: {eq: address},
-            },
+            id
           },
         });
-        this.nft = nfts.data.listNfts.items.at(0);
+        debugger;
+        var nft = nfts.data.getNft;
+        console.log(nft);
+        if(nft) {
+          const nftTraits = await API.graphql({
+            query: listNftTraits,
+            variables: {
+              filter: {
+                id: { beginsWith: nft.id }
+              }
+            }
+          });
+          var traits = nftTraits.data.listNftTraits.items;
+          nft['traits'] = traits;
+          this.nft = nft;
+          console.log(traits);
+        }
         console.log(this.nft);
       } catch (error) {
         console.log(error);
@@ -633,6 +658,7 @@ export default {
           },
         });
         this.nftContract = contracts.data.listNftAssetContracts.items;
+        console.log(this.nftContract);
 
         // Convert Proxy object returned by query into JS object to access slug
         var currentContract = JSON.parse(JSON.stringify(this.nftContract)).at(
@@ -682,107 +708,19 @@ export default {
         await this.getCollection();
       }
     },
-    async getAllNftEvents() {
-      console.log("reading database");
-      var nextToken = await this.getNFTEvents(
-        this.nftData.address,
-        this.nftData.token_id
-      );
-      while (nextToken) {
-        console.log("nextoken");
-        nextToken = await this.getNFTEvents(
-          this.nftData.address,
-          this.nftData.token_id,
-          nextToken
-        );
-      }
-
-      if (this.nftEvents.length > 0 && !nextToken) {
-        this.transactionStatus = "complete";
-        console.log("EVENTS", this.nftEvents);
-        console.log(this.transactionStatus);
-        return true;
-      }
-    },
-    async fetchNFTEvents(contractAddress, tokenId, eventType = null) {
-      var body = {
-        "asset-contract-address": contractAddress,
-        "token-id": tokenId,
-        limit: 100,
-      };
-
-      if (eventType) body["event-type"] = eventType;
-      var test = await nftEventQueue(body);
-      // var messageId = test["messageId"];
-
-      console.log(test);
-      return test;
-    },
-    async subscribeToCheckpoint(checkpointId) {
-      const checkpointQuery = await API.graphql({
-        query: onUpdateNftEventCheckpoint,
-        variables: {
-          id: checkpointId,
-        },
-      }).subscribe({
-        next: (checkpoint) => {
-          console.log("checkpoint", checkpoint);
-        },
-      });
-
-      setTimeout(() => {
-        checkpointQuery.unsubscribe();
-      }, 60000);
-      // if (count === 50) {
-      //   this.transactionStatus = "failure";
-      //   return false;
-      // }
-      // const checkpointQuery = await API.graphql({
-      //   query: listNftEventCheckpoints,
-      //   variables: {
-      //     filter: { id: { eq: checkpointId } },
-      //   },
-      // });
-
-      // var checkpoint = checkpointQuery.data.listNftEventCheckpoints.items.at(0);
-      // console.log(checkpoint);
-      // if (checkpoint) {
-      //   this.transactionStatus = checkpoint.status;
-      //   this.lastCheckpoint = checkpoint;
-      // }
-      // if (checkpoint && checkpoint?.status === "success") {
-      //   this.transactionStatus = "success";
-      //   var loaded = await this.getAllNftEvents();
-      //   if (loaded) this.transactionStatus = "complete";
-      //   return true;
-      // } else if (checkpoint && checkpoint?.status === "failure") {
-      //   return false;
-      // } else {
-      //   await setTimeout(() => {
-      //     this.subscribeToCheckpoint(checkpointId, (count += 1));
-      //   }, 2000);
-      // }
-    },
-    async subscribeToEvents() {
-      var eventSubscriber = API.graphql({
-        query: onCreateNftEvent,
-      }).subscribe({
-        next: (data) => {
-          console.log("Event", data);
-        },
-        error: (e) => {
-          console.log("Event Error", e);
-        },
-      });
-
-      setTimeout(() => {
-        eventSubscriber.unsubscribe();
-      }, 60000);
-    },
     getAverageRatings() {
       console.log(this.$refs);
-      var average = this.$refs['comments'].getAverageRating();
-      this.averageRating = average;
+      try {
+        var average = this.$refs['comments'].getAverageRating();
+        this.averageRating = average;
+      } catch(e) {
+        this.averageRating = 0;
+      }
+    },
+    setTotalSupply(event) {
+      debugger;
+      this.totalSupply = event.total_supply;
+      console.log(this.total_supply);
     }
   },
 };
@@ -997,5 +935,10 @@ h1 {
 
 .comment-section {
   width: 100%;
+}
+
+.rating {
+  justify-content: center;
+  align-items: center;
 }
 </style>

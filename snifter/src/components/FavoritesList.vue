@@ -80,6 +80,7 @@ export default {
           const nft = await API.graphql({
             query: listNfts,
             variables: {
+              limit: 1000000,
               filter: {
                 id: { eq: this.Favorites[i].nftID },
               },

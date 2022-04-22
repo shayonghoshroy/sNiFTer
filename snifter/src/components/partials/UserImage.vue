@@ -142,6 +142,9 @@ async function addImageToDB(username, image) {
 }
 .profilepic__image {
   opacity: 1;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
   transition: opacity 0.2s ease-in-out;
 }
 .profilepic__content {

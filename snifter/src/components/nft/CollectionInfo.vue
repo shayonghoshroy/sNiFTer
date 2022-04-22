@@ -56,11 +56,10 @@
 
         <va-accordion v-model="showTraits">
           <va-collapse header="Traits">
-            <div v-if="collection.traits">
+            <div v-if="collection && stats">
               <TraitTable
-                v-if="collection.traits"
-                :traits="collection.traits"
-                :totalSupply="10000"
+                :id="collection.slug"
+                :totalSupply="stats.total_supply"
               />
             </div>
           </va-collapse>
@@ -252,14 +251,19 @@ export default {
     }
   },
   async created() {
+    debugger;
     var stats = await getCollectionStatsDirectly(this.collection.slug);
     var latestStats = {};
-    for(var [key, val] of Object.entries(stats['stats'])) { 
-      latestStats[key] = val.toFixed(3);
+    for(var [key, val] of Object.entries(stats['stats'])) {
+      if(key === "floor_price" && !val) {
+        val = "Not Supplied";
+      } else {
+        latestStats[key] = val.toFixed(3);
+      }
     }
     this.latestStats = latestStats;
-    console.log(this.latestStats);
     this.statsLoaded = true;
+    this.$emit('totalSupply', {'total_supply': parseInt(this.latestStats.total_supply)});
   },
   methods: {
   },
