@@ -16,7 +16,7 @@
     </template>
     <template #right class="mb-2">
       <div>
-        <div v-if="isLoggedIn">
+        <div v-if="isLoggedIn && hasPhoto">
           <div class="navbar-item">
             <router-link to="/user"
               ><img :src="store.src" class="avatar"
@@ -65,6 +65,13 @@ export default {
   computed: {
     isLoggedIn() {
       return this.store.isLoggedIn;
+    },
+    hasPhoto() {
+      if (this.store.src != "") {
+        return true;
+      } else {
+        return false;
+      }
     },
   },
   methods: {},
