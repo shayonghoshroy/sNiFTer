@@ -25,6 +25,7 @@ import { Auth } from "aws-amplify";
 import awsExports from "../../aws-exports";
 import { getUser } from "../../graphql/queries";
 import stockavatar from "../../assets/stockavatar.png";
+import { store } from "../../store/store.js";
 export default {
   name: "SignIn",
   components: {},
@@ -33,6 +34,7 @@ export default {
       imgKey: this.imgKey,
       username: this.username,
       src: null,
+      store,
     };
   },
   props: {
@@ -60,6 +62,8 @@ export default {
           bucket: awsExports.aws_user_files_s3_bucket,
           region: awsExports.aws_user_files_s3_bucket_region,
         });
+        this.store.src = this.src;
+        this.store.isLoggedIn = true;
       } else {
         this.src = stockavatar;
       }
