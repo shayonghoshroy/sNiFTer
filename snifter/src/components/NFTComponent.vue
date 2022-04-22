@@ -165,6 +165,7 @@ export default {
     async favorite(userID, nftID) {
       if (!this.user) {
         this.$router.push("/user");
+        return;
       }
       const index = this.nfts.findIndex((x) => x.id === nftID);
       this.nfts[index].hasFavorited = !this.nfts[index].hasFavorited;
