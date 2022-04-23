@@ -64,7 +64,6 @@ export default {
       this.store.isLoggedIn = false;
       const auth = useAuthenticator();
       auth.signOut();
-      this.$router.push("/user");
     },
   },
 };
