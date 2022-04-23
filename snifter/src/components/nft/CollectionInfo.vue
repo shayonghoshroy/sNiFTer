@@ -156,7 +156,7 @@
                     <th class="table-row-header">Change</th>
                     <td
                     :style="stats.seven_day_change < 0 ? 'color: red;' : 'color: green;'"
-                    >{{ stats.seven_day_change }}</td>
+                    ><b>{{ stats.seven_day_change }}</b></td>
                   </tr>
                   <tr>
                     <th class="table-row-header">Sales</th>
@@ -187,7 +187,7 @@
                     <th class="table-row-header">Change</th>
                     <td
                     :style="stats.one_day_change < 0 ? 'color: red;' : 'color: green;'"
-                    >{{ stats.one_day_change }}</td>
+                    ><b>{{ stats.one_day_change }}</b></td>
                   </tr>
                   <tr>
                     <th class="table-row-header">Sales</th>

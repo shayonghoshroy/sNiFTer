@@ -357,7 +357,7 @@ export default {
         var eventType = "";
         if (nftEvent.event_type === "successful") {
           eventType = "Sale";
-          nftEvent['from'] = nftEvent['from_account'];
+          nftEvent['from'] = nftEvent['transaction']['from_account']['address'];
         }
         else if (nftEvent.event_type === "transfer") eventType = "Transfer";
         else {
@@ -857,7 +857,7 @@ h1 {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  padding-top: 8em;
+  padding-top: 9.5em;
   width: 100%;
 }
 

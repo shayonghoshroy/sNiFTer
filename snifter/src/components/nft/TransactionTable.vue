@@ -7,7 +7,7 @@
 
     <va-data-table
       :columns="columns"
-      :items="nftEvents"
+      :items="nftEventItems"
       :filter="filter"
       :per-page="perPage"
       :current-page="currentPage"
@@ -49,15 +49,19 @@ export default {
       if (events.length === 0) return [];
       var items = events.map((nftEvent) => {
         console.log(nftEvent.event);
+        var createdDate = nftEvent.created_date;
+        createdDate = new Date(createdDate).toGMTString();
+        createdDate = createdDate.substring(0, createdDate.indexOf("GMT")).trim();
+
         return {
           event: nftEvent.event,
           price: nftEvent.price,
-          from: nftEvent.from_account ? nftEvent.from_account['address'] : "-",
-          to: nftEvent.to_account ? nftEvent.to_account['address'] : "-",
-          created_date: nftEvent.created_date ? nftEvent.created_date : "-",
+          from: nftEvent.from,
+          to: nftEvent.to,
+          created_date: createdDate
         };
       });
-      return items;
+      return items.sort((a, b) => (Date.parse(a.created_date) < Date.parse(b.created_date) ? 1: -1));
     },
     pages() {
       var pages =
