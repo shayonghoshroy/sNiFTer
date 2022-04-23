@@ -290,7 +290,7 @@ import { API, Auth } from "aws-amplify";
                         this.changeComment(comment)
                         .then(() => {
                             this.comments.splice(i, 1);
-                            this.comments.splice(i, 1, comment);
+                            this.comments.splice(i, 0, comment);
                             console.log(this.comments[i]);
                             this.$emit('ratingChange');
                         });
