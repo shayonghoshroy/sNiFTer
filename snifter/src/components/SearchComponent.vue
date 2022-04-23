@@ -10,7 +10,7 @@
             class="search-item"
             v-for="(type, index) in searchTypes"
             :key="index"
-            @click="searchIndex = index"
+            @click="{ searchIndex = index; generalSearchField = ''; }"
           >
             <va-list-item-section avatar>
               <va-icon :name="type[1]"></va-icon>
@@ -75,10 +75,10 @@
           />
         </va-form>
 
-        <va-form class="search-input-form" v-else>
+        <va-form @keypress="startSearch()" class="search-input-form" v-else>
           <va-input
             class="mb-4"
-            v-model="address"
+            v-model="generalSearchField"
             label="Address"
             type="text"
           />
@@ -125,7 +125,7 @@
 <script>
 import { API } from "aws-amplify";
 import { listNfts, listCollections } from "../graphql/queries";
-import { fetchNFTs } from "../services/nftScraperService";
+
 export default {
   name: "SearchComponent",
   components: {},
@@ -206,12 +206,14 @@ export default {
       });
     },
     disableSearchInvalidInput() {
-      if (this.searchTypes[this.searchIndex][0] === "Number of Sales") {
+      var searchType = this.searchTypes[this.searchIndex][0];
+      console.log(this.searchTypes[this.searchIndex]);
+      if (searchType === "Number of Sales") {
         if (this.expressionValue < 0)
           return true;
       }
 
-      else if (this.searchTypes[this.searchIndex][0] === "Collection Name") {
+      else if (["Collection Name", "Token Name", "Owner", "Focused"].includes(searchType)) {
         if (this.generalSearchField === '')
           return true;
       }
@@ -250,8 +252,7 @@ export default {
         filter[searchField] = {};
         filter[searchField][expression] = value;
       }
-      else
-        filter[searchField] = {beginsWith: this.generalSearchField};
+      else filter[searchField] = {beginsWith: this.generalSearchField};
       const results = await API.graphql({
         query: listNfts,
         limit: 1000000,
@@ -263,21 +264,9 @@ export default {
       this.nfts = results.data.listNfts.items;
       this.$emit("getNFTs", this.nfts);
     },
-    targetedSearch: async function(event) {
+    targetedSearch: async function() {
       try {
         await this.getNFTs();
-        if (this.nfts.length === 0) {
-          event["searchStatus"] = "Fetching";
-          this.$emit("getNFTs", event);
-          var response = await fetchNFTs(this.address, this.tokenid);
-          if (response.ok) {
-            await this.getNFTs();
-          }
-
-          if (this.nft === null) {
-            await setTimeout(this.getNFTs(), 3000);
-          }
-        }
       } catch(e) {
         console.error(e);
       }
@@ -286,17 +275,14 @@ export default {
       if (this.disableSearchInvalidInput)
         return;
       this.disableSearch = true;
-      //var previousTime = this.keyUpControl;
-      //if(previousTime !== null && now - previousTime < 300) return;
-      //this.keyUpControl = now;
-      //var response = null;
+
       var event = {
         searchStatus: "Failure",
         data: [],
         searchType: "",
       };
       event['searchType'] = 'nft';
-      if(this.searchIndex === 4) await this.targetedSearch(event);
+      if(this.searchIndex === 4) await this.targetedSearch();
       else await this.generalSearch();
       if(this.nfts.length > 0) {
         event['searchStatus'] = 'Success';
@@ -308,14 +294,16 @@ export default {
       this.disableSearch = false;
     },
     getNFTs: async function () {
+      debugger;
       try {
-        this.address = this.address.toLowerCase();
+        this.generalSearchField = this.generalSearchField.toLowerCase();
+        var id = this.generalSearchField;
         if (this.tokenid == "") {
           const nfts = await API.graphql({
             query: listNfts,
             variables: {
               limit: 1000000,
-              filter: { address: { eq: this.address } },
+              filter: { id: { beginsWith: id } },
             },
           });
 
@@ -323,13 +311,13 @@ export default {
           this.nfts = nftItems;
           this.$emit("getNFTs", this.nfts);
         } else {
+          id += "-" + this.tokenid;
           const nfts = await API.graphql({
             query: listNfts,
             variables: {
               limit: 1000000,
               filter: {
-                token_id: { eq: this.tokenid },
-                address: { eq: this.address },
+                id: { beginsWith: id }
               },
             },
           });
@@ -337,7 +325,7 @@ export default {
           this.nfts = nfts.data.listNfts.items;
           this.$emit("getNFTs", this.nfts);
         }
-      } catch (e) {
+      } catch (e) {        
         console.error(e);
       }
     },

@@ -158,7 +158,8 @@ import { API, Auth } from "aws-amplify";
                 return this.newComment.length;
             },
             nftReviews() {
-                return this.comments;
+                var comments = this.comments;
+                return comments.sort((a, b) => ( a.id < b.id ) ? 1 : -1);
             },
             disableCommentInput() {
                 return this.user === '';

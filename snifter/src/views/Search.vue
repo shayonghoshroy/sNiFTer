@@ -6,17 +6,12 @@
     </article>
     <SearchComponent ref="searchComponent" @getNFTs="searchResult($event)" />
     <div v-if="searched">
-      <div v-if="searchStatus === 'Fetching'" class="pending-search-result">
-        <va-inner-loading :loading="true" color="primary">
-          <va-card>
-            <va-card-content> Fetching NFT... </va-card-content>
-          </va-card>
-        </va-inner-loading>
-      </div>
-      <div class="empty-search-results" v-else-if="searchStatus === 'Failure'">
-        <va-alert class="search-alert mb-4" color="danger" icon="info">
-          No search results...
-        </va-alert>
+      <div class="empty-search-wrapper" v-if="searchStatus === 'Failure'">
+        <div class="empty-search-results">
+          <va-alert class="search-alert mb-4" color="danger" icon="info">
+            No search results...
+          </va-alert>
+        </div>
       </div>
       <div v-else>
         <NFTComponent v-if="searchType === 'nft'" :insertNfts="true" :insertedNfts="data" />
@@ -80,5 +75,15 @@ h2 {
 }
 .background {
   background-color: transparent;
+}
+
+.empty-search-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.empty-search-results {
+  width: 80%;
 }
 </style>
