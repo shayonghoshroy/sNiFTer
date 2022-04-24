@@ -107,7 +107,7 @@
             Suggested Search:
           </va-list-label>
 
-          <va-list-item v-for="(suggestion, index) in searchSuggestions" :key="index" @click="activateSuggestion(suggestion.collection_name)">
+          <va-list-item v-for="(suggestion, index) in searchSuggestions" :key="index" @click="activateSuggestion(suggestion)">
             <va-list-item-section avatar>
               <va-avatar>
                 <img :src="suggestion.image_url">
@@ -115,7 +115,7 @@
             </va-list-item-section>
             <va-list-item-section>
               <va-list-item-label>
-                {{ suggestion.collection_name }}
+                {{ suggestion.name }}
               </va-list-item-label>
             </va-list-item-section>
           </va-list-item>
@@ -183,7 +183,7 @@ export default {
         for(var i = 0; i < collections.length; i++){
           var collection = collections[i];
           if(collection['name'] && !suggestionNames.includes(collection['name']) && collection['name'].toLowerCase().includes(generalSearch.toLowerCase())) {
-            suggestions.splice(0, 0, {'collection_name': collection['name'], 'image_url': collection['image_url']});
+            suggestions.splice(0, 0, {'name': collection['name'], 'image_url': collection['image_url']});
             suggestionNames.push(collection['name']);
           }
         }
@@ -193,10 +193,47 @@ export default {
           var nfts = this.nfts;
           for(var j = 0; j < nfts.length; j++) {
             var nft = nfts[j];
-            if(nft['collection_name'] && !suggestionNames.includes(nft['collection_name'])) {
-              var nftCollection = this.collections.filter((col) => col.name === nft['collection_name'])[0];
-              suggestions.splice(0, 0, {'collection_name': nftCollection['name'], 'image_url': nftCollection['image_url']});
-              suggestionNames.push(nftCollection['name']);
+            var searchType = this.searchTypes[this.searchIndex][0];
+            var searchField = '';
+            if(searchType === "Token Name") {
+              searchField = 'name';
+            } else if(searchType === "Owner") {
+              searchField = 'owner';
+            } else if(searchType === "Number of Sales") {
+              searchField = 'num_sales';
+            } else if(searchType === "Focused") {
+              searchField = 'id';
+            }
+            if(nft[searchField] && !suggestionNames.includes(nft[searchField])) {
+              if(searchField === 'num_sales') {
+                var value = nft[searchField];
+                var expressionType = this.expressionOptions[this.expressionIndex][1];
+                if(expressionType === "gt") {
+                  value = '> ' + (value - 1);
+                } else if(expressionType === "lt") {
+                  value = '< ' + (value + 1);
+                } else {
+                  value = "= " + value;
+                }
+                suggestions.splice(0, 0, {'name': value, 'image_url': nft['image_url']});
+                suggestionNames.push(nft[searchField]);
+              } else if(searchType === "Focused") {
+                var id = nft[searchField];
+                var address = id.split("-")[0];
+                if(this.tokenid === "") {
+                  if(!suggestionNames.includes(address)) {
+                    suggestions.splice(0, 0, {'name': address, 'image_url': nft['image_url']});
+                    suggestionNames.push(address);
+                  }
+                } else {
+                  suggestions.splice(0, 0, {'name': nft[searchField], 'image_url': nft['image_url']});
+                  suggestionNames.push(nft[searchField]);
+                }
+              } 
+              else {
+                suggestions.splice(0, 0, {'name': nft[searchField], 'image_url': nft['image_url']});
+                suggestionNames.push(nft[searchField]);
+              }
             }
           }
         }
@@ -226,8 +263,23 @@ export default {
   },
   methods: {
     activateSuggestion: async function(suggestion) {
-      this.searchIndex = 0;
-      this.generalSearchField = suggestion;
+      var searchType = this.searchTypes[this.searchIndex][0];
+      var value = suggestion['name'];
+      if(searchType === "Focused") {
+        if(this.tokenid === "") {
+          this.generalSearchField = value;
+        } else {
+          var [address, token_id] = value.split("-");
+          console.log("address: " + address);
+          console.log("token_id: " + token_id);
+          this.generalSearchField = address;
+          this.tokenid = token_id;
+        }
+      } else if(searchType === "Number of Sales") { 
+        this.expressionValue = parseInt(value.substring(value.indexOf(" ") + 1, value.length));
+      } else{
+        this.generalSearchField = suggestion['name'];
+      }
       await this.startSearch();
     },
     generalSearch: async function() {
@@ -329,7 +381,6 @@ export default {
           results = results.filter((nft) => {
             var token_id_str = '' + token_id;
             var item_token_id = '' + nft.token_id;
-            console.log(token_id_str, item_token_id);
             return item_token_id.substring(0, token_id_str.length) === token_id_str;
           });
           this.nfts = results;
