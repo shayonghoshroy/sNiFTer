@@ -1,5 +1,6 @@
 <template>
   <div v-if="collection" class="collection-wrapper">
+    <!-- Collection Information Section -->
     <div class="collection-information">
       <va-list>
         <va-list-item>
@@ -54,6 +55,7 @@
 
         <slot name="contractInfo"></slot>
 
+        <!-- Traits -->
         <va-accordion v-model="showTraits">
           <va-collapse header="Traits">
             <div v-if="collection && stats">
@@ -67,6 +69,7 @@
 
         <va-divider inset />
 
+        <!-- Stats -->
         <div v-if="stats" class="collection-stats">
           <va-list-item>
             <div class="va-table-responsive">
@@ -230,6 +233,7 @@ export default {
   },
   computed: {
     cleanCollectionDescription() {
+      // Regex to parse out links from the collection description
       const link = /\[(.*?)\]\((.*?)\)/gim;
       const linkNames = /\*\*(.*)\*\*/gim;
       return this.collection.description
@@ -237,13 +241,16 @@ export default {
         .replaceAll(linkNames, "");
     },
     collectionLinks() {
+      // Regex to collect links from collection description
       const link = /\[(.*?)\]\((.*?)\)/gim;
       var collectionDescription = this.collection.description;
       if (collectionDescription === null || collectionDescription === undefined)
         return [];
+      // Return the links from the description for better display
       return [...collectionDescription.matchAll(link)];
     },
     stats() {
+      // Ensures deep reactivity
       if(this.latestStats) {
         return this.latestStats;
       }
@@ -251,9 +258,11 @@ export default {
     }
   },
   async created() {
-    debugger;
+    // Collect latest collection stats
     var stats = await getCollectionStatsDirectly(this.collection.slug);
     var latestStats = {};
+
+    // Format stats to 3 decimal places
     for(var [key, val] of Object.entries(stats['stats'])) {
       if(key === "floor_price" && !val) {
         val = "Not Supplied";
@@ -261,8 +270,12 @@ export default {
         latestStats[key] = val.toFixed(3);
       }
     }
+
     this.latestStats = latestStats;
+    // Display stats
     this.statsLoaded = true;
+
+    // Emit total supply, so NFT can calculate rarity
     this.$emit('totalSupply', {'total_supply': parseInt(this.latestStats.total_supply)});
   },
   methods: {

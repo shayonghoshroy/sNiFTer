@@ -253,25 +253,32 @@ export default {
     CommentDisplay
   },
   created() {
+    // Set provided nftData on creation to ensure it is set, before queries are called
     this.nftData = this.$route.query;
   },
   async mounted() {
+    // Check if signed in
     await this.getUser();
 
-    await this.getNFT();
-    //if(this.nft === undefined) await this.getNFT();
+    // Query for NFT
+    await this.getNFTEntities();
 
+    // Query for contract address and collection
     await this.getNFTs(this.nftData.address)
 
+    // Set NFT favorite status and total favorites
     await this.setFavoriteStatus(this.user, this.nftData.id);
     await this.setTotalFavorites(this.nftData.id);
 
+    // Set NFT watch status
     await this.setWatchStatus(this.user, this.nftData.id);
 
+    // Get collection if not in database
     if (this.collection === null || this.collection === undefined) {
       await this.collectionRequest(this.nft.collection_slug);
     }
 
+    // Fetch most recent nft events
     this.nftEvents = await getNftEventsDirectly(this.nftData.token_id, this.nftData.address);
     if(this.nftEvents.length > 0) {
       this.transactionStatus = "complete";
@@ -279,6 +286,7 @@ export default {
       this.transactionStatus = "none";
     }
 
+    // Set NFT average ratings
     this.getAverageRatings();
   },
   data() {
@@ -315,17 +323,21 @@ export default {
   },
   computed: {
     progress() {
+      // [Deprecated] Old progress bar
       return (
         this.lastCheckpoint.total_events / this.lastCheckpoint.saved_events
       );
     },
     loadingStatus() {
+      // Determine whether transactions have been loaded yet
       return this.transactionStatus;
     },
     traitColumnFields() {
+      // Columns for NFT traits
       return ["type", "value", "count", "rarity"];
     },
     entityListData() {
+      // Format data to display ownership entities
       var entities = [];
       if (this.collection) {
         entities.push({
@@ -351,29 +363,35 @@ export default {
       return entities;
     },
     nftEventItems() {
+      // Format NFT Events
       var events = this.nftEvents;
       if (events.length === 0) return [];
       var items = events.map((nftEvent) => {
         var eventType = "";
+        
+        // Gather from address for sales
         if (nftEvent.event_type === "successful") {
           eventType = "Sale";
           nftEvent['from'] = nftEvent['transaction']['from_account']['address'];
         }
-        else if (nftEvent.event_type === "transfer") eventType = "Transfer";
+        // Gather from address for bids
         else {
           eventType = "Bid";
           nftEvent['from'] = nftEvent.from_account['address'];
         }
 
+        // Set from new owner
         nftEvent['to'] = nftEvent['asset']['owner']['address'];
+
+        // Set price for bid or sale
         var price = nftEvent.bid_amount;
         if(eventType === 'Sale') {
           price = nftEvent.total_price;
         }
-        // Convert from wei to eth
+
+        // Convert from wei to eth, round 3 decimals
         price = parseFloat(Web3.utils.fromWei(price.toString())).toFixed(3);
         
-        // Round to two decimals
         return {
           event: eventType,
           price: price,
@@ -385,6 +403,9 @@ export default {
       return items;
     },
     transactionStats() {
+      /**
+       * Calculate Transaction data for NFT
+       */
       var last_bid = 0;
       var newestCreatedDate = null;
       var highest_bid = 0;
@@ -399,12 +420,14 @@ export default {
       var sales_volume = 0;
 
       if(this.nftEvents.length > 0) {
+        // Iterate events to calculate values
         this.nftEventItems.forEach((event) => {
           var currentTime = Date.parse(event.created_date);
-          if (
-            event["event"] === "Bid"
-          ) {
+
+          // Update Bid values
+          if (event["event"] === "Bid") {
             var bid_amount = event["price"];
+
             if (bid_amount) {
               bid_amount = parseFloat(bid_amount);
               total_bids += 1;
@@ -417,6 +440,7 @@ export default {
             }
             if (bid_amount > highest_bid) highest_bid = bid_amount;
           }
+
           if (event["event"] === "Sale") {
             var saleAmount = event["price"];
             if (saleAmount) {
@@ -433,6 +457,8 @@ export default {
           }
         });
       }
+
+      // Set averages
       var avg_bid = 0;
       var avg_sale = 0;
       if (average_bid > 0) {
@@ -441,6 +467,8 @@ export default {
       if (average_sale > 0) {
         avg_sale = (average_sale / totalSales).toFixed(3);
       }
+
+      // Return formatted data
       return {
         last_bid: last_bid.toFixed(3),
         highest_bid: highest_bid.toFixed(3),
@@ -455,18 +483,11 @@ export default {
       };
     },
   },
-  // watch: {
-  //   nftData() {
-  //     if(this.nftData.id) {
-  //       this.getNFT()
-  //       .then(() => {
-  //         console.log(this.nft);
-  //       });
-  //     }
-  //   }
-  // },
   methods: {
     async getUser() {
+      /**
+       * Check for logged in user
+       */
       try{
         const user = await Auth.currentAuthenticatedUser();
         this.user = user.username;
@@ -614,22 +635,24 @@ export default {
         console.error(e);
       }
     },
-    async initSubscriptions() {},
     async getNFT() {
+      /**
+       * Query database for NFT
+       */
       try {
         var id = this.nftData.id;
 
-        debugger;
         const nfts = await API.graphql({
           query: getNft,
           variables: {
             id
           },
         });
-        debugger;
+
         var nft = nfts.data.getNft;
-        console.log(nft);
         if(nft) {
+
+          // Collect traits after NFT is fetched
           const nftTraits = await API.graphql({
             query: listNftTraits,
             variables: {
@@ -640,17 +663,21 @@ export default {
           });
           var traits = nftTraits.data.listNftTraits.items;
           nft['traits'] = traits;
+
+          // Set NFT
           this.nft = nft;
-          console.log(traits);
         }
-        console.log(this.nft);
       } catch (error) {
-        console.log(error);
+        //console.log(error);
       }
     },
-    async getNFTs(address) {
-      console.log("fetching");
+    async getNFTEntities(address) {
+      /**
+       * Fetch contract and collection data associated with NFT
+       */
       try {
+
+        // Query for contract
         const contracts = await API.graphql({
           query: listNftAssetContracts,
           variables: {
@@ -658,14 +685,12 @@ export default {
           },
         });
         this.nftContract = contracts.data.listNftAssetContracts.items;
-        console.log(this.nftContract);
 
         // Convert Proxy object returned by query into JS object to access slug
         var currentContract = JSON.parse(JSON.stringify(this.nftContract)).at(
           0
         );
         this.currentContract = currentContract;
-        console.log(currentContract);
 
         // Query collections for matching slug
         const collection = await API.graphql({
@@ -680,7 +705,7 @@ export default {
           JSON.stringify(collection.data.listCollections.items)
         ).at(0);
       } catch (e) {
-        console.error(e);
+        //console.error(e);
       }
     },
     async getCollection(collectionSlug) {
@@ -702,14 +727,13 @@ export default {
       }
     },
     async collectionRequest(collectionSlug) {
-      console.log("Fetching...");
       var response = await fetchCollection(collectionSlug);
       if (response.ok) {
         await this.getCollection();
       }
     },
     getAverageRatings() {
-      console.log(this.$refs);
+      // Get average ratings from comments via reference
       try {
         var average = this.$refs['comments'].getAverageRating();
         this.averageRating = average;
@@ -718,7 +742,6 @@ export default {
       }
     },
     setTotalSupply(event) {
-      debugger;
       this.totalSupply = event.total_supply;
       console.log(this.total_supply);
     }
