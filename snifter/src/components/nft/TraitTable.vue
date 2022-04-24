@@ -35,7 +35,7 @@ export default {
   },
   created() {
     this.getTraits()
-    .then(() => { console.log(this.traits) });
+    .then(() => { return; });
   },
   computed: {
     traitItems() {
@@ -54,6 +54,7 @@ export default {
   },
   methods: {
     async getTraits() {
+      // Query for NFT Traits
       const nftTraits = await API.graphql({
         query: listNftTraits,
         variables: {
@@ -64,7 +65,7 @@ export default {
         }
       });
       this.traits = nftTraits.data.listNftTraits.items;
-      console.log(this.id, this.traits);
+      //console.log(this.id, this.traits);
     }
   },
   data() {

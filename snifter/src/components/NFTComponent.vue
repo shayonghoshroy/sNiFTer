@@ -95,14 +95,16 @@ export default {
   },
   methods: {
     async getUser() {
+      // Check if user is logged in
       try {
         const user = await Auth.currentAuthenticatedUser();
         this.user = user.username;
       } catch(e) {
-        console.log(e);
+        //console.log(e);
       }
     },
     async getNFTs() {
+      // Get NFTs if not provided
       if (!this.insertNfts) {
         try {
           const nfts = await API.graphql({
@@ -111,14 +113,14 @@ export default {
             },
           });
           this.nfts = nfts.data.listNfts.items;
-          console.log(this.nfts);
         } catch (e) {
-          console.error(e);
+          // console.error(e);
         }
       } else this.nfts = this.insertedNfts;
-      // add fields to nfts
+
+      // Add fields to nfts
       for (let i = 0; i < this.nfts.length; i++) {
-        // add field to store if the user has favorited it
+        // Add field to store if the user has favorited it
         try {
           const has_favorited = await API.graphql({
             query: listUserFavoriteNfts,
@@ -152,7 +154,7 @@ export default {
             count.data.listUserFavoriteNfts.items
           ).length;
         } catch (e) {
-          console.error(e);
+          //console.error(e);
         }
       }
     },
@@ -197,7 +199,7 @@ export default {
           });
         }
       } catch (e) {
-        console.error(e);
+        //console.error(e);
       }
     },
   },

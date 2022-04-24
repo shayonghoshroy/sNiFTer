@@ -174,11 +174,12 @@ export default {
       return this.searchTypes[this.searchIndex][this.searchIndex];
     },
     searchSuggestions() {
-      debugger;
+      // Determine the suggested search options as user types
       var suggestions = [];
       var suggestionNames = [];
       var generalSearch = this.generalSearchField;
       var collections = this.collections;
+      // If searching by collection, set collection suggestions
       if(this.searchTypes[this.searchIndex][0] === "Collection Name") {
         for(var i = 0; i < collections.length; i++){
           var collection = collections[i];
@@ -189,12 +190,17 @@ export default {
         }
       }
       else {
+        // If NFTs exist
         if(this.nfts.length > 0) {
           var nfts = this.nfts;
+          // Parse through to determine suggestions
           for(var j = 0; j < nfts.length; j++) {
             var nft = nfts[j];
+
             var searchType = this.searchTypes[this.searchIndex][0];
             var searchField = '';
+            
+            // Set Search Field to the nft paramter
             if(searchType === "Token Name") {
               searchField = 'name';
             } else if(searchType === "Owner") {
@@ -204,7 +210,10 @@ export default {
             } else if(searchType === "Focused") {
               searchField = 'id';
             }
+
+            // If the field exists, and has not been included yet
             if(nft[searchField] && !suggestionNames.includes(nft[searchField])) {
+              // Include operator sign when searching by sales
               if(searchField === 'num_sales') {
                 var value = nft[searchField];
                 var expressionType = this.expressionOptions[this.expressionIndex][1];
@@ -215,22 +224,29 @@ export default {
                 } else {
                   value = "= " + value;
                 }
+
+                // Add to suggestions, and suggestion Names
                 suggestions.splice(0, 0, {'name': value, 'image_url': nft['image_url']});
                 suggestionNames.push(nft[searchField]);
               } else if(searchType === "Focused") {
                 var id = nft[searchField];
                 var address = id.split("-")[0];
+
+                // If not token ID, search by address, otherwise search by address and token_id
                 if(this.tokenid === "") {
                   if(!suggestionNames.includes(address)) {
+                    // Add to suggestions, and suggestion Names
                     suggestions.splice(0, 0, {'name': address, 'image_url': nft['image_url']});
                     suggestionNames.push(address);
                   }
                 } else {
+                  // Add to suggestions, and suggestion Names
                   suggestions.splice(0, 0, {'name': nft[searchField], 'image_url': nft['image_url']});
                   suggestionNames.push(nft[searchField]);
                 }
               } 
               else {
+                // Add to suggestions, and suggestion Names
                 suggestions.splice(0, 0, {'name': nft[searchField], 'image_url': nft['image_url']});
                 suggestionNames.push(nft[searchField]);
               }
@@ -246,13 +262,16 @@ export default {
       });
     },
     disableSearchInvalidInput() {
+      // Disable search if invalid values
       var searchType = this.searchTypes[this.searchIndex][0];
-      console.log(this.searchTypes[this.searchIndex]);
+      
+      // Number of sales should be > 0
       if (searchType === "Number of Sales") {
         if (this.expressionValue < 0)
           return true;
       }
 
+      // Search should not be empty
       else if (["Collection Name", "Token Name", "Owner", "Focused"].includes(searchType)) {
         if (this.generalSearchField === '')
           return true;
@@ -263,15 +282,18 @@ export default {
   },
   methods: {
     activateSuggestion: async function(suggestion) {
+      /**
+       * Perform search when suggestion is clicked
+       */
       var searchType = this.searchTypes[this.searchIndex][0];
       var value = suggestion['name'];
+
+      // Format as {address} or {address}-{token_id} for Focused
       if(searchType === "Focused") {
         if(this.tokenid === "") {
           this.generalSearchField = value;
         } else {
           var [address, token_id] = value.split("-");
-          console.log("address: " + address);
-          console.log("token_id: " + token_id);
           this.generalSearchField = address;
           this.tokenid = token_id;
         }
@@ -285,9 +307,12 @@ export default {
     generalSearch: async function() {
       var searchIndex = this.searchIndex;
       var searchField = '';
+
+      // Set proper search fields
       switch (searchIndex) {
         case 0:
           searchField = 'collection_name';
+          // Perform collection name search
           await this.searchByCollectionName();
           return;
         case 1:
@@ -301,13 +326,19 @@ export default {
           break;
       }
       var filter = {};
+
+      // Format filter for number of sales
       if(searchField === 'num_sales') {
         var expression = this.expressionOptions.at(this.expressionIndex)[1];
         var value = this.expressionValue;
         filter[searchField] = {};
         filter[searchField][expression] = value;
       }
+
+      // Format general filter
       else filter[searchField] = {beginsWith: this.generalSearchField};
+
+      // Query for match
       const results = await API.graphql({
         query: listNfts,
         limit: 1000000,
@@ -316,10 +347,17 @@ export default {
           },
         },
       );
+
+      // Set results
       this.nfts = results.data.listNfts.items;
+
+      // Emit results to search page
       this.$emit("getNFTs", this.nfts);
     },
     targetedSearch: async function() {
+      /*
+      * Perform search for Focused field
+      */
       try {
         await this.getNFTs();
       } catch(e) {
@@ -327,32 +365,56 @@ export default {
       }
     },
     startSearch: async function () {
+      /**
+       * Coordinate and perform search
+       */
+
+      // Do nothing if invalid search
       if (this.disableSearchInvalidInput)
         return;
+
+      // Turn off search to disallow spam
       this.disableSearch = true;
 
+      // Assume failed search result, update values if success
       var event = {
         searchStatus: "Failure",
         data: [],
         searchType: "",
       };
-      console.log(this.generalSearchField);
+      
+      // Set what type of item is being searched
       event['searchType'] = 'nft';
+
+      // Perform targeted search in its own method, otherwise general search
       if(this.searchIndex === 4) await this.targetedSearch();
       else await this.generalSearch();
+
+      // Set success/fail result
       if(this.nfts.length > 0) {
         event['searchStatus'] = 'Success';
       } else {
         event['searchStatus'] = 'Failure';
       }
+
+      // Set data and emit to search page
       event['data'] = this.nfts;
       this.$emit('getNFTs', event);
+
+      // Enable search again
       this.disableSearch = false;
     },
     getNFTs: async function () {
+      /*
+       * Used for focused search
+       */
       try {
+
+        // Format to lower case address
         this.generalSearchField = this.generalSearchField.toLowerCase();
         var address = this.generalSearchField;
+
+        // If no token id, check if id matches address
         if (this.tokenid == "") {
           const nfts = await API.graphql({
             query: listNfts,
@@ -362,10 +424,13 @@ export default {
             },
           });
 
+          // Set items and emit result to search page
           var nftItems = nfts.data.listNfts.items;
           this.nfts = nftItems;
           this.$emit("getNFTs", this.nfts);
         } else {
+
+          // If token id is provided, match by address and filter by token id
           var token_id = this.tokenid;
           const nfts = await API.graphql({
             query: listNfts,
@@ -377,34 +442,45 @@ export default {
             },
           });
 
+          // Filter results for matching token ids
           var results = nfts.data.listNfts.items;
           results = results.filter((nft) => {
             var token_id_str = '' + token_id;
             var item_token_id = '' + nft.token_id;
             return item_token_id.substring(0, token_id_str.length) === token_id_str;
           });
+
+          // Set data and emit to search page
           this.nfts = results;
           this.$emit("getNFTs", this.nfts);
         }
       } catch (e) {        
-        console.error(e);
+        //console.error(e);
       }
     },
     getCollections: async function () {
+      /**
+       * Fetch all collections for collection name searches
+       */
       try {
         const collection = await API.graphql({
           query: listCollections
         });
         this.collections = collection.data.listCollections.items;
-        console.log(this.collections);
       } catch (e) {
-        console.error(e);
+        //console.error(e);
       }
     },
     searchByCollectionName: async function() {
+      /**
+       * Perform collection name search
+       */
       try {
         var searchTerm = this.generalSearchField;
+        // Parse through and determine if collection name matches
         for(var i = 0; i < this.collections.length; i++) {
+
+          // Check if collection name matches search value
           if (this.collections[i]['name'].toLowerCase().includes(searchTerm.toLowerCase())) {
             const nfts = await API.graphql({
             query: listNfts,
@@ -414,12 +490,15 @@ export default {
               },
             });
 
+            // Set NFT data
             this.nfts = nfts.data.listNfts.items;
+
+            // Emit results to search page
             this.$emit("getNFTs", this.nfts);
           }
         }
       } catch (error) {
-        console.log(error);
+        //console.log(error);
       }
     }
   },

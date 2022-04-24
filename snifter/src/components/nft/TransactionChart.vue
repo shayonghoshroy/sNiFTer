@@ -17,8 +17,7 @@ export default {
             var bids = [];
             var sales = [];
 
-            // Lol
-            console.log(events);
+            // Format events for chart
             events.forEach((event) => {
                 var timestamp = Date.parse(event['created_date']);
                 var eventType = event['event'];
@@ -28,8 +27,8 @@ export default {
             });
 
             bids = bids.sort(function(a, b){return a[0] - b[0]});
-            console.log(bids);
-
+            
+            // Build chart options
             return {
                 chart: {
                     type: 'spline',

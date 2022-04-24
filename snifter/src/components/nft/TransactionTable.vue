@@ -40,15 +40,14 @@ export default {
   },
   async created() {
     this.filteredTransactions = this.nftEventItems;
-    console.log(this.filteredTransactions);
   },
   computed: {
     nftEventItems() {
-      console.log("Transactions", this.nftEvents);
+      // Format events for table
       var events = this.nftEvents;
       if (events.length === 0) return [];
       var items = events.map((nftEvent) => {
-        console.log(nftEvent.event);
+        // Convert created date from ISO string to formatted date string
         var createdDate = nftEvent.created_date;
         createdDate = new Date(createdDate).toGMTString();
         createdDate = createdDate.substring(0, createdDate.indexOf("GMT")).trim();
@@ -61,16 +60,18 @@ export default {
           created_date: createdDate
         };
       });
+      // Sort by created date
       return items.sort((a, b) => (Date.parse(a.created_date) < Date.parse(b.created_date) ? 1: -1));
     },
     pages() {
+      // Determine how many pages in table
       var pages =
         this.perPage &&
         this.perPage !== 0 &&
         this.filteredTransactions?.length > 0
           ? Math.ceil(this.filteredTransactions.length / this.perPage)
           : this.filteredTransactions.length;
-      console.log("PAGES", pages, this.filteredTransactions.length);
+
       return pages;
     },
   },

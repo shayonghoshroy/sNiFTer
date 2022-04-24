@@ -48,6 +48,9 @@ export default {
   },
   methods: {
     searchResult(event) {
+      /**
+       * Called when a search is performed in SearchComponent
+       */
       this.searchStatus = event.searchStatus;
       this.searchType = event.searchType;
       this.data = event.data;
