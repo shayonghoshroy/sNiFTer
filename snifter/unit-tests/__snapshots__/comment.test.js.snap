@@ -1,0 +1,115 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Comment.test.js has the expected html structure 1`] = `
+<div>
+  <va-card>
+    <va-card-title>
+      shyguy 
+      <div
+        class="user-control"
+      >
+        <va-button-group>
+          <va-button
+            icon="edit"
+          />
+          <va-button
+            icon="delete"
+          />
+        </va-button-group>
+      </div>
+    </va-card-title>
+    <va-card-content>
+      <div
+        class="comment-content"
+      >
+        <div
+          class="rating"
+        >
+          
+          <div
+            class="rating-stars"
+          >
+            <va-icon
+              name="star"
+            />
+          </div>
+          <div
+            class="rating-stars"
+          >
+            <va-icon
+              name="star"
+            />
+          </div>
+          <div
+            class="rating-stars"
+          >
+            <va-icon
+              name="star"
+            />
+          </div>
+          <div
+            class="rating-stars"
+          >
+            <va-icon
+              name="star"
+            />
+          </div>
+          <div
+            class="rating-stars"
+          >
+            <va-icon
+              name="star"
+            />
+          </div>
+          <div
+            class="rating-stars"
+          >
+            <va-icon
+              name="star"
+            />
+          </div>
+          <div
+            class="rating-stars"
+          >
+            <va-icon
+              name="star"
+            />
+          </div>
+          <div
+            class="rating-stars"
+          >
+            <va-icon
+              name="star"
+            />
+          </div>
+          <div
+            class="rating-stars"
+          >
+            <va-icon
+              name="star"
+            />
+          </div>
+          <div
+            class="rating-stars"
+          >
+            <va-icon
+              name="star"
+            />
+          </div>
+          
+        </div>
+        <div
+          class="message"
+        >
+          <p
+            style="text-align: left;"
+          >
+            I am a comment.
+          </p>
+        </div>
+      </div>
+    </va-card-content>
+    <!--v-if-->
+  </va-card>
+</div>
+`;
