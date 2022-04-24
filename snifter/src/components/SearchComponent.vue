@@ -36,14 +36,16 @@
             class="mb-4"
             v-model="generalSearchField"
             label="NFT Name"
+            :rules="[(v) => v.length > 0 || `Must provide value for search`]"
             placeholder="Required"
           />
         </va-form>
-        <va-form @keypress="startSearch()" class="search-input-form" v-else-if="searchIndex === 2">
+        <va-form @keyup="startSearch()" class="search-input-form" v-else-if="searchIndex === 2">
           <va-input
             class="mb-4"
             v-model="generalSearchField"
             label="Address"
+            :rules="[(v) => v.length > 0 || `Must provide value for search`]"
             placeholder="Required"
           />
         </va-form>
@@ -75,14 +77,15 @@
           />
         </va-form>
 
-        <va-form @keypress="startSearch()" class="search-input-form" v-else>
+        <va-form @keyup="startSearch()" class="search-input-form" v-else>
           <va-input
             class="mb-4"
             v-model="generalSearchField"
             label="Address"
+            :rules="[(v) => v.length > 0 || `Must provide value for search`]"
             type="text"
           />
-          <va-input 
+          <va-input @keyup="startSearch()"
             class="mb-4"
             v-model="tokenid"
             label="Token ID"
@@ -281,6 +284,7 @@ export default {
         data: [],
         searchType: "",
       };
+      console.log(this.generalSearchField);
       event['searchType'] = 'nft';
       if(this.searchIndex === 4) await this.targetedSearch();
       else await this.generalSearch();
@@ -294,16 +298,15 @@ export default {
       this.disableSearch = false;
     },
     getNFTs: async function () {
-      debugger;
       try {
         this.generalSearchField = this.generalSearchField.toLowerCase();
-        var id = this.generalSearchField;
+        var address = this.generalSearchField;
         if (this.tokenid == "") {
           const nfts = await API.graphql({
             query: listNfts,
             variables: {
               limit: 1000000,
-              filter: { id: { beginsWith: id } },
+              filter: { id: { beginsWith: address } },
             },
           });
 
@@ -311,18 +314,25 @@ export default {
           this.nfts = nftItems;
           this.$emit("getNFTs", this.nfts);
         } else {
-          id += "-" + this.tokenid;
+          var token_id = this.tokenid;
           const nfts = await API.graphql({
             query: listNfts,
             variables: {
               limit: 1000000,
               filter: {
-                id: { beginsWith: id }
+                address: { beginsWith: address },
               },
             },
           });
 
-          this.nfts = nfts.data.listNfts.items;
+          var results = nfts.data.listNfts.items;
+          results = results.filter((nft) => {
+            var token_id_str = '' + token_id;
+            var item_token_id = '' + nft.token_id;
+            console.log(token_id_str, item_token_id);
+            return item_token_id.substring(0, token_id_str.length) === token_id_str;
+          });
+          this.nfts = results;
           this.$emit("getNFTs", this.nfts);
         }
       } catch (e) {        

@@ -99,7 +99,7 @@ export default {
         const user = await Auth.currentAuthenticatedUser();
         this.user = user.username;
       } catch(e) {
-        console.error(e);
+        console.log(e);
       }
     },
     async getNFTs() {
