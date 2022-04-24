@@ -40,6 +40,7 @@
             />
             <div class="nft-interactions">
               <div class="nft-stub">
+                <!-- bookmark button that will add or remove an NFT from a user's watchlist when clicked -->
                 <div class="watchlist-icon">
                   <va-icon
                     v-if="isWatching"
@@ -54,6 +55,7 @@
                     @click="watch(this.user, nft.id)"
                   ></va-icon>
                 </div>
+                <!-- heart button that will favorite/unfavorite an NFT when clicked -->
                 <div class="nft-icon">
                   <va-icon
                     v-if="hasFavorited"
@@ -493,7 +495,9 @@ export default {
         this.user = user.username;
       } catch(e) { console.log(e); }
     },
+    // set the 'isWatching' boolean based on whether the user has the NFT in their watchlist
     async setWatchStatus(userID, nftID) {
+      // query for the watchlist relationship
       try {
         const is_watching = await API.graphql({
           query: listUserWatchlistNfts,
@@ -515,13 +519,14 @@ export default {
         console.error(e);
       }
     },
-    // if user is watching, remove watch
-    // else add watch
+    // if user has the nft in their watchlist, remove the watchlist relationship
+    // else create a new watchlist relationship
     async watch(userID, nftID) {
+      // if user is unauthenticated, force user onto the sign-in page
       if (!this.user) {
         this.$router.push("/user");
       }
-      this.isWatching = !this.isWatching;
+      this.isWatching = !this.isWatching; // reverse boolean
       try {
         const is_watching = await API.graphql({
           query: listUserWatchlistNfts,
@@ -536,12 +541,14 @@ export default {
           const userWatchlistNftId = {
             id: is_watching.data.listUserWatchlistNfts.items[0].id,
           };
+          // remove the relationship
           console.log("removing watch");
           await API.graphql({
             query: deleteUserWatchlistNft,
             variables: { input: userWatchlistNftId },
           });
         } else {
+          // add the relationship
           console.log("adding watch");
           const userWatchlistNft = { userID, nftID };
           await API.graphql({
@@ -553,6 +560,7 @@ export default {
         console.error(e);
       }
     },
+    // get the total number of favorites for the nft to be displayed next to the heart icon
     async setTotalFavorites(nftID) {
       console.log("nft id", nftID);
       try {
@@ -573,6 +581,7 @@ export default {
         console.error(e);
       }
     },
+    // set the current favorite status of the user and nft
     async setFavoriteStatus(userID, nftID) {
       try {
         const has_favorited = await API.graphql({
@@ -595,9 +604,10 @@ export default {
         console.error(e);
       }
     },
-    // if user has favorited, remove favorite
-    // else add favorite
+    // if user has favorited the nft, remove the favorite relationship
+    // else create a new favorite relationship
     async favorite(userID, nftID) {
+      // if user is not authenticated, return to the sign in page
       if (!this.user) {
         this.$router.push("/user");
       }
@@ -617,6 +627,7 @@ export default {
             id: has_favorited.data.listUserFavoriteNfts.items[0].id,
           };
           console.log("removing favorite");
+          // subtract total number of favorites by 1, remove favorite relationship
           this.totalFavorites -= 1;
           await API.graphql({
             query: deleteUserFavoriteNft,
@@ -624,6 +635,7 @@ export default {
           });
         } else {
           console.log("adding favorite");
+          // add 1 to the total number of favorites, add favorite relationship
           this.totalFavorites += 1;
           const userFavoriteNft = { userID, nftID };
           await API.graphql({
