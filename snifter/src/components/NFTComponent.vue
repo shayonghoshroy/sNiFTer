@@ -25,6 +25,7 @@
               </router-link>
               <va-card-content>
                 <div class="nft-stub">
+                  <!-- heart button that will favorite/unfavorite an NFT when clicked -->
                   <div class="nft-icon">
                     <va-icon
                       v-if="nft.hasFavorited"
@@ -120,7 +121,7 @@ export default {
 
       // Add fields to nfts
       for (let i = 0; i < this.nfts.length; i++) {
-        // Add field to store if the user has favorited it
+        // Add boolean field to store if the user has favorited it or not
         try {
           const has_favorited = await API.graphql({
             query: listUserFavoriteNfts,
@@ -162,9 +163,10 @@ export default {
       if (nftName === null || nftName.length < 14) return nftName;
       return nftName.substring(0, 14) + "...";
     },
-    // if user has favorited, remove favorite
-    // else add favorite
+    // if user has favorited the nft already, remove the favorite
+    // else add a new favorite relationship
     async favorite(userID, nftID) {
+      // if user is not authenticated, return to the sign in page
       if (!this.user) {
         this.$router.push("/user");
         return;
@@ -185,12 +187,14 @@ export default {
           const userFavoriteNftId = {
             id: has_favorited.data.listUserFavoriteNfts.items[0].id,
           };
+          // subtract total number of favorites by 1, remove favorite relationship
           this.nfts[index].totalFavorites -= 1;
           await API.graphql({
             query: deleteUserFavoriteNft,
             variables: { input: userFavoriteNftId },
           });
         } else {
+          // add 1 to the total number of favorites, add favorite relationship
           this.nfts[index].totalFavorites += 1;
           const userFavoriteNft = { userID, nftID };
           await API.graphql({
