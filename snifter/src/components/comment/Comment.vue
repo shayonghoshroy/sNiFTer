@@ -3,7 +3,7 @@
         <va-card>
             <va-card-title>
                 {{ sender }}
-                <div v-if="this.user === this.sender && !this.isEditable && !isStatic" class="user-control">
+                <div v-if="this.user !== '' && this.user === this.sender && !this.isEditable && !isStatic" class="user-control">
                     <va-button-group>
                         <va-button @click="this.isEditable = true;" icon="edit"/>
                         <va-button @click="$emit('commentDeleted', { id })" icon="delete" />
@@ -50,7 +50,7 @@
             <va-card-actions v-if="isEditable" align="right">
                 <va-button 
                 style="text-align: right;"
-                @click="latestMessage = message; isEditable = false;"
+                @click="latestMessage = message; latestRating = nft_rating; isEditable = false;"
                 >
                     Cancel
                 </va-button>
@@ -108,6 +108,7 @@
             }
         },
         mounted() {
+            // Copy values, so they can be edited
             this.latestMessage = this.message;
             this.latestRating = this.nft_rating;
         },
@@ -119,6 +120,7 @@
             }
         },
         computed: {
+            // Ensure message is below 250 characters, and isn't too wide
             sanitizedMessage() {
                 var message = this.message;
                 var sanitizedMessage = "";
@@ -133,6 +135,7 @@
                 return sanitizedMessage.trim();
             },
             disableCommentSubmit() {
+                // Disable submission if messages it too long
                 return this.latestMessage.length > 250;
             }
         },

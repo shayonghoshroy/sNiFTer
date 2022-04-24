@@ -3,6 +3,9 @@ import { API } from "aws-amplify";
 import { createNft, createNftAssetContract, createNftTraits, createCollection } from "../graphql/mutations";
 
 export async function fetchCollection(collectionSlug) {
+  /**
+   * Function we used to populate the collections in our db
+   */
   var baseUrl = "https://qjlxkgsn7g.execute-api.us-east-2.amazonaws.com/dev";
 
   var endpoint = "/collection";
@@ -26,6 +29,9 @@ export async function fetchCollection(collectionSlug) {
 }
 
 export async function nftEventQueue(body) {
+  /**
+   * [Deprecated] Used to use backend to fetch events, which was inefficient
+   */
   var baseUrl = "https://qjlxkgsn7g.execute-api.us-east-2.amazonaws.com/dev";
 
   var endpoint = "/nftevent";
@@ -53,8 +59,12 @@ export async function nftEventQueue(body) {
 }
 
 export async function getNftEventsDirectly(token_id, asset_contract_address) {
+  /**
+   * Used to fetch transactions each time nft page is loaded
+   */
   var url = "https://api.opensea.io/api/v1/events?" + "token_id=" + token_id + "&asset_contract_address=" + asset_contract_address;
 
+  // Fetch last 50 sales and last 150 bids
   var sales_url = url += "&event_type=successful&limit=50";
   var bid_url = url += "&event_type=offer_entered&limit=150";
   
@@ -87,13 +97,16 @@ export async function getNftEventsDirectly(token_id, asset_contract_address) {
     return data['asset_events'];
   });
 
+  // Populate events with sales and bids
   var events = bids.concat(sales);
   return events;
 }
 
 export async function fetchNFTs(address, token_id = null) {
+  /**
+   * Function we used to populate our db with NFTs
+   */
   try {
-    debugger;
     var url = "https://api.opensea.io/api/v1/assets";
 
     var headers = {
@@ -119,14 +132,17 @@ export async function fetchNFTs(address, token_id = null) {
       return data;
     });
 
+    // Parse out contract, nfts, and traits
     var [contractItem, nftItems, nftTraits] = parseNfts(data, address);
     console.log(nftTraits, contractItem);
     if(nftItems.length > 0) {
       nftItems.forEach((item) => {
+        // Pop traits from nft
         var traits = item['traits'];
         delete item['traits'];
 
         try {
+          // Create NFT
           const result = API.graphql({
             query: createNft,
             variables: { input: item },
@@ -138,6 +154,7 @@ export async function fetchNFTs(address, token_id = null) {
         } catch(e) { console.log(e); };
 
         try {
+          // Create traits
           traits.forEach((trait) => {
             const tResult = API.graphql({
               query: createNftTraits,
@@ -151,6 +168,7 @@ export async function fetchNFTs(address, token_id = null) {
         } catch(e) { console.log(e); };
       });
 
+      // Create contract
       const contractResult = API.graphql({
         query: createNftAssetContract,
         variables: { input: contractItem }
@@ -160,10 +178,10 @@ export async function fetchNFTs(address, token_id = null) {
       });
       console.log(contractResult);
 
+      // Fetch and create collection
       var collectionSlug = nftItems[0]['collection_slug'];
       var collectionData = await getCollection(collectionSlug);
       var [collectionItem, collectionTraits] = parseCollection(collectionData, collectionSlug);
-      debugger;
       const collectionResult = API.graphql({
         query: createCollection,
         variables: { input: collectionItem }
@@ -189,6 +207,7 @@ export async function fetchNFTs(address, token_id = null) {
 }
 
 function parseCollection(collectionData) {
+  // Gather values
   var collection = collectionData['collection'];
   var id = collection['slug'];
   var slug = collection['slug'];
@@ -198,6 +217,7 @@ function parseCollection(collectionData) {
   var image_url = collection['image_url'];
   var external_url = collection['external_url'];
 
+  // Delete traits and stats
   delete collection['traits'];
   delete collection['stats'];
 
@@ -216,6 +236,7 @@ function parseCollection(collectionData) {
 }
 
 function parseTraits(traits, idPrefix) {
+  // Parse traits for NFT
   var nftTraits = [];
   traits.forEach((trait) => {
     var traitId = idPrefix + "-" + nftTraits.length;
@@ -230,6 +251,7 @@ function parseTraits(traits, idPrefix) {
 }
 
 function parseCollectionTraits(traits, idPrefix) {
+  // Parse traits for collection
   var collectionTraits = [];
   var traitTypes = Object.keys(traits);
 
@@ -251,7 +273,7 @@ function parseCollectionTraits(traits, idPrefix) {
 }
 
 function parseNfts(data, address) {
-  debugger;
+  // Parse NFTs to save
   var nfts = data["assets"];
   var nftItems = [];
   var nftTraits = [];
@@ -294,6 +316,7 @@ function parseNfts(data, address) {
     });
   });
 
+  // Populate contract values
   var contract = nfts[0]['asset_contract'];
   var contractId = address;
   var slug = nftItems[0]['collection_slug'];
@@ -323,6 +346,9 @@ function parseNfts(data, address) {
 }
 
 export async function getCollection(collectionSlug) {
+  /**
+   * Used for us to populate our db
+   */
   var url = "https://api.opensea.io/api/v1/collection/" + collectionSlug;
 
   var headers = {
@@ -343,6 +369,9 @@ export async function getCollection(collectionSlug) {
 }
 
 export async function getCollectionStatsDirectly(collectionSlug) {
+  /**
+   * Fetches new collection stats each time NFT page is loaded
+   */
   var url = "https://api.opensea.io/api/v1/collection/" + collectionSlug + "/stats";
 
   var headers = {

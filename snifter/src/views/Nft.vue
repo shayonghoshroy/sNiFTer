@@ -261,10 +261,10 @@ export default {
     await this.getUser();
 
     // Query for NFT
-    await this.getNFTEntities();
+    await this.getNFT();
 
     // Query for contract address and collection
-    await this.getNFTs(this.nftData.address)
+    await this.getNFTEntities(this.nftData.address)
 
     // Set NFT favorite status and total favorites
     await this.setFavoriteStatus(this.user, this.nftData.id);

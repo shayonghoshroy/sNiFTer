@@ -136,13 +136,17 @@ import { API, Auth } from "aws-amplify";
             }
         },
         async mounted() {
+
+            // Check if user is signed in
             try {
                 const userResult = await Auth.currentAuthenticatedUser();
                 this.user = userResult.username;
-                await this.getComments();
             } catch(e) {
                 void(0);
             }
+
+            // Load comments for NFT
+            await this.getComments();
         },
         data() {
             return {
@@ -155,9 +159,11 @@ import { API, Auth } from "aws-amplify";
         },
         computed: {
             newCommentLength() {
+                // Reactive length of new comment
                 return this.newComment.length;
             },
             nftReviews() {
+                // Sort reviews by most recent
                 var comments = this.comments;
                 return comments.sort((a, b) => ( a.id < b.id ) ? 1 : -1);
             },
@@ -168,16 +174,21 @@ import { API, Auth } from "aws-amplify";
                 return this.newComment.length > 250;
             },
             userCommentExists() {
-                return this.comments.filter((comment) => comment.sender === this.user).length > 0;
+                // Determine if a user has a comment for this nft
+                return this.comments.filter((comment) => this.user !== '' && comment.sender === this.user).length > 0;
             },
             existingUserComment() {
-                return this.comments.filter((comment) => comment.sender === this.user)[0];
+                // Determine what the users comment is, if one exists
+                return this.comments.filter((comment) => this.user !== '' && comment.sender === this.user)[0];
             }
         },
         watch: {
         },
         methods: {
             getAverageRating() {
+                /**
+                 * Calculate the average rating for the nft
+                 */
                 var summation = 0;
                 for(var i = 0; i < this.comments.length; i++) {
                     summation += this.comments[i].nft_rating;
@@ -185,6 +196,9 @@ import { API, Auth } from "aws-amplify";
                 return summation > 0 ? Math.floor(summation / this.comments.length) : 0;
             },
             handleUserLoggedIn() {
+                /**
+                 * Reroute to signin page if not logged in
+                 */
                 if(this.user === '') this.$router.push("/user");
             },
             setRating(rating) {
@@ -192,11 +206,13 @@ import { API, Auth } from "aws-amplify";
             },
             clearComment() {
                 this.handleUserLoggedIn();
+                if(this.user === '') return;
 
                 this.newComment = '';
                 this.newRating = 0;
             },
             async getComments() {
+                // Query for comments
                 const result = await API.graphql({
                     query: listMessages,
                     variables: { 
@@ -209,11 +225,14 @@ import { API, Auth } from "aws-amplify";
                 });
             },
             createComment(byPassCommentExists = false) {
+                // Reroute if user is not logged in and do nothing
                 this.handleUserLoggedIn();
+                if(this.user === '') return;
 
-
+                // Determine if user already has a comment or not
                 var exists = this.userCommentExists;
                 if(!exists || byPassCommentExists) {
+                    // If not, create the comment
                     var id = Date.now();
                     var sender = this.user;
                     var message = this.newComment.substring(0, 250);
@@ -229,19 +248,31 @@ import { API, Auth } from "aws-amplify";
                         nft_id,
                         nft_rating
                     };
-                    this.saveComment(createdComment)
-                    .then(() => {
-                        this.comments.splice(0, 0, createdComment);
-                        this.clearComment();
-                        this.$vaToast.init({ message: 'Review Added', color: 'success' });
-                        this.$emit("ratingChange");
-                    });
+
+                    // Ensure user is logged in
+                    if(sender && sender !== '') {
+                        // Save comment
+                        this.saveComment(createdComment)
+                        .then(() => {
+                            // Add comment to local list
+                            this.comments.splice(0, 0, createdComment);
+                            // Clear input
+                            this.clearComment();
+                            // Show toast and emit rating change to NFT page
+                            this.$vaToast.init({ message: 'Review Added', color: 'success' });
+                            this.$emit("ratingChange");
+                        });
+                    }
                 }
                 else {
+                    // Otherwise show the overwrite modal
                     this.$refs['confirmReviewChange'].show();
                 }
             },
             async saveComment(comment) {
+                /*
+                * Save a new comment
+                */
                 const newComment = comment;
                 const result = await API.graphql({
                     query: createMessage,
@@ -250,18 +281,23 @@ import { API, Auth } from "aws-amplify";
                 console.log(result);
             },
             deleteComment(id, suppressToast = false) {
-                console.log(id);
-                console.log(this.comments);
+                /**
+                 * Delete user's comment
+                 */
                 for(var i = 0; i < this.comments.length; i++) {
+                    // Find matching comment
                     if(this.comments[i].id === id['id']) {
                         // Remove 1 comment at the ith index
                         this.removeComment(id)
                         .then(() => {
                             // Index may have changed by now
                             var currentIndex = this.comments.findIndex((comment) => { comment.id === id['id'] });
+                            // Remove comment locally
                             this.comments.splice(currentIndex, 1);
+                            // Display success to user
                             if(!suppressToast)
                                 this.$vaToast.init({ message: 'Review Deleted', color: 'danger' });
+                            // Emit rating change to NFT
                             this.$emit("ratingChange");
                         });
                         break;
@@ -269,29 +305,37 @@ import { API, Auth } from "aws-amplify";
                 }
             },
             async removeComment(commentId) {
+                // Query to delete comment
                 const result = await API.graphql({
                     query: deleteMessage,
                     variables: { input: commentId },
                 });
+
                 console.log(result);
             },
             updateComment(event) {
-                console.log(event);
+                /**
+                 * Update comment locally and in database
+                 */
                 var id = event.id;
                 var message = event.message;
                 var nft_rating = event.nft_rating;
-                console.log(nft_rating);
 
                 for(var i = 0; i < this.comments.length; i++) {
+                    // Find matching comment
                     if(this.comments[i].id == id) {
+
+                        // Update comment data
                         var comment = this.comments[i];
                         comment.message = message;
                         comment.nft_rating = nft_rating;
+
+                        // Change comment in db
                         this.changeComment(comment)
                         .then(() => {
+                            // Delete existing comment, and insert new comment at same index
                             this.comments.splice(i, 1);
                             this.comments.splice(i, 0, comment);
-                            console.log(this.comments[i]);
                             this.$emit('ratingChange');
                         });
                         break;
@@ -308,12 +352,10 @@ import { API, Auth } from "aws-amplify";
                 console.log(result);
             },
             overWriteComment() {
-                debugger;
                 var existingComment = this.existingUserComment;
                 this.createComment(true);
                 this.deleteComment({ id: existingComment.id }, true);
                 this.$refs['confirmReviewChange'].hide();
-                console.log(this.comments);
             }
         },
     }
