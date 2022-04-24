@@ -5,7 +5,6 @@
         :label="searchTypes.at(searchIndex)[0]"
         split
       >
-        
         <va-list class="search-item-list">
           <va-list-item
             class="search-item"
@@ -97,6 +96,12 @@ export default {
     },
   },
   methods: {
+    /**
+      * Wrapper method that calls a functon to get the corect category of tweets depending on the user's choice in the search dropdown
+      *
+      * @param {number} searchIndex Index corresponding to which type of search to make
+      *
+      */
     async tweetFilters(searchIndex) {
       if(searchIndex === 0) {
         await this.getNFTTweets();
@@ -114,6 +119,10 @@ export default {
         console.log("error");
       }
     },
+    /**
+      * Get 1000 tweets without any filtering
+      *
+      */
     listAllTweets: async function () {
       try {
         const tweet = await API.graphql({
@@ -129,6 +138,10 @@ export default {
       }
       
     },
+    /**
+      * Collects all network related tweets in the database for display
+      *
+      */
     getNetworkTweets: async function () {
             try {
                 console.log("Starting Query");
@@ -150,12 +163,17 @@ export default {
                     },
                   },
                 });
+                // Store the query response as tweets to be displayed to user
                 this.tweets = tweets.data.listTweets.items;
                 console.log(this.tweets);
             } catch (e) {
                 console.error(e);
             }
         },
+        /**
+        * Collects all currency related tweets in the database for display
+        *
+        */
         getCurrencyTweets: async function () {
             try {
                 console.log("Starting Query");
@@ -173,12 +191,17 @@ export default {
                     },
                   },
                 });
+                // Store the query response as tweets to be displayed to user
                 this.tweets = tweets.data.listTweets.items;
-                console.log(this.tweets);
+                //console.log(this.tweets);
             } catch (e) {
                 console.error(e);
             }
         },
+        /**
+        * Collects all nft related tweets in the database for display
+        *
+        */
         getNFTTweets: async function () {
             try {
                 console.log("Starting Query");
@@ -205,13 +228,18 @@ export default {
                     },
                   },
                 });
-                console.log(tweets);
+                //console.log(tweets);
+                // Store the query response as tweets to be displayed to user
                 this.tweets = tweets.data.listTweets.items;
-                console.log(this.tweets);
+                //console.log(this.tweets);
             } catch (e) {
                 console.error(e);
             }
         },
+        /**
+        * Collects all creator related tweets in the database for display
+        *
+        */
         getCreatorTweets: async function () {
             try {
                 console.log("Starting Query");
@@ -229,13 +257,18 @@ export default {
                     },
                   },
                 });
-                console.log(tweets);
+                //console.log(tweets);
+                // Store the query response as tweets to be displayed to user
                 this.tweets = tweets.data.listTweets.items;
-                console.log(this.tweets);
+                //console.log(this.tweets);
             } catch (e) {
                 console.error(e);
             }
         },
+    /**
+    * Deprecated function from older version of TwitterSearchComponent
+    *
+    */
     startSearch: async function () {
       this.disableSearch = false;
       var response = null;
@@ -298,6 +331,10 @@ export default {
       this.disableSearch = false;
       this.tweets = [];
     },
+    /**
+    * Deprecated function from older version of TwitterSearchComponent
+    *
+    */
     getTweets: async function () {
       // getting the current unix epoch of exactly 1 days ago
       var timestamp = (+new Date/1000) - 86400;
@@ -317,6 +354,10 @@ export default {
         console.error(e);
       }
     },
+    /**
+    * Deprecated function from older version of TwitterSearchComponent
+    *
+    */
     getTwitterUsers: async function () {
       var timestamp = (+new Date/1000) - 86400;
       try {

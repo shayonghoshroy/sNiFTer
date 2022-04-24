@@ -61,6 +61,12 @@ export default {
     onReady() {
       this.$refs.youtube.playVideo();
     },
+    /**
+      * Grabs the article that was routed to from the home page
+      *
+      * @param {string} searchTitle ID of article to be GET
+      *
+      */
     async getArticle(articleId) {
       try {
         const articles = await API.graphql({
