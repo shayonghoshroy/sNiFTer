@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Nav.test.js has the expected html structure 1`] = `
+<va-navbar
+  color="rgba(0,0,0,0.3)"
+  user="shyguy"
+/>
+`;
