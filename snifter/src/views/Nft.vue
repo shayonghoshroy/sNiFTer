@@ -375,15 +375,14 @@ export default {
         if (nftEvent.event_type === "successful") {
           eventType = "Sale";
           nftEvent['from'] = nftEvent['transaction']['from_account']['address'];
+          nftEvent['to'] = nftEvent['transaction']['to_account']['address'];
         }
         // Gather from address for bids
         else {
           eventType = "Bid";
           nftEvent['from'] = nftEvent.from_account['address'];
+          nftEvent['to'] = nftEvent['asset']['owner']['address'];
         }
-
-        // Set from new owner
-        nftEvent['to'] = nftEvent['asset']['owner']['address'];
 
         // Set price for bid or sale
         var price = nftEvent.bid_amount;
