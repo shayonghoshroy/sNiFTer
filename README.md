@@ -4,6 +4,10 @@ sNiFTer is an information platform, with the goal to decrease the learning curve
 
 View our proof of concept demo site here: https://dev.d22d1odtojlp9e.amplifyapp.com/
 
+View our web application here: https://www.snifter.us
+
+View our marketing site here: https://sccapstone.github.io/sNiFTer/
+
 ## External Requirements
 
 In order to build this project you first have to install:
