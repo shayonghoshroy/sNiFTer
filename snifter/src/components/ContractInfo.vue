@@ -15,11 +15,11 @@
                 </tr>
                 <tr>
                   <th class="table-row-header">Payout Address</th>
-                  <td>{{ contract.payout_address }}</td>
+                  <td>{{ contract.payout_address || "None" }}</td>
                 </tr>
                 <tr>
                   <th class="table-row-header">Contract Type</th>
-                  <td>{{ contract.asset_contract_type }}</td>
+                  <td>NFT</td>
                 </tr>
                 <tr>
                   <th class="table-row-header">Created Date</th>
