@@ -291,7 +291,7 @@ import { API, Auth } from "aws-amplify";
                         this.removeComment(id)
                         .then(() => {
                             // Index may have changed by now
-                            var currentIndex = this.comments.findIndex((comment) => { comment.id === id['id'] });
+                            var currentIndex = this.comments.findIndex((comment) => comment['id'] === id['id'] );
                             // Remove comment locally
                             this.comments.splice(currentIndex, 1);
                             // Display success to user
