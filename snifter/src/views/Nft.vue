@@ -368,6 +368,34 @@ export default {
       // Format NFT Events
       var events = this.nftEvents;
       if (events.length === 0) return [];
+
+      // Set bid 'to' address based on who owned at last sale
+      var firstBid = events.findIndex((bidEvent) => bidEvent['event_type'] === 'offer_entered');
+      var firstSale = events.findIndex((saleEvent) => saleEvent['event_type'] === 'successful');
+      var lastSale = events.slice().reverse().findIndex((lastSaleEvent_) => lastSaleEvent_['event_type'] === "successful");
+      lastSale = lastSale > 0 ? events.length - 1 - lastSale : lastSale;
+
+      var currentOwner = '';
+      if(firstSale !== -1) {
+        var firstSaleEvent = events[firstSale];
+        if(firstBid !== -1) {
+          
+          // First sale is newer than first bid
+          if(firstSale < firstBid) {
+            // Set the currentOwner to 'to' account of sale
+            currentOwner = firstSaleEvent['winner_account']['address'];
+          }
+          else {
+            // Set the currentOwner to 'from' account of sale
+            currentOwner = firstSaleEvent['seller']['address'];
+          }
+        }
+      } else {
+        if(firstBid !== -1) {
+          currentOwner = events[firstBid]['asset']['owner']['address'];
+        }
+      }
+      var index = 0;
       var items = events.map((nftEvent) => {
         var eventType = "";
         
@@ -375,13 +403,18 @@ export default {
         if (nftEvent.event_type === "successful") {
           eventType = "Sale";
           nftEvent['from'] = nftEvent['seller']['address'];
-          nftEvent['to'] = nftEvent['winner_account']['address'];
+          if(index !== lastSale) {
+            nftEvent['to'] = nftEvent['winner_account']['address'];
+          } else {
+          nftEvent['to'] = nftEvent['asset']['owner']['address'];
+          }
+          currentOwner = nftEvent['to'];
         }
         // Gather from address for bids
         else {
           eventType = "Bid";
           nftEvent['from'] = nftEvent.from_account['address'];
-          nftEvent['to'] = nftEvent['asset']['owner']['address'];
+          nftEvent['to'] = currentOwner;
         }
 
         // Set price for bid or sale
@@ -392,7 +425,8 @@ export default {
 
         // Convert from wei to eth, round 3 decimals
         price = parseFloat(Web3.utils.fromWei(price.toString())).toFixed(3);
-        
+        index += 1;
+
         return {
           event: eventType,
           price: price,

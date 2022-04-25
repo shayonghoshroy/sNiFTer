@@ -99,6 +99,9 @@ export async function getNftEventsDirectly(token_id, asset_contract_address) {
 
   // Populate events with sales and bids
   var events = bids.concat(sales);
+  if(events.length > 0)
+    // Return in ascheding order for processing
+    return events.sort((a, b) => (Date.parse(a.created_date) > Date.parse(b.created_date) ? 1: -1));
   return events;
 }
 
