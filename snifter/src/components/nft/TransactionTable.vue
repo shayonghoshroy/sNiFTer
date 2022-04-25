@@ -79,11 +79,11 @@ export default {
     return {
       filter: "",
       columns: [
-        { key: "event", sortable: true },
-        { key: "price", sortable: true },
-        { key: "from", sortable: true },
-        { key: "to", sortable: true },
-        { key: "created_date", sortable: true },
+        { key: "event", sortable: false },
+        { key: "price", sortable: false },
+        { key: "from", sortable: false },
+        { key: "to", sortable: false },
+        { key: "created_date", sortable: false },
       ],
       perPage: 20,
       currentPage: 1,
