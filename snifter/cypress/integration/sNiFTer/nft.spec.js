@@ -17,7 +17,7 @@ context("NFT", () => {
         cy.contains("Traits").click();
 
         cy.reload();
-        cy.wait(4000);
+        cy.wait(6000);
         cy.get("div.va-collapse__header").contains("Transactions").click();
         cy.contains("Table");
         cy.contains("Chart");
