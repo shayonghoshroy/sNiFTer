@@ -374,8 +374,8 @@ export default {
         // Gather from address for sales
         if (nftEvent.event_type === "successful") {
           eventType = "Sale";
-          nftEvent['from'] = nftEvent['transaction']['from_account']['address'];
-          nftEvent['to'] = nftEvent['transaction']['to_account']['address'];
+          nftEvent['from'] = nftEvent['seller']['address'];
+          nftEvent['to'] = nftEvent['winner_account']['address'];
         }
         // Gather from address for bids
         else {
