@@ -44,12 +44,12 @@ npm install aws-amplify @aws-amplify/ui-components
 ## Running
 Ensure that all dependencies are downloaded with the following command:
 ```
-npm install
+npm install --save
 ```
 
 Get setup with our Amplify environment (requires adminstrator (Shayon) to first provide access through email)
 ```
-amplify pull --appId d22d1odtojlp9e --envName dev
+amplify pull --appId d22d1odtojlp9e --envName stephendev
 ```
 
 Run the Vue app.
