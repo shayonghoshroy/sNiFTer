@@ -1,6 +1,6 @@
 # Welcome to sNiFTER
 
-[![image](https://user-images.githubusercontent.com/59932579/164502470-e1c6a93c-7f6e-4f7c-9cdf-e07358ac0a5b.png)](https://www.youtube.com/watch?v=NpEaa2P7qZI)
+[![image](https://user-images.githubusercontent.com/59932579/165208157-f5a3e358-220a-4284-b745-e714f987c05c.png)](https://www.youtube.com/watch?v=7N9WniHTwsE)
 
 sNiFTer is an information platform, with the goal to decrease the learning curve, increase engagement, and provide reliable, actionable information for the NFT space. sNiFTer aims to tackle this challenge on 3 fronts; insights and tracking into the performance of and engagement with an NFT entity, interactive educational resources on NFT and blockChain technology, and interaction between users in a social manner for community engagement. By NFT entity, we are referring to an individual token, an NFT collection, or an NFT creator.
 
