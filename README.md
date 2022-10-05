@@ -2,11 +2,9 @@
 
 sNiFTer is an information platform, with the goal to decrease the learning curve, increase engagement, and provide reliable, actionable information for the NFT space. sNiFTer aims to tackle this challenge on 3 fronts; insights and tracking into the performance of and engagement with an NFT entity, interactive educational resources on NFT and BlockChain technology, and interaction between users in a social manner for community engagement. 
 
-View our marketing site here: https://sccapstone.github.io/sNiFTer/
-
 <br>
 <h6>DEPRECATED https://www.snifter.us</h6>
-We ran out of funding to keep the site running! Check out our marketing site instead.
+We ran out of funding to keep the site running! Check out our marketing site instead: https://sccapstone.github.io/sNiFTer/
 <br><br>
 
 
